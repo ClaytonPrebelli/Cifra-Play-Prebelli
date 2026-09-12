@@ -81,14 +81,14 @@ export function initShow(state) {
     velEl.textContent = `${p.velocidade}s`
     btnRolagem.textContent = scroller.estado.rolando ? 'Pausar' : 'Retomar'
     fimEl.hidden = !state.atual || scroller.estado.total <= 1 ||
-      scroller.estado.ativa < scroller.estado.total - 1
+      scroller.estado.ativa < scroller.estado.total - 1 || !state.proxima
     const prox = state.proxima
     btnProxima.hidden = !prox
     btnProxima.textContent = prox ? `Próxima ▸ ${prox.titulo}` : 'Próxima ▸'
     fimTextoEl.textContent = prox
       ? `Fim de "${state.atual?.item?.titulo}" — próxima: ${prox.titulo}.`
       : ''
-    btnFimProxima.textContent = prox ? `Próxima música → ${prox.titulo}` : 'Voltar para a lista'
+    btnFimProxima.hidden = !prox
   }
 
   scroller.onPagina = (i) => {
