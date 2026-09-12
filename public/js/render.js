@@ -73,46 +73,66 @@ export function renderShow(modelo, { tomOffset = 0, colunas = 3 } = {}) {
   return container
 }
 
+const GAP_COLUNAS = 40
+
+function criarPagina(altura, colunas) {
+  const p = document.createElement('div')
+  p.className = 'pagina'
+  p.style.height = `${altura}px`
+  p.style.overflow = 'hidden'
+  p.style.columnCount = '2'
+  p.style.columnFill = 'auto'
+  p.append(...colunas)
+  return p
+}
+
 export function paginarRows(rows, { altura, largura }) {
-  const paginas = []
-  const estiloColunas = { columnCount: '2', columnFill: 'auto', columnGap: '2.5rem' }
+  if (!altura || !largura) return []
+  const colW = Math.max(100, (largura - GAP_COLUNAS) / 2)
+  const med = document.createElement('div')
+  med.className = 'show-cifra'
+  med.style.position = 'fixed'
+  med.style.left = '-9999px'
+  med.style.top = '0'
+  med.style.width = `${colW}px`
+  document.body.append(med)
 
-  function novoMedidor() {
-    const m = document.createElement('div')
-    m.style.position = 'fixed'
-    m.style.left = '-9999px'
-    m.style.top = '0'
-    m.style.width = `${largura}px`
-    m.style.height = `${altura}px`
-    Object.assign(m.style, estiloColunas)
-    document.body.append(m)
-    return m
-  }
-
-  function fechar(m) {
-    m.style.cssText = ''
-    m.className = 'pagina'
-    m.style.height = `${altura}px`
-    Object.assign(m.style, estiloColunas)
-    m.style.overflow = 'hidden'
-    return m
-  }
-
-  let med = null
-  for (const row of rows) {
-    if (!med) med = novoMedidor()
+  function alturaLinha(row) {
+    med.textContent = ''
     med.append(row)
-    const u = med.lastElementChild
-    const excedeu = u.offsetTop + u.offsetHeight > altura + 3 ||
-      u.offsetLeft + u.offsetWidth > med.clientWidth + 6
-    if (excedeu && med.childElementCount > 1) {
-      med.removeChild(row)
-      paginas.push(fechar(med))
-      med = novoMedidor()
-      med.append(row)
-    }
+    const h = row.offsetHeight
+    med.removeChild(row)
+    return h
   }
-  if (med && med.childElementCount) paginas.push(fechar(med))
-  else if (med) med.remove()
+
+  const paginas = []
+  let c1 = []
+  let c2 = []
+  let h1 = 0
+  let h2 = 0
+  const novaPagina = () => {
+    if (c1.length || c2.length) paginas.push(criarPagina(altura, [...c1, ...c2]))
+  }
+
+  for (const row of rows) {
+    const hr = alturaLinha(row)
+    if (h1 + hr <= altura) {
+      c1.push(row)
+      h1 += hr
+      continue
+    }
+    if (h2 + hr <= altura) {
+      c2.push(row)
+      h2 += hr
+      continue
+    }
+    novaPagina()
+    c1 = [row]
+    h1 = hr
+    c2 = []
+    h2 = 0
+  }
+  novaPagina()
+  med.remove()
   return paginas
 }

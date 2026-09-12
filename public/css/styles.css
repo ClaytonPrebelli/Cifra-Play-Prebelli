@@ -426,13 +426,20 @@ select {
 
 .show-cifra {
   position: relative;
+  width: calc(200% / 3);
   font-size: clamp(15px, 2.4vh, 26px);
   line-height: 1.95;
 }
 
 .pagina {
-  break-inside: avoid;
-  column-gap: 2.5rem;
+  display: flex;
+  gap: 40px;
+  overflow: hidden;
+}
+
+.pagina .col {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .compasso {

@@ -104,7 +104,7 @@ export function initShow(state) {
     const rows = [...renderShow(state.atual.modelo, { tomOffset: p.tomOffset }).children]
     const paginas = paginarRows(rows, {
       altura: scroller.altura(),
-      largura: Math.max(1, telaEl.clientWidth - 40),
+      largura: Math.max(1, cifraEl.clientWidth),
     })
     scroller.rebuild(paginas)
     if (salvar) salvarPrefs()

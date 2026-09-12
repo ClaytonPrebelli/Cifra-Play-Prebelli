@@ -42,8 +42,10 @@ depois a tela que é o coração do app, e por último as extensões.
 
 ## Fase 3 — Tela de apresentação (o coração)
 
-**Entrega:** modo show em 2 colunas com rolamento automático.
-- [x] `public/js/render.js` — modelo → DOM em 2 colunas, seções em vermelho,
+**Entrega:** modo show com a tela dividida em 3 (cifra em 2 colunas nos 2/3
+esquerdos, 1/3 direito em branco para video de playback) e rolamento automático.
+- [x] `public/js/render.js` — modelo → DOM em 2 colunas (páginas medidas por
+      linha, sem cortar conteúdo), seções em vermelho,
       acorde ancorado acima da palavra (nunca separa acorde da palavra)
 - [x] `public/js/scroller.js` — paginação por versos (página nunca parte verso)
       + avanço automático com velocidade configurável
