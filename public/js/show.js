@@ -1,7 +1,7 @@
 import { getMusica, saveCatalog } from './api.js'
 import { parseCifra } from './parser.js'
 import { transporNota } from './transpositor.js'
-import { renderShow } from './render.js'
+import { renderShow, paginarRows } from './render.js'
 import { createScroller } from './scroller.js'
 
 const PADRAO = { tomOffset: 0, velocidade: 3, rolagem: true }
@@ -31,7 +31,6 @@ export function initShow(state) {
   const btnFimProxima = document.getElementById('btn-fim-proxima')
 
   const scroller = createScroller(telaEl, cifraEl)
-  let ultimosRows = []
   let timerSalvar = null
 
   function modo(mode) {
@@ -99,17 +98,17 @@ export function initShow(state) {
     atualizarControles()
   }
 
-  function rerender() {
+  function montarCifra(salvar) {
     const p = prefsAtuais()
     scroller.velocidade = p.velocidade
-    const rows = [...renderShow(state.atual.modelo, { tomOffset: p.tomOffset, colunas: 2 }).children]
-    cifraEl.textContent = ''
-    cifraEl.append(...rows)
-    ultimosRows = rows
-    scroller.rebuild(rows)
-    scroller.estado.rolando ? scroller.retomar() : scroller.pausar()
+    const rows = [...renderShow(state.atual.modelo, { tomOffset: p.tomOffset }).children]
+    const paginas = paginarRows(rows, {
+      altura: scroller.altura(),
+      largura: Math.max(1, telaEl.clientWidth - 40),
+    })
+    scroller.rebuild(paginas)
+    if (salvar) salvarPrefs()
     atualizarControles()
-    salvarPrefs()
   }
 
   async function abrir(item) {
@@ -124,9 +123,9 @@ export function initShow(state) {
       scroller.velocidade = p.velocidade
       tituloEl.textContent = item.artista ? `${item.artista} — ${item.titulo}` : item.titulo
       state.proxima = state.catalog[state.catalog.findIndex((c) => c.id === item.id) + 1] || null
-      rerender()
-      if (p.rolagem) scroller.retomar()
       modo('show')
+      montarCifra(true)
+      if (p.rolagem) scroller.retomar()
     } catch (err) {
       alert(`Erro ao abrir "${item.titulo}": ${err.message}`)
     }
@@ -138,20 +137,16 @@ export function initShow(state) {
     state.atual = null
     state.proxima = null
     cifraEl.textContent = ''
-    ultimosRows = []
+    scroller.rebuild([])
   }
 
   function aoMudarProp() {
     if (!state.atual) return
-    atualizarControles()
-    rerender()
+    montarCifra(true)
   }
 
   window.addEventListener('resize', () => {
-    if (state.mode === 'show' && ultimosRows.length) {
-      scroller.layout()
-      atualizarControles()
-    }
+    if (state.mode === 'show' && state.atual) montarCifra(false)
   })
 
   document.getElementById('show-voltar').addEventListener('click', voltarLista)

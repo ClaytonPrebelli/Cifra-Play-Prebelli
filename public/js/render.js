@@ -72,3 +72,47 @@ export function renderShow(modelo, { tomOffset = 0, colunas = 3 } = {}) {
   }
   return container
 }
+
+export function paginarRows(rows, { altura, largura }) {
+  const paginas = []
+  const estiloColunas = { columnCount: '2', columnFill: 'auto', columnGap: '2.5rem' }
+
+  function novoMedidor() {
+    const m = document.createElement('div')
+    m.style.position = 'fixed'
+    m.style.left = '-9999px'
+    m.style.top = '0'
+    m.style.width = `${largura}px`
+    m.style.height = `${altura}px`
+    Object.assign(m.style, estiloColunas)
+    document.body.append(m)
+    return m
+  }
+
+  function fechar(m) {
+    m.style.cssText = ''
+    m.className = 'pagina'
+    m.style.height = `${altura}px`
+    Object.assign(m.style, estiloColunas)
+    m.style.overflow = 'hidden'
+    return m
+  }
+
+  let med = null
+  for (const row of rows) {
+    if (!med) med = novoMedidor()
+    med.append(row)
+    const u = med.lastElementChild
+    const excedeu = u.offsetTop + u.offsetHeight > altura + 3 ||
+      u.offsetLeft + u.offsetWidth > med.clientWidth + 6
+    if (excedeu && med.childElementCount > 1) {
+      med.removeChild(row)
+      paginas.push(fechar(med))
+      med = novoMedidor()
+      med.append(row)
+    }
+  }
+  if (med && med.childElementCount) paginas.push(fechar(med))
+  else if (med) med.remove()
+  return paginas
+}

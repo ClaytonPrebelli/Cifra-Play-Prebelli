@@ -1,5 +1,5 @@
 export function createScroller(tela, cifra) {
-  const st = { colunas: 2, velocidade: 3, rolando: true, total: 1, ativa: 0, onPagina: null }
+  const st = { velocidade: 3, rolando: true, total: 1, ativa: 0, onPagina: null }
   let rafId = 0
   let timer = null
 
@@ -9,27 +9,20 @@ export function createScroller(tela, cifra) {
 
   function layout() {
     const h = altura()
-    cifra.style.height = `${h}px`
-    cifra.style.columnCount = String(st.colunas)
-    cifra.style.columnFill = 'auto'
-    st.total = Math.max(1, Math.ceil(cifra.scrollHeight / h))
     if (st.ativa > st.total - 1) st.ativa = st.total - 1
-    tela.scrollTop = deslocamento()
+    tela.scrollTop = cifra.offsetTop + st.ativa * h
     if (st.onPagina) st.onPagina(st.ativa)
   }
 
-  function deslocamento() {
-    return cifra.offsetTop + st.ativa * altura()
-  }
-
-  function rebuild(rows) {
+  function rebuild(paginas) {
     cifra.textContent = ''
-    if (rows.length) cifra.append(...rows)
+    if (paginas.length) cifra.append(...paginas)
+    st.total = Math.max(1, paginas.length)
     layout()
   }
 
   function animarPara(dur) {
-    const alvo = deslocamento()
+    const alvo = cifra.offsetTop + st.ativa * altura()
     return new Promise((resolver) => {
       if (dur <= 0) {
         tela.scrollTop = alvo
@@ -93,8 +86,8 @@ export function createScroller(tela, cifra) {
     pausar,
     retomar,
     alternar,
+    altura,
     set velocidade(v) { st.velocidade = Math.max(1, Math.min(30, v)) },
-    set colunas(c) { st.colunas = Math.max(1, Math.min(3, c)) },
     set onPagina(fn) { st.onPagina = fn },
     get estado() { return st },
   }
