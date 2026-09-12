@@ -1,5 +1,5 @@
 export function createScroller(tela, cifra) {
-  const st = { colunas: 3, velocidade: 3, rolando: true, total: 1, ativa: 0, onPagina: null }
+  const st = { colunas: 2, velocidade: 3, rolando: true, total: 1, ativa: 0, onPagina: null }
   let rafId = 0
   let timer = null
 

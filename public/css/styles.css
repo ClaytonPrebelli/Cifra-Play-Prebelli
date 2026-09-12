@@ -415,13 +415,24 @@ select {
   font-variant-numeric: tabular-nums;
 }
 
+.show-layout {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
 .show-tela {
   position: relative;
-  flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: thin;
   padding: 0.25rem 1.25rem 0;
+}
+
+.show-video {
+  min-width: 0;
+  min-height: 0;
 }
 
 .show-cifra {

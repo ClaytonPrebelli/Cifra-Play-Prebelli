@@ -38,19 +38,21 @@
             <span id="show-vel" class="ctl-valor">3s</span>
             <button id="btn-vel-mais" class="btn ctl">+</button>
           </span>
-          <button id="btn-colunas" class="btn" title="Colunas por página">3 col</button>
           <button id="btn-rolagem" class="btn">Pausar</button>
           <button id="btn-proxima" class="btn primary" hidden>Próxima ▸</button>
         </div>
       </header>
-      <div id="show-tela" class="show-tela">
-        <div id="show-cifra" class="show-cifra">
-          <p class="placeholder" style="padding:1.25rem;">Toque numa música para começar.</p>
+      <div id="show-layout" class="show-layout">
+        <div id="show-tela" class="show-tela">
+          <div id="show-cifra" class="show-cifra">
+            <p class="placeholder" style="padding:1.25rem;">Toque numa música para começar.</p>
+          </div>
+          <div id="show-fim" class="show-fim" hidden>
+            <p id="show-fim-texto"></p>
+            <button id="btn-fim-proxima" class="btn primary">Próxima música →</button>
+          </div>
         </div>
-        <div id="show-fim" class="show-fim" hidden>
-          <p id="show-fim-texto"></p>
-          <button id="btn-fim-proxima" class="btn primary">Próxima música →</button>
-        </div>
+        <div id="show-video" class="show-video"></div>
       </div>
     </section>
   </main>

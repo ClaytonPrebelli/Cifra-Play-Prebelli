@@ -4,7 +4,7 @@ import { transporNota } from './transpositor.js'
 import { renderShow } from './render.js'
 import { createScroller } from './scroller.js'
 
-const PADRAO = { tomOffset: 0, velocidade: 3, rolagem: true, colunas: 3 }
+const PADRAO = { tomOffset: 0, velocidade: 3, rolagem: true }
 
 let abrirFn = null
 
@@ -24,7 +24,6 @@ export function initShow(state) {
   const btnTomMais = document.getElementById('btn-tom-mais')
   const btnVelMenos = document.getElementById('btn-vel-menos')
   const btnVelMais = document.getElementById('btn-vel-mais')
-  const btnColunas = document.getElementById('btn-colunas')
   const btnRolagem = document.getElementById('btn-rolagem')
   const btnProxima = document.getElementById('btn-proxima')
   const fimEl = document.getElementById('show-fim')
@@ -48,7 +47,6 @@ export function initShow(state) {
       tomOffset: prefs?.tomOffset ?? PADRAO.tomOffset,
       velocidade: prefs?.velocidade ?? PADRAO.velocidade,
       rolagem: prefs?.rolagem ?? PADRAO.rolagem,
-      colunas: prefs?.colunas ?? PADRAO.colunas,
       tomBase: m?.tomBase ?? state.atual?.modelo?.tom ?? null,
     }
   }
@@ -59,7 +57,7 @@ export function initShow(state) {
     if (idx === -1) return
     const p = prefsAtuais()
     state.catalog[idx].prefs = {
-      tomOffset: p.tomOffset, velocidade: p.velocidade, rolagem: p.rolagem, colunas: p.colunas,
+      tomOffset: p.tomOffset, velocidade: p.velocidade, rolagem: p.rolagem,
     }
     clearTimeout(timerSalvar)
     timerSalvar = setTimeout(() => {
@@ -82,7 +80,6 @@ export function initShow(state) {
       ? `${disp}${p.tomOffset ? ` (${p.tomOffset > 0 ? '+' : ''}${p.tomOffset})` : ''}`
       : '–'
     velEl.textContent = `${p.velocidade}s`
-    btnColunas.textContent = `${p.colunas} col`
     btnRolagem.textContent = scroller.estado.rolando ? 'Pausar' : 'Retomar'
     fimEl.hidden = !state.atual || scroller.estado.total <= 1 ||
       scroller.estado.ativa < scroller.estado.total - 1
@@ -105,8 +102,7 @@ export function initShow(state) {
   function rerender() {
     const p = prefsAtuais()
     scroller.velocidade = p.velocidade
-    scroller.colunas = p.colunas
-    const rows = [...renderShow(state.atual.modelo, { tomOffset: p.tomOffset, colunas: p.colunas }).children]
+    const rows = [...renderShow(state.atual.modelo, { tomOffset: p.tomOffset, colunas: 2 }).children]
     cifraEl.textContent = ''
     cifraEl.append(...rows)
     ultimosRows = rows
@@ -126,7 +122,6 @@ export function initShow(state) {
       }
       const p = prefsAtuais()
       scroller.velocidade = p.velocidade
-      scroller.colunas = p.colunas
       tituloEl.textContent = item.artista ? `${item.artista} — ${item.titulo}` : item.titulo
       state.proxima = state.catalog[state.catalog.findIndex((c) => c.id === item.id) + 1] || null
       rerender()
@@ -164,11 +159,6 @@ export function initShow(state) {
   btnTomMais.addEventListener('click', () => { state.atual.prefs = prefsAtuais(); state.atual.prefs.tomOffset += 1; aoMudarProp() })
   btnVelMenos.addEventListener('click', () => { state.atual.prefs = prefsAtuais(); state.atual.prefs.velocidade -= 1; aoMudarProp() })
   btnVelMais.addEventListener('click', () => { state.atual.prefs = prefsAtuais(); state.atual.prefs.velocidade += 1; aoMudarProp() })
-  btnColunas.addEventListener('click', () => {
-    state.atual.prefs = prefsAtuais()
-    state.atual.prefs.colunas = (state.atual.prefs.colunas % 3) + 1
-    aoMudarProp()
-  })
   btnRolagem.addEventListener('click', () => { scroller.alternar(); atualizarControles() })
   btnProxima.addEventListener('click', proximaMusica)
   btnFimProxima.addEventListener('click', () => {

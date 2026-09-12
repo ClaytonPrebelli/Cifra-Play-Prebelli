@@ -1,8 +1,9 @@
 # Arquitetura — Portal de Cifras (Cifra Prebelli)
 
-Aplicativo web local para shows: exibe letras com cifras em 3 colunas com
-rolagem automática estilo teleponto, busca fácil, ordem de setlist editável e
-transposição de tom por música.
+Aplicativo web local para shows: exibe letras com cifras em 2 colunas (tela
+dividida em 3, com 1/3 reservado ao vídeo de playback) com rolagem automática
+estilo teleponto, busca fácil, ordem de setlist editável e transposição de tom
+por música.
 
 ## 1. Decisões aprovadas (conversa 2026-09-12)
 
@@ -162,7 +163,7 @@ Estado simples e centralizado (módulo `app.js`), atualizado por eventos:
 
 - Fundo escuro, fonte grande, máximo aproveitamento da tela (sem sidebar);
   navbar mínima: voltar, título, tom, controles de velocidade/rolagem.
-- A cifra é dividida em **páginas**: blocos de 3 colunas que **nunca partem um
+- A cifra é dividida em **páginas**: blocos de 2 colunas que **nunca partem um
   verso** (um verso inteiro sempre cabe). Navegação por página (setas / tecla).
 - **Rolagem automática**: o app avança de página automaticamente; a velocidade
   (segundos por página) é ajustável e salva nas preferências da música.
