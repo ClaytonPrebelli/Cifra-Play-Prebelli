@@ -21,12 +21,18 @@ const MIME = {
 }
 
 function sendJson(res, status, body) {
-  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' })
+  res.writeHead(status, {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'no-store',
+  })
   res.end(JSON.stringify(body))
 }
 
 function sendFile(res, data, type) {
-  res.writeHead(200, { 'Content-Type': type })
+  res.writeHead(200, {
+    'Content-Type': type,
+    'Cache-Control': 'no-store',
+  })
   res.end(data)
 }
 

@@ -35,7 +35,18 @@ function fillFromFile(file) {
   const sep = base.indexOf(' - ')
   document.getElementById('ed-artista').value = sep === -1 ? '' : base.slice(0, sep).trim()
   document.getElementById('ed-titulo').value = (sep === -1 ? base : base.slice(sep + 3)).trim()
-  return file.text()
+  return decodeFile(file)
+}
+
+function decodeFile(file) {
+  return file.arrayBuffer().then((buffer) => {
+    const bytes = new Uint8Array(buffer)
+    try {
+      return new TextDecoder('utf-8', { fatal: true }).decode(bytes)
+    } catch {
+      return new TextDecoder('windows-1252').decode(bytes)
+    }
+  })
 }
 
 function applyTema(tema) {
@@ -81,6 +92,7 @@ export function initList(state) {
 
   const filtroEstilos = createMultiselect({
     textoVazio: 'Estilos',
+    mostrarTodos: true,
     opcoesIniciais: estilosDaLista(),
     selecionadosIniciais: state.filters.estilos,
     onchange: (arr) => {

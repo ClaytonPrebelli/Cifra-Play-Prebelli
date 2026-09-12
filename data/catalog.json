@@ -5,7 +5,19 @@
       "id": "Cazuza - Exagerado.txt",
       "artista": "Cazuza",
       "titulo": "Exagerado",
-      "tomBase": "C"
+      "tomBase": "C",
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "Marcos e Belutti - Sonho de Todo Casal.txt",
+      "artista": "Marcos e Belutti",
+      "titulo": "Sonho de Todo Casal",
+      "tomBase": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ]
     }
   ]
 }

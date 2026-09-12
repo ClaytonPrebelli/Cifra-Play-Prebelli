@@ -5,6 +5,8 @@ export function createMultiselect({
   onchange = () => {},
   placeholderAdd = 'Adicionar estilo…',
   inline = false,
+  mostrarTodos = false,
+  rotuloTodos = 'Todos',
 }) {
   let opcoes = [...opcoesIniciais]
   let selecionados = [...selecionadosIniciais]
@@ -41,6 +43,24 @@ export function createMultiselect({
   toolbar.append(addInput, btnLimpar)
   panel.append(toolbar, lista)
   el.append(btn, panel)
+
+  let todosRow = null
+  if (mostrarTodos) {
+    todosRow = document.createElement('label')
+    todosRow.className = 'multiselect-item'
+    const todosCb = document.createElement('input')
+    todosCb.type = 'checkbox'
+    todosCb.addEventListener('change', () => {
+      if (todosCb.checked) {
+        selecionados = []
+        renderTrigger()
+        emit()
+        renderLista()
+      }
+    })
+    todosRow.append(todosCb, document.createTextNode(` ${rotuloTodos}`))
+    panel.insertBefore(todosRow, lista)
+  }
 
   function renderTrigger() {
     const n = selecionados.length
