@@ -1,71 +1,37 @@
-function margemVertical(el) {
-  const m = getComputedStyle(el)
-  return (parseFloat(m.marginTop) || 0) + (parseFloat(m.marginBottom) || 0)
-}
-
 export function createScroller(tela, cifra) {
-  const st = {
-    colunas: 3,
-    velocidade: 3,
-    rolando: true,
-    paginas: [],
-    ativa: 0,
-    onPagina: null,
-  }
+  const st = { colunas: 3, velocidade: 3, rolando: true, total: 1, ativa: 0, onPagina: null }
   let rafId = 0
   let timer = null
 
   function altura() {
-    return Math.max(220, tela.clientHeight - 8)
+    return Math.max(220, tela.clientHeight - 16)
   }
 
-  function deslocamento(indice) {
-    const p = st.paginas[Math.max(0, Math.min(indice, st.paginas.length - 1))]
-    return p ? cifra.offsetTop + p.offsetTop : 0
+  function layout() {
+    const h = altura()
+    cifra.style.height = `${h}px`
+    cifra.style.maxHeight = `${h}px`
+    cifra.style.columnCount = String(st.colunas)
+    cifra.style.columnFill = 'auto'
+    cifra.style.overflow = 'hidden'
+    st.total = Math.max(1, Math.ceil(cifra.scrollHeight / h))
+    if (st.ativa > st.total - 1) st.ativa = st.total - 1
+    tela.scrollTop = deslocamento()
+    if (st.onPagina) st.onPagina(st.ativa)
   }
 
-  function agrupar(rows) {
-    const cap = st.colunas * altura() * 0.98
-    const grupos = []
-    let atual = []
-    let soma = 0
-    for (const r of rows) {
-      const h = r.offsetHeight + margemVertical(r)
-      if (atual.length && soma + h > cap) {
-        grupos.push(atual)
-        atual = []
-        soma = 0
-      }
-      atual.push(r)
-      soma += h
-    }
-    if (atual.length) grupos.push(atual)
-    if (grupos.length === 0) grupos.push([])
-    return grupos.map((g) => {
-      const p = document.createElement('div')
-      p.className = 'pagina'
-      p.dataset.colunas = String(st.colunas)
-      p.append(...g)
-      return p
-    })
+  function deslocamento() {
+    return cifra.offsetTop + st.ativa * altura()
   }
 
   function rebuild(rows) {
     cifra.textContent = ''
-    if (rows.length === 0) {
-      st.paginas = []
-      st.ativa = 0
-      return
-    }
-    st.paginas = agrupar(rows)
-    for (const p of st.paginas) cifra.append(p)
-    st.ativa = Math.max(0, Math.min(st.ativa, st.paginas.length - 1))
-    tela.scrollTop = deslocamento(st.ativa)
-    if (st.onPagina) st.onPagina(st.ativa)
+    if (rows.length) cifra.append(...rows)
+    layout()
   }
 
-  function animarPara(indice, dur) {
-    const alvo = deslocamento(indice)
+  function animarPara(dur) {
+    const alvo = deslocamento()
     return new Promise((resolver) => {
       if (dur <= 0) {
         tela.scrollTop = alvo
@@ -78,8 +44,7 @@ export function createScroller(tela, cifra) {
       const passo = (ts) => {
         if (inicio === null) inicio = ts
         const p = Math.min(1, (ts - inicio) / dur)
-        const e = 1 - Math.pow(1 - p, 3)
-        tela.scrollTop = desde + delta * e
+        tela.scrollTop = desde + delta * (1 - Math.pow(1 - p, 3))
         if (p < 1) rafId = requestAnimationFrame(passo)
         else resolver()
       }
@@ -88,15 +53,15 @@ export function createScroller(tela, cifra) {
   }
 
   function irPara(indice, dur = 1) {
-    st.ativa = Math.max(0, Math.min(indice, st.paginas.length - 1))
+    st.ativa = Math.max(0, Math.min(indice, st.total - 1))
     if (st.onPagina) st.onPagina(st.ativa)
-    return animarPara(st.ativa, dur)
+    return animarPara(dur)
   }
 
   function cronometro() {
     clearTimeout(timer)
-    if (!st.rolando || st.paginas.length <= 1) return
-    if (st.ativa >= st.paginas.length - 1) {
+    if (!st.rolando || st.total <= 1) return
+    if (st.ativa >= st.total - 1) {
       if (st.onPagina) st.onPagina(st.ativa)
       return
     }
@@ -125,6 +90,7 @@ export function createScroller(tela, cifra) {
 
   return {
     rebuild,
+    layout,
     irPara,
     pausar,
     retomar,

@@ -84,8 +84,8 @@ export function initShow(state) {
     velEl.textContent = `${p.velocidade}s`
     btnColunas.textContent = `${p.colunas} col`
     btnRolagem.textContent = scroller.estado.rolando ? 'Pausar' : 'Retomar'
-    fimEl.hidden = !state.atual || scroller.estado.paginas.length === 0 ||
-      scroller.estado.ativa < scroller.estado.paginas.length - 1
+    fimEl.hidden = !state.atual || scroller.estado.total <= 1 ||
+      scroller.estado.ativa < scroller.estado.total - 1
     const prox = state.proxima
     btnProxima.hidden = !prox
     btnProxima.textContent = prox ? `Próxima ▸ ${prox.titulo}` : 'Próxima ▸'
@@ -98,7 +98,7 @@ export function initShow(state) {
   scroller.onPagina = (i) => {
     if (!state.atual) return
     state.atual.pagina = i
-    i >= scroller.estado.paginas.length - 1 ? scroller.pausar() : scroller.retomar()
+    i >= scroller.estado.total - 1 ? scroller.pausar() : scroller.retomar()
     atualizarControles()
   }
 
@@ -154,7 +154,7 @@ export function initShow(state) {
 
   window.addEventListener('resize', () => {
     if (state.mode === 'show' && ultimosRows.length) {
-      scroller.rebuild(ultimosRows)
+      scroller.layout()
       atualizarControles()
     }
   })

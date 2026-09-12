@@ -428,39 +428,22 @@ select {
   position: relative;
   font-size: clamp(15px, 2.4vh, 26px);
   line-height: 1.95;
-  padding-bottom: 4rem;
-}
-
-.pagina[data-colunas='1'] { column-count: 1; }
-.pagina[data-colunas='2'] { column-count: 2; }
-.pagina[data-colunas='3'] { column-count: 3; }
-
-.pagina {
-  column-fill: balance;
   column-gap: 2.5rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.pagina:last-child {
-  border-bottom: none;
-}
-
-.secao {
-  margin: 1.1em 0 0.6em;
-  color: var(--section);
-  text-transform: uppercase;
-  text-align: center;
-  font-size: 0.82em;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  break-inside: avoid;
-  column-break-inside: avoid;
 }
 
 .compasso {
-  margin: 0 0 0.18em;
+  margin: 0;
   break-inside: avoid;
   column-break-inside: avoid;
+}
+
+.compasso.secao-atual .pw-texto {
+  font-weight: 700;
+  color: var(--section);
+}
+
+.compasso.secao-atual .acorde {
+  font-weight: 800;
 }
 
 .compasso-so {
@@ -476,7 +459,7 @@ select {
 .pw {
   position: relative;
   display: inline-block;
-  padding-top: 1.6em;
+  padding-top: 0.95em;
 }
 
 .pw-acordes {

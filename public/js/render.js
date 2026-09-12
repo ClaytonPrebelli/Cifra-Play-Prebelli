@@ -60,15 +60,15 @@ export function renderShow(modelo, { tomOffset = 0, colunas = 3 } = {}) {
   const conteudo = tomOffset === 0
     ? modelo.conteudo
     : modelo.conteudo.map((c) => (c.tipo === 'secao' ? c : transporCompasso(c, tomOffset)))
+  let destacar = false
   for (const item of conteudo) {
     if (item.tipo === 'secao') {
-      const h = document.createElement('h2')
-      h.className = 'secao'
-      h.textContent = item.nome
-      container.append(h)
-    } else {
-      container.append(montarCompasso(item))
+      destacar = true
+      continue
     }
+    const c = montarCompasso(item)
+    if (destacar) c.classList.add('secao-atual')
+    container.append(c)
   }
   return container
 }
