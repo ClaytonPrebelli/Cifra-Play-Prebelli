@@ -70,6 +70,15 @@ function tomBaseFromContent(text) {
   return m ? m[1] : null
 }
 
+function normalizeTom(value) {
+  if (typeof value !== 'string') return undefined
+  const t = value.trim()
+  if (!t) return null
+  const m = /^([A-Ga-g])(#|b|B)?$/.exec(t)
+  if (!m) return undefined
+  return m[1].toUpperCase() + (m[2] ? m[2].toLowerCase() : '')
+}
+
 function normalizeEstilos(list) {
   if (!Array.isArray(list)) return []
   const seen = new Set()
@@ -150,7 +159,10 @@ async function handlePutMusica(req, res, id) {
     id,
     artista: existing?.artista ?? meta.artista,
     titulo: existing?.titulo ?? meta.titulo,
-    tomBase: tomBaseFromContent(body.conteudo) ?? existing?.tomBase ?? null,
+    tomBase: normalizeTom(body.tomBase) ??
+      tomBaseFromContent(body.conteudo) ??
+      existing?.tomBase ??
+      null,
     estilos: Array.isArray(body.estilos)
       ? normalizeEstilos(body.estilos)
       : existing?.estilos ?? estilosFromContent(body.conteudo),

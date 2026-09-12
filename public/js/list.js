@@ -66,6 +66,7 @@ export function initList(state) {
   const textoEl = document.getElementById('ed-texto')
   const artistEl = document.getElementById('ed-artista')
   const tituloEl = document.getElementById('ed-titulo')
+  const tomEl = document.getElementById('ed-tom')
   const statusEl = document.getElementById('editor-status')
   const btnSalvar = document.getElementById('btn-salvar')
   const btnCancelar = document.getElementById('btn-cancelar')
@@ -183,6 +184,7 @@ export function initList(state) {
     document.getElementById('editor-titulo').textContent = m ? `Editar — ${m.titulo}` : 'Adicionar música'
     artistEl.value = m?.artista ?? ''
     tituloEl.value = m?.titulo ?? ''
+    tomEl.value = m?.tomBase ?? ''
     editorEstilos.setValor(m?.estilos || [])
     textoEl.value = ''
     statusEl.textContent = ''
@@ -215,7 +217,7 @@ export function initList(state) {
     }
     const novoId = fileNameFrom(artista, titulo)
     try {
-      await putMusica(novoId, conteudo, estilos)
+      await putMusica(novoId, conteudo, estilos, tomEl.value.trim() || null)
       if (editId && novoId !== editId) {
         await deleteMusica(editId)
       }

@@ -121,7 +121,8 @@ export function initShow(state) {
       }
       const p = prefsAtuais()
       scroller.velocidade = p.velocidade
-      tituloEl.textContent = item.artista ? `${item.artista} — ${item.titulo}` : item.titulo
+      const nome = item.artista ? `${item.artista} — ${item.titulo}` : item.titulo
+      tituloEl.textContent = p.tomBase ? `${nome} · Tom ${p.tomBase}` : nome
       state.proxima = state.catalog[state.catalog.findIndex((c) => c.id === item.id) + 1] || null
       modo('show')
       montarCifra(true)

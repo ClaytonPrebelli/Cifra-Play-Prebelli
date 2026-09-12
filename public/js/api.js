@@ -20,8 +20,8 @@ export const getCatalog = () => request('GET', '/api/musicas')
 
 export const getMusica = (id) => request('GET', `/api/musicas/${encodeURIComponent(id)}`)
 
-export const putMusica = (id, conteudo, estilos) =>
-  request('PUT', `/api/musicas/${encodeURIComponent(id)}`, { conteudo, estilos })
+export const putMusica = (id, conteudo, estilos, tomBase) =>
+  request('PUT', `/api/musicas/${encodeURIComponent(id)}`, { conteudo, estilos, tomBase })
 
 export const deleteMusica = (id) =>
   request('DELETE', `/api/musicas/${encodeURIComponent(id)}`)
