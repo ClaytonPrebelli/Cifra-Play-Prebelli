@@ -17,9 +17,9 @@ depois a tela que é o coração do app, e por último as extensões.
 ## Fase 1 — Parser + Transpositor (lógica pura, sem UI)
 
 **Entrega:** ler um `.txt`, produzir um `CifraModel` correto e transpor.
-- [ ] `public/js/parser.js` implementando `docs/formato-cifra.md`
-- [ ] `public/js/transpositor.js` (mapa cromático, tônica/baixo, sufixo preservado)
-- [ ] `test/parser.test.js` e `test/transpositor.test.js` — testes **golden**
+- [x] `public/js/parser.js` implementando `docs/formato-cifra.md`
+- [x] `public/js/transpositor.js` (mapa cromático, tônica/baixo, sufixo preservado)
+- [x] `test/parser.test.js` e `test/transpositor.test.js` — testes **golden**
 - ✅ Feito quando: `npm test` verde cobre seções, âncora posicional, tom,
   amostras reais de cifra e casos de fronteira.
 
