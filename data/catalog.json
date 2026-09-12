@@ -1,0 +1,11 @@
+{
+  "versoes": 1,
+  "musicas": [
+    {
+      "id": "Cazuza - Exagerado.txt",
+      "artista": "Cazuza",
+      "titulo": "Exagerado",
+      "tomBase": "C"
+    }
+  ]
+}

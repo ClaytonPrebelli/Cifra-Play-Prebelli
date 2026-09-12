@@ -1,0 +1,362 @@
+:root {
+  color-scheme: dark;
+  --bg: #111318;
+  --bg-header: #0c0e13;
+  --bg-panel: #181c24;
+  --border: #2a3040;
+  --text: #eef1f6;
+  --text-dim: #8b93a3;
+  --chord: #ffd166;
+  --section: #e53935;
+  --accent: #4c9aff;
+  --input-bg: #0d1016;
+}
+
+body[data-tema='claro'] {
+  color-scheme: light;
+  --bg: #f4f6fa;
+  --bg-header: #ffffff;
+  --bg-panel: #ffffff;
+  --border: #d9dee8;
+  --text: #1c2029;
+  --text-dim: #6b7484;
+  --chord: #b8860b;
+  --section: #c62828;
+  --accent: #2f6fdc;
+  --input-bg: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+main#app {
+  height: 100%;
+}
+
+.view {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex: 0 0 auto;
+  padding: 0.55rem 1.25rem;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1 1 auto;
+  justify-content: flex-end;
+}
+
+.content-area {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 1.25rem;
+}
+
+.placeholder {
+  color: var(--text-dim);
+}
+
+input[type='search'],
+input[type='text'] {
+  font: inherit;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.45rem 0.7rem;
+  min-width: 0;
+}
+
+input[type='search'] {
+  width: min(22rem, 100%);
+}
+
+select {
+  font: inherit;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.45rem 0.7rem;
+  min-width: 0;
+}
+
+.multiselect {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.multiselect-trigger {
+  max-width: 18rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.multiselect-inline {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.multiselect-inline .multiselect-trigger {
+  align-self: flex-start;
+}
+
+.multiselect-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  min-width: 220px;
+  max-height: 320px;
+  overflow: hidden;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.multiselect-inline .multiselect-panel {
+  position: static;
+  box-shadow: none;
+  max-height: 260px;
+}
+
+.multiselect-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 0.15rem 0.35rem;
+}
+
+.multiselect-add {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.9rem;
+}
+
+.multiselect-limpar {
+  font: inherit;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.85rem;
+  flex: 0 0 auto;
+}
+
+.multiselect-lista {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  min-height: 0;
+}
+
+.multiselect-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.multiselect-item:hover {
+  background: var(--bg);
+}
+
+.multiselect-vazio {
+  margin: 0;
+  padding: 0.4rem 0.5rem;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.btn {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+}
+
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn.danger {
+  color: var(--section);
+}
+
+#lista-musicas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.musica-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  background: var(--bg-panel);
+  cursor: pointer;
+}
+
+.musica-item:hover {
+  border-color: var(--accent);
+}
+
+.musica-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.musica-nome {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.musica-meta {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.musica-acoes {
+  display: flex;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+}
+
+.editor {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 1rem;
+}
+
+.editor.is-drag {
+  outline: 2px dashed var(--accent);
+  outline-offset: -16px;
+}
+
+.editor-panel {
+  width: min(720px, 100%);
+  max-height: 92vh;
+  overflow: auto;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.editor-panel h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.editor-campos {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.editor-campos input {
+  flex: 1 1 50%;
+  min-width: 0;
+}
+
+.editor-panel textarea {
+  min-height: 320px;
+  font-family: ui-monospace, Consolas, "Courier New", monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.75rem;
+  resize: vertical;
+}
+
+.editor-status {
+  color: var(--section);
+  font-size: 0.85rem;
+  min-height: 1.1em;
+}
+
+.editor-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  align-items: center;
+}

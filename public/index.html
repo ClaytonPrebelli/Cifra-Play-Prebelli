@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cifra Prebelli</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <main id="app">
+    <section id="lista" class="view">
+      <header class="app-header">
+        <h1>Cifra Prebelli</h1>
+        <div class="header-actions">
+          <input id="busca" type="search" placeholder="Buscar música ou artista…">
+          <div id="filtro-estilos" class="multiselect"></div>
+          <button id="btn-adicionar" class="btn primary">Adicionar</button>
+          <button id="btn-tema" class="btn" title="Alternar tema">Tema</button>
+        </div>
+      </header>
+      <div class="content-area">
+        <p id="lista-vazia" class="placeholder"></p>
+        <ul id="lista-musicas"></ul>
+      </div>
+    </section>
+    <section id="show" class="view" hidden>
+      <header class="app-header">
+        <span id="show-sobre">Modo show</span>
+        <div class="header-actions"></div>
+      </header>
+      <p class="placeholder" style="padding:1.25rem;">Modo show — em construção.</p>
+    </section>
+  </main>
+
+  <div id="editor" class="editor" hidden>
+    <div class="editor-panel">
+      <h2 id="editor-titulo">Adicionar música</h2>
+      <div class="editor-campos">
+        <input id="ed-artista" type="text" placeholder="Artista">
+        <input id="ed-titulo" type="text" placeholder="Título">
+      </div>
+      <div id="ed-estilos-wrap"></div>
+      <textarea id="ed-texto" placeholder="Cole ou escreva a cifra aqui… (ou arraste um arquivo .txt)"></textarea>
+      <input id="ed-arquivo" type="file" accept=".txt,text/plain" hidden>
+      <p id="editor-status" class="editor-status"></p>
+      <div class="editor-acoes">
+        <button id="btn-arquivo" class="btn">Abrir arquivo</button>
+        <button id="btn-cancelar" class="btn">Cancelar</button>
+        <button id="btn-salvar" class="btn primary">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "cifra-prebelli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Portal local de cifras para shows",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test test/"
+  }
+}
