@@ -6,7 +6,7 @@
   --border: #2a3040;
   --text: #eef1f6;
   --text-dim: #8b93a3;
-  --chord: #ffd166;
+  --chord: #2e7d32;
   --section: #e53935;
   --accent: #4c9aff;
   --input-bg: #0d1016;
@@ -20,7 +20,7 @@ body[data-tema='claro'] {
   --border: #d9dee8;
   --text: #1c2029;
   --text-dim: #6b7484;
-  --chord: #b8860b;
+  --chord: #1b5e20;
   --section: #c62828;
   --accent: #2f6fdc;
   --input-bg: #ffffff;
@@ -437,6 +437,10 @@ select {
   overflow: hidden;
 }
 
+.pagina + .pagina {
+  border-top: 1px solid var(--border);
+}
+
 .pagina .col {
   flex: 1 1 0;
   min-width: 0;
@@ -486,7 +490,7 @@ select {
 
 .acorde {
   color: var(--chord);
-  font-weight: 700;
+  font-weight: 800;
   font-size: 0.74em;
   line-height: 1.05;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4);

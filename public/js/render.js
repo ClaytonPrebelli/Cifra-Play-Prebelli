@@ -63,7 +63,7 @@ export function renderShow(modelo, { tomOffset = 0, colunas = 3 } = {}) {
   let destacar = false
   for (const item of conteudo) {
     if (item.tipo === 'secao') {
-      destacar = true
+      destacar = !/^(fim|final)$/i.test(item.nome || '')
       continue
     }
     const c = montarCompasso(item)
