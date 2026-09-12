@@ -10,10 +10,8 @@ export function createScroller(tela, cifra) {
   function layout() {
     const h = altura()
     cifra.style.height = `${h}px`
-    cifra.style.maxHeight = `${h}px`
     cifra.style.columnCount = String(st.colunas)
     cifra.style.columnFill = 'auto'
-    cifra.style.overflow = 'hidden'
     st.total = Math.max(1, Math.ceil(cifra.scrollHeight / h))
     if (st.ativa > st.total - 1) st.ativa = st.total - 1
     tela.scrollTop = deslocamento()
