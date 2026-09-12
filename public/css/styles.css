@@ -438,7 +438,7 @@ select {
 }
 
 .pagina + .pagina {
-  border-top: 1px solid var(--border);
+  border-top: 2px dashed var(--accent);
 }
 
 .pagina .col {
