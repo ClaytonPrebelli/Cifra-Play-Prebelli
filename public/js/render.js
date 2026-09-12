@@ -75,14 +75,17 @@ export function renderShow(modelo, { tomOffset = 0, colunas = 3 } = {}) {
 
 const GAP_COLUNAS = 40
 
-function criarPagina(altura, colunas) {
+function criarPagina(altura, c1, c2) {
   const p = document.createElement('div')
   p.className = 'pagina'
   p.style.height = `${altura}px`
   p.style.overflow = 'hidden'
-  p.style.columnCount = '2'
-  p.style.columnFill = 'auto'
-  p.append(...colunas)
+  for (const col of [c1, c2]) {
+    const d = document.createElement('div')
+    d.className = 'col'
+    d.append(...col)
+    p.append(d)
+  }
   return p
 }
 
@@ -111,7 +114,7 @@ export function paginarRows(rows, { altura, largura }) {
   let h1 = 0
   let h2 = 0
   const novaPagina = () => {
-    if (c1.length || c2.length) paginas.push(criarPagina(altura, [...c1, ...c2]))
+    if (c1.length || c2.length) paginas.push(criarPagina(altura, c1, c2))
   }
 
   for (const row of rows) {
