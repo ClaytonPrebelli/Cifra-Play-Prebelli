@@ -29,8 +29,12 @@ test('golden: cifra completa vira modelo esperado', () => {
   assert.equal(m.tom, 'Bb')
   assert.deepEqual(m.estilos, ['Rock', 'Românticas'])
 
-  assert.deepEqual(m.conteudo.map((i) => (i.tipo === 'secao' ? i.nome : null)), [
-    'Intro', null, 'Verso', null, null, 'Refrão', null, 'Final', null,
+  assert.deepEqual(m.conteudo.map((i) => {
+    if (i.tipo === 'secao') return i.nome
+    if (i.tipo === 'espaco') return '_'
+    return null
+  }), [
+    'Intro', null, '_', 'Verso', null, null, '_', 'Refrão', null, '_', 'Final', null,
   ])
 
   const [intro, v1, v2, refrao, final] = m.conteudo.filter((i) => i.tipo === 'compasso')
@@ -68,24 +72,27 @@ test('seção vs acorde entre colchetes', () => {
   const m = parseCifra('[Refrão]\n\n[C]\n\n[C G]\n\nX\n')
   assert.equal(m.conteudo[0].tipo, 'secao')
   assert.equal(m.conteudo[0].nome, 'Refrão')
-  assert.equal(m.conteudo[1].tipo, 'compasso')
-  assert.equal(m.conteudo[1].acordes[0].tonica, 'C')
-  assert.equal(m.conteudo[2].acordes.length, 2)
-  assert.equal(m.conteudo[2].acordes[1].tonica, 'G')
+  const [c1, c2, c3] = m.conteudo.filter((i) => i.tipo === 'compasso')
+  assert.equal(c1.acordes[0].tonica, 'C')
+  assert.equal(c2.acordes.length, 2)
+  assert.equal(c2.acordes[1].tonica, 'G')
+  assert.ok(m.conteudo.some((i) => i.tipo === 'espaco'))
 })
 
 test('fronteira: letra com C maiúsculo não é linha de acordes', () => {
   const m = parseCifra('C com você\n\nAm F C G\n')
-  assert.deepEqual(m.conteudo[0].acordes, [])
-  assert.equal(m.conteudo[0].letra, 'C com você')
-  assert.equal(m.conteudo[1].letra, null)
-  assert.equal(m.conteudo[1].acordes.length, 4)
+  const [letra, acordes] = m.conteudo.filter((i) => i.tipo === 'compasso')
+  assert.deepEqual(letra.acordes, [])
+  assert.equal(letra.letra, 'C com você')
+  assert.equal(acordes.letra, null)
+  assert.equal(acordes.acordes.length, 4)
 })
 
 test('fronteira: "Amor é fogo" é letra e nota isolada é acorde', () => {
   const m = parseCifra('Amor é fogo que arde\n\nDm\n')
-  assert.equal(m.conteudo[0].letra, 'Amor é fogo que arde')
-  assert.equal(m.conteudo[1].acordes[0].tonica, 'D')
+  const [letra, nota] = m.conteudo.filter((i) => i.tipo === 'compasso')
+  assert.equal(letra.letra, 'Amor é fogo que arde')
+  assert.equal(nota.acordes[0].tonica, 'D')
 })
 
 test('âncora: acorde antes da primeira palavra ancora em w1', () => {
@@ -109,6 +116,7 @@ test('parseChord extrai tonica, sufixo, anotação e baixo', () => {
   })
   assert.equal(parseChord('A°').sufixo, '°')
   assert.equal(parseChord('Amaj7').sufixo, 'maj7')
+  assert.equal(parseChord('G7M').sufixo, '7M')
   assert.equal(parseChord('Bb').tonica, 'Bb')
   assert.equal(parseChord('com'), null)
   assert.equal(parseChord('C/'), null)

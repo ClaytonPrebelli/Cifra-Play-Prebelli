@@ -7,7 +7,7 @@ export const AppState = {
   catalog: [],
   filters: { busca: '', estilos: [] },
   atual: null,
-  show: { paginaAtiva: 0, autoRolagem: true, velocidade: 3, tomOffset: 0 },
+  show: { tomOffset: 0 },
 }
 
 function setMode(mode) {

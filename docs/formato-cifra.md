@@ -93,15 +93,16 @@ Cada linha útil (não vazia) é classificada por este algoritmo:
     (?:6|7|9|11|13)?                     # extensões numéricas
   | sus(?:2|4)? 
   | add[2-9]?
+  | 7M(?:6|9|11|13)?                    # 7ª maior (Cifra Club: G7M)
   | 6|7|9|11|13                          # extensões diretas
  )?
  (\([^)]*\))?                     # anotações: (b5), (add9), (9+)
  (/[A-G](#|b)?)?                  # baixo invertido: C/E, D/F#
 $
-```
 
 Tokenize depois compactando espaços múltiplos em um. Notas válidas:
 `C D E F G A B` e variantes `C# Db` etc. (`bb` não é aceito; normalizar).
+`7M` (ex.: `G7M`) é 7ª maior, aceita extensões `7M9`, `7M11`, `7M13`.
 
 ### Extração do acorde
 

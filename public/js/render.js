@@ -59,11 +59,17 @@ export function renderShow(modelo, { tomOffset = 0, colunas = 3 } = {}) {
   container.dataset.colunas = String(colunas)
   const conteudo = tomOffset === 0
     ? modelo.conteudo
-    : modelo.conteudo.map((c) => (c.tipo === 'secao' ? c : transporCompasso(c, tomOffset)))
+    : modelo.conteudo.map((c) => (c.tipo === 'compasso' ? transporCompasso(c, tomOffset) : c))
   let destacar = false
   for (const item of conteudo) {
     if (item.tipo === 'secao') {
       destacar = !/^(fim|final)$/i.test(item.nome || '')
+      continue
+    }
+    if (item.tipo === 'espaco') {
+      const g = document.createElement('div')
+      g.className = 'espaco'
+      container.append(g)
       continue
     }
     const c = montarCompasso(item)

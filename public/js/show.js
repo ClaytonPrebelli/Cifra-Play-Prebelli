@@ -4,7 +4,7 @@ import { transporNota } from './transpositor.js'
 import { renderShow, paginarRows } from './render.js'
 import { createScroller } from './scroller.js'
 
-const PADRAO = { tomOffset: 0, velocidade: 3, rolagem: true }
+const PADRAO = { tomOffset: 0 }
 
 let abrirFn = null
 
@@ -19,12 +19,9 @@ export function initShow(state) {
   const cifraEl = document.getElementById('show-cifra')
   const tituloEl = document.getElementById('show-titulo')
   const tomEl = document.getElementById('show-tom')
-  const velEl = document.getElementById('show-vel')
   const btnTomMenos = document.getElementById('btn-tom-menos')
   const btnTomMais = document.getElementById('btn-tom-mais')
-  const btnVelMenos = document.getElementById('btn-vel-menos')
-  const btnVelMais = document.getElementById('btn-vel-mais')
-  const btnRolagem = document.getElementById('btn-rolagem')
+  const btnProximoBloco = document.getElementById('btn-proximo-bloco')
   const btnProxima = document.getElementById('btn-proxima')
   const fimEl = document.getElementById('show-fim')
   const fimTextoEl = document.getElementById('show-fim-texto')
@@ -44,8 +41,6 @@ export function initShow(state) {
     const prefs = state.atual?.prefs
     return {
       tomOffset: prefs?.tomOffset ?? PADRAO.tomOffset,
-      velocidade: prefs?.velocidade ?? PADRAO.velocidade,
-      rolagem: prefs?.rolagem ?? PADRAO.rolagem,
       tomBase: m?.tomBase ?? state.atual?.modelo?.tom ?? null,
     }
   }
@@ -55,9 +50,7 @@ export function initShow(state) {
     const idx = state.catalog.findIndex((c) => c.id === state.atual.id)
     if (idx === -1) return
     const p = prefsAtuais()
-    state.catalog[idx].prefs = {
-      tomOffset: p.tomOffset, velocidade: p.velocidade, rolagem: p.rolagem,
-    }
+    state.catalog[idx].prefs = { tomOffset: p.tomOffset }
     clearTimeout(timerSalvar)
     timerSalvar = setTimeout(() => {
       saveCatalog({ versoes: 1, musicas: state.catalog }).catch(() => {})
@@ -78,10 +71,9 @@ export function initShow(state) {
     tomEl.textContent = disp
       ? `${disp}${p.tomOffset ? ` (${p.tomOffset > 0 ? '+' : ''}${p.tomOffset})` : ''}`
       : '–'
-    velEl.textContent = `${p.velocidade}s`
-    btnRolagem.textContent = scroller.estado.rolando ? 'Pausar' : 'Retomar'
-    fimEl.hidden = !state.atual || scroller.estado.total <= 1 ||
-      scroller.estado.ativa < scroller.estado.total - 1 || !state.proxima
+    const noFim = scroller.estado.total <= 1 || scroller.estado.ativa >= scroller.estado.total - 1
+    btnProximoBloco.hidden = !state.atual || noFim
+    fimEl.hidden = !state.atual || noFim || !state.proxima
     const prox = state.proxima
     btnProxima.hidden = !prox
     btnProxima.textContent = prox ? `Próxima ▸ ${prox.titulo}` : 'Próxima ▸'
@@ -94,13 +86,11 @@ export function initShow(state) {
   scroller.onPagina = (i) => {
     if (!state.atual) return
     state.atual.pagina = i
-    i >= scroller.estado.total - 1 ? scroller.pausar() : scroller.retomar()
     atualizarControles()
   }
 
   function montarCifra(salvar) {
     const p = prefsAtuais()
-    scroller.velocidade = p.velocidade
     const rows = [...renderShow(state.atual.modelo, { tomOffset: p.tomOffset }).children]
     const paginas = paginarRows(rows, {
       altura: scroller.altura(),
@@ -120,20 +110,17 @@ export function initShow(state) {
         modelo: parseCifra(data.conteudo),
       }
       const p = prefsAtuais()
-      scroller.velocidade = p.velocidade
       const nome = item.artista ? `${item.artista} — ${item.titulo}` : item.titulo
       tituloEl.textContent = p.tomBase ? `${nome} · Tom ${p.tomBase}` : nome
       state.proxima = state.catalog[state.catalog.findIndex((c) => c.id === item.id) + 1] || null
       modo('show')
       montarCifra(true)
-      if (p.rolagem) scroller.retomar()
     } catch (err) {
       alert(`Erro ao abrir "${item.titulo}": ${err.message}`)
     }
   }
 
   function voltarLista() {
-    scroller.pausar()
     modo('list')
     state.atual = null
     state.proxima = null
@@ -153,9 +140,7 @@ export function initShow(state) {
   document.getElementById('show-voltar').addEventListener('click', voltarLista)
   btnTomMenos.addEventListener('click', () => { state.atual.prefs = prefsAtuais(); state.atual.prefs.tomOffset -= 1; aoMudarProp() })
   btnTomMais.addEventListener('click', () => { state.atual.prefs = prefsAtuais(); state.atual.prefs.tomOffset += 1; aoMudarProp() })
-  btnVelMenos.addEventListener('click', () => { state.atual.prefs = prefsAtuais(); state.atual.prefs.velocidade -= 1; aoMudarProp() })
-  btnVelMais.addEventListener('click', () => { state.atual.prefs = prefsAtuais(); state.atual.prefs.velocidade += 1; aoMudarProp() })
-  btnRolagem.addEventListener('click', () => { scroller.alternar(); atualizarControles() })
+  btnProximoBloco.addEventListener('click', () => scroller.irPara(scroller.estado.ativa + 1))
   btnProxima.addEventListener('click', proximaMusica)
   btnFimProxima.addEventListener('click', () => {
     state.proxima ? proximaMusica() : voltarLista()
@@ -165,11 +150,7 @@ export function initShow(state) {
     if (state.mode !== 'show') return
     const tag = (e.target.tagName || '').toLowerCase()
     if (tag === 'input' || tag === 'textarea' || !document.getElementById('editor').hidden) return
-    if (e.key === ' ') {
-      e.preventDefault()
-      scroller.alternar()
-      atualizarControles()
-    } else if (e.key === 'ArrowRight') {
+    if (e.key === 'ArrowRight') {
       e.preventDefault()
       if (e.shiftKey) proximaMusica()
       else scroller.irPara(scroller.estado.ativa + 1)

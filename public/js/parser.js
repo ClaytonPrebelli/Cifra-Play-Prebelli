@@ -1,4 +1,4 @@
-export const CHORD_PATTERN = /^[A-G](#|b)?(?:(?:maj7?|min7?|M7?|m|dim|aug|\+|°)(?:6|7|9|11|13)?|sus(?:2|4)?|add[2-9]?|6|7|9|11|13)?(?:\([^)]*\))?(?:\/[A-G](#|b)?)?$/
+export const CHORD_PATTERN = /^[A-G](#|b)?(?:(?:maj7?|min7?|M7?|m|dim|aug|\+|°)(?:6|7|9|11|13)?|sus(?:2|4)?|add[2-9]?|7M(?:6|9|11|13)?|6|7|9|11|13)?(?:\([^)]*\))?(?:\/[A-G](#|b)?)?$/
 
 export function parseChord(token) {
   if (!CHORD_PATTERN.test(token)) return null
@@ -106,6 +106,10 @@ export function parseCifra(texto) {
     const linha = bruta.replace(/\s+$/, '')
     if (linha.trim() === '') {
       flush()
+      if (modelo.conteudo.length > 0 &&
+          modelo.conteudo[modelo.conteudo.length - 1].tipo !== 'espaco') {
+        modelo.conteudo.push({ tipo: 'espaco' })
+      }
       continue
     }
 
@@ -161,5 +165,8 @@ export function parseCifra(texto) {
   }
 
   flush()
+  while (modelo.conteudo.length && modelo.conteudo[modelo.conteudo.length - 1].tipo === 'espaco') {
+    modelo.conteudo.pop()
+  }
   return modelo
 }

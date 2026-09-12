@@ -1,7 +1,6 @@
 export function createScroller(tela, cifra) {
-  const st = { velocidade: 3, rolando: true, total: 1, ativa: 0, onPagina: null }
+  const st = { total: 1, ativa: 0, onPagina: null }
   let rafId = 0
-  let timer = null
 
   function altura() {
     return Math.max(220, tela.clientHeight - 16)
@@ -43,51 +42,17 @@ export function createScroller(tela, cifra) {
     })
   }
 
-  function irPara(indice, dur = 1) {
+  function irPara(indice, dur = 220) {
     st.ativa = Math.max(0, Math.min(indice, st.total - 1))
     if (st.onPagina) st.onPagina(st.ativa)
     return animarPara(dur)
-  }
-
-  function cronometro() {
-    clearTimeout(timer)
-    if (!st.rolando || st.total <= 1) return
-    if (st.ativa >= st.total - 1) {
-      if (st.onPagina) st.onPagina(st.ativa)
-      return
-    }
-    timer = setTimeout(() => {
-      if (!st.rolando) return
-      const dur = Math.min(600, st.velocidade * 1000 * 0.35)
-      irPara(st.ativa + 1, dur)
-      cronometro()
-    }, st.velocidade * 1000)
-  }
-
-  function pausar() {
-    st.rolando = false
-    clearTimeout(timer)
-  }
-
-  function retomar() {
-    st.rolando = true
-    cronometro()
-  }
-
-  function alternar() {
-    if (st.rolando) pausar()
-    else retomar()
   }
 
   return {
     rebuild,
     layout,
     irPara,
-    pausar,
-    retomar,
-    alternar,
     altura,
-    set velocidade(v) { st.velocidade = Math.max(1, Math.min(30, v)) },
     set onPagina(fn) { st.onPagina = fn },
     get estado() { return st },
   }
