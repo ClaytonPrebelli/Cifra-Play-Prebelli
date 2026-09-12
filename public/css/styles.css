@@ -475,6 +475,9 @@ select {
 .pw {
   position: relative;
   display: inline-block;
+}
+
+.pw:has(.pw-acordes) {
   padding-top: 0.95em;
 }
 
