@@ -1,5 +1,6 @@
 import { getCatalog, getMusica, putMusica, deleteMusica } from './api.js'
 import { createMultiselect } from './multiselect.js'
+import { openShow } from './show.js'
 
 const TEMA_STORAGE_KEY = 'cifra-prebelli:tema'
 
@@ -171,7 +172,7 @@ export function initList(state) {
       })
       acoes.append(btnEditar, btnRemover)
 
-      li.addEventListener('click', () => openEditor(m))
+      li.addEventListener('click', () => openShow(m))
       li.append(info, acoes)
       listEl.append(li)
     }

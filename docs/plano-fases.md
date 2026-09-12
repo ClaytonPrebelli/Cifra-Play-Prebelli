@@ -43,12 +43,12 @@ depois a tela que é o coração do app, e por último as extensões.
 ## Fase 3 — Tela de apresentação (o coração)
 
 **Entrega:** modo show em 3 colunas com rolamento automático.
-- [ ] `public/js/render.js` — modelo → DOM em 3 colunas, seções em vermelho,
+- [x] `public/js/render.js` — modelo → DOM em 3 colunas, seções em vermelho,
       acorde ancorado acima da palavra (nunca separa acorde da palavra)
-- [ ] `public/js/scroller.js` — paginação por versos (página nunca parte verso)
+- [x] `public/js/scroller.js` — paginação por versos (página nunca parte verso)
       + avanço automático com velocidade configurável
-- [ ] `public/js/show.js` — estado do show, atalhos, "próxima música" retomando rolagem
-- [ ] Preferências por música: velocidade, tomOffset, colunas, rolagem → `POST /api/catalog`
+- [x] `public/js/show.js` — estado do show, atalhos, "próxima música" retomando rolagem
+- [x] Preferências por música: velocidade, tomOffset, colunas, rolagem → `POST /api/catalog`
 - ✅ Feito quando: toco uma música de ponta a ponta no "modo show" sem tocar
   no mouse, navegando as músicas do setlist.
 

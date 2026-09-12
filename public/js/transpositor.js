@@ -29,11 +29,23 @@ export function transporAcorde(acorde, offset) {
   return { ...acorde, tonica, baixo }
 }
 
+export function textoDoAcorde(a) {
+  if (!a) return ''
+  return (a.tonica || '') + (a.sufixo || '') + (a.anotacao || '') + (a.baixo ? `/${a.baixo}` : '')
+}
+
 export function transporTexto(token, offset) {
   const acorde = parseChord(token)
   if (!acorde) return null
   const transposto = transporAcorde(acorde, offset)
-  if (!transposto) return null
-  return transposto.tonica + (transposto.sufixo || '') + (transposto.anotacao || '') +
-    (transposto.baixo ? `/${transposto.baixo}` : '')
+  return transposto ? textoDoAcorde(transposto) : null
+}
+
+export function transporCompasso(compasso, offset) {
+  if (!compasso || offset === 0) return compasso
+  return {
+    ...compasso,
+    acordes: compasso.acordes.map((a) => transporAcorde(a, offset)),
+    inline: compasso.inline.map((e) => ({ ...e, acorde: transporAcorde(e.acorde, offset) })),
+  }
 }
