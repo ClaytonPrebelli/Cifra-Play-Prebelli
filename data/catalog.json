@@ -2,13 +2,17 @@
   "versoes": 1,
   "musicas": [
     {
-      "id": "Cazuza - Exagerado.txt",
-      "artista": "Cazuza",
-      "titulo": "Exagerado",
-      "tomBase": "C",
+      "id": "Henrique e Juliano - A Maior Saudade.txt",
+      "artista": "Henrique e Juliano",
+      "titulo": "A Maior Saudade",
+      "tomBase": "B",
       "estilos": [
-        "Rock"
-      ]
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      },
+      "capotraste": null
     },
     {
       "id": "Marcos e Belutti - Sonho de Todo Casal.txt",
@@ -17,7 +21,11 @@
       "tomBase": "D",
       "estilos": [
         "Sertanejo Universitário"
-      ]
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
     }
-  ]
+  ],
+  "ordens": {}
 }

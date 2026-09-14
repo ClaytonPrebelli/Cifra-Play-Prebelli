@@ -3,6 +3,7 @@ import { parseCifra } from './parser.js'
 import { transporNota } from './transpositor.js'
 import { renderShow, paginarRows } from './render.js'
 import { createScroller } from './scroller.js'
+import { ordemParaEstilo } from './app.js'
 
 const PADRAO = { tomOffset: 0 }
 
@@ -23,9 +24,6 @@ export function initShow(state) {
   const btnTomMais = document.getElementById('btn-tom-mais')
   const btnProximoBloco = document.getElementById('btn-proximo-bloco')
   const btnProxima = document.getElementById('btn-proxima')
-  const fimEl = document.getElementById('show-fim')
-  const fimTextoEl = document.getElementById('show-fim-texto')
-  const btnFimProxima = document.getElementById('btn-fim-proxima')
 
   const scroller = createScroller(telaEl, cifraEl)
   let timerSalvar = null
@@ -59,8 +57,7 @@ export function initShow(state) {
 
   function proximaMusica() {
     if (!state.atual) return
-    const idx = state.catalog.findIndex((c) => c.id === state.atual.id)
-    const prox = state.catalog[idx + 1]
+    const prox = state.proxima
     if (prox) openShow(prox)
   }
 
@@ -73,14 +70,9 @@ export function initShow(state) {
       : '–'
     const noFim = scroller.estado.total <= 1 || scroller.estado.ativa >= scroller.estado.total - 1
     btnProximoBloco.hidden = !state.atual || noFim
-    fimEl.hidden = !state.atual || noFim || !state.proxima
     const prox = state.proxima
     btnProxima.hidden = !prox
     btnProxima.textContent = prox ? `Próxima ▸ ${prox.titulo}` : 'Próxima ▸'
-    fimTextoEl.textContent = prox
-      ? `Fim de "${state.atual?.item?.titulo}" — próxima: ${prox.titulo}.`
-      : ''
-    btnFimProxima.hidden = !prox
   }
 
   scroller.onPagina = (i) => {
@@ -89,14 +81,14 @@ export function initShow(state) {
     atualizarControles()
   }
 
-  function montarCifra(salvar) {
+  function montarCifra(salvar, aoTopo = false) {
     const p = prefsAtuais()
     const rows = [...renderShow(state.atual.modelo, { tomOffset: p.tomOffset }).children]
     const paginas = paginarRows(rows, {
       altura: scroller.altura(),
       largura: Math.max(1, cifraEl.clientWidth),
     })
-    scroller.rebuild(paginas)
+    scroller.rebuild(paginas, aoTopo)
     if (salvar) salvarPrefs()
     atualizarControles()
   }
@@ -104,17 +96,35 @@ export function initShow(state) {
   async function abrir(item) {
     try {
       const data = await getMusica(item.id)
+      const est = state.filters.estilos.length === 1 ? state.filters.estilos[0] : null
+      const ordem = ordemParaEstilo(state, est)
       state.atual = {
         id: item.id,
         item,
         modelo: parseCifra(data.conteudo),
+        ordem,
+        estilo: est,
       }
+      const i = ordem.indexOf(item.id)
+      const proxId = i >= 0 && i < ordem.length - 1 ? ordem[i + 1] : null
+      state.proxima = proxId ? state.catalog.find((m) => m.id === proxId) || null : null
       const p = prefsAtuais()
       const nome = item.artista ? `${item.artista} — ${item.titulo}` : item.titulo
-      tituloEl.textContent = p.tomBase ? `${nome} · Tom ${p.tomBase}` : nome
+      tituloEl.textContent = nome
+      if (p.tomBase) {
+        const tom = document.createElement('span')
+        tom.textContent = ` · Tom ${p.tomBase}`
+        tituloEl.append(tom)
+      }
+      if (item.capotraste) {
+        const capo = document.createElement('span')
+        capo.className = 'capo'
+        capo.textContent = ` · Capo ${item.capotraste}ª casa`
+        tituloEl.append(capo)
+      }
       state.proxima = state.catalog[state.catalog.findIndex((c) => c.id === item.id) + 1] || null
       modo('show')
-      montarCifra(true)
+      montarCifra(true, true)
     } catch (err) {
       alert(`Erro ao abrir "${item.titulo}": ${err.message}`)
     }
@@ -142,9 +152,6 @@ export function initShow(state) {
   btnTomMais.addEventListener('click', () => { state.atual.prefs = prefsAtuais(); state.atual.prefs.tomOffset += 1; aoMudarProp() })
   btnProximoBloco.addEventListener('click', () => scroller.irPara(scroller.estado.ativa + 1))
   btnProxima.addEventListener('click', proximaMusica)
-  btnFimProxima.addEventListener('click', () => {
-    state.proxima ? proximaMusica() : voltarLista()
-  })
 
   document.addEventListener('keydown', (e) => {
     if (state.mode !== 'show') return

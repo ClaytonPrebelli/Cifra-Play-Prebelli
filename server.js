@@ -47,9 +47,13 @@ async function loadCatalog() {
   try {
     const raw = await readFile(CATALOG_PATH, 'utf8')
     const data = JSON.parse(raw)
-    return { versoes: 1, musicas: Array.isArray(data.musicas) ? data.musicas : [] }
+    return {
+      versoes: 1,
+      musicas: Array.isArray(data.musicas) ? data.musicas : [],
+      ordens: data.ordens && typeof data.ordens === 'object' && !Array.isArray(data.ordens) ? data.ordens : {},
+    }
   } catch {
-    return { versoes: 1, musicas: [] }
+    return { versoes: 1, musicas: [], ordens: {} }
   }
 }
 
@@ -97,6 +101,22 @@ function estilosFromContent(text) {
   const m = /^[ \t]*Estilo:\s*(.+?)[ \t]*$/im.exec(text || '')
   if (!m) return []
   return normalizeEstilos(m[1].split(/[,;]/))
+}
+
+function normalizeCapo(value) {
+  if (value === null || value === undefined || value === '') return null
+  const n = typeof value === 'number' ? value : parseInt(String(value).trim(), 10)
+  if (Number.isNaN(n) || !Number.isInteger(n)) return undefined
+  if (n === 0) return null
+  if (n < 1 || n > 14) return undefined
+  return n
+}
+
+function capotrasteFromContent(text) {
+  const m = /^[ \t]*Capotraste:\s*(\S*)[ \t]*$/im.exec(text || '')
+  if (!m) return null
+  if (!m[1] || /^sem$/i.test(m[1])) return null
+  return normalizeCapo(m[1])
 }
 
 function readBody(req) {
@@ -155,6 +175,9 @@ async function handlePutMusica(req, res, id) {
   const before = await loadCatalog()
   const existing = before.musicas.find((m) => m.id === id)
   const meta = deriveMeta(id)
+  const capo = body.capotraste === undefined
+    ? capotrasteFromContent(body.conteudo)
+    : normalizeCapo(body.capotraste)
   const entry = {
     id,
     artista: existing?.artista ?? meta.artista,
@@ -163,6 +186,7 @@ async function handlePutMusica(req, res, id) {
       tomBaseFromContent(body.conteudo) ??
       existing?.tomBase ??
       null,
+    capotraste: capo ?? existing?.capotraste ?? null,
     estilos: Array.isArray(body.estilos)
       ? normalizeEstilos(body.estilos)
       : existing?.estilos ?? estilosFromContent(body.conteudo),
@@ -194,9 +218,13 @@ async function handleCatalog(req, res) {
   if (!body || !Array.isArray(body.musicas)) {
     return sendJson(res, 400, { error: 'catálogo inválido' })
   }
-  const catalog = { versoes: 1, musicas: body.musicas }
+  const catalog = {
+    versoes: 1,
+    musicas: body.musicas,
+    ordens: body.ordens && typeof body.ordens === 'object' && !Array.isArray(body.ordens) ? body.ordens : {},
+  }
   await persistCatalog(catalog)
-  return sendJson(res, 200, { ok: true, musicas: catalog.musicas })
+  return sendJson(res, 200, { ok: true, musicas: catalog.musicas, ordens: catalog.ordens })
 }
 
 async function handleScan(res) {
@@ -214,12 +242,21 @@ async function handleScan(res) {
     const meta = deriveMeta(f)
     let tomBase = null
     let estilos = []
+    let capotraste = null
     try {
       const conteudo = await readFile(join(MUSICAS_DIR, f), 'utf8')
       tomBase = tomBaseFromContent(conteudo)
       estilos = estilosFromContent(conteudo)
+      capotraste = capotrasteFromContent(conteudo)
     } catch {}
-    newEntries.push({ id: f, artista: meta.artista, titulo: meta.titulo, tomBase, estilos })
+    newEntries.push({
+      id: f,
+      artista: meta.artista,
+      titulo: meta.titulo,
+      tomBase,
+      estilos,
+      capotraste,
+    })
   }
   catalog.musicas = [...catalog.musicas.filter((m) => present.has(m.id)), ...newEntries]
   await persistCatalog(catalog)
@@ -234,7 +271,7 @@ const server = createServer(async (req, res) => {
   try {
     if (pathname === '/api/musicas' && method === 'GET') {
       const catalog = await loadCatalog()
-      return sendJson(res, 200, catalog.musicas)
+      return sendJson(res, 200, { musicas: catalog.musicas, ordens: catalog.ordens })
     }
 
     if (pathname === '/api/scan' && method === 'POST') {

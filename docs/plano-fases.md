@@ -26,17 +26,17 @@ depois a tela que é o coração do app, e por último as extensões.
 ## Fase 2 — Servidor completo + Catálogo + Lista
 
 **Entrega:** listar, buscar, reordenar e abrir músicas no navegador.
-- [ ] Rotas `/api/*` implementadas (musicas, scan, catalog, PUT/DELETE)
-- [ ] `GET /api/scan`: adiciona arquivos novos, remove sumidos, título/artista do nome
-- [ ] **Header fino** (sem sidebar) com ação "Adicionar música"
-- [ ] Importação pela tela: seletor de arquivo `.txt`, **drag & drop** e colar
+- [x] Rotas `/api/*` implementadas (musicas, scan, catalog, PUT/DELETE)
+- [x] `GET /api/scan`: adiciona arquivos novos, remove sumidos, título/artista do nome
+- [x] **Header fino** (sem sidebar) com ação "Adicionar música"
+- [x] Importação pela tela: seletor de arquivo `.txt`, **drag & drop** e colar
       texto → grava via `PUT /api/musicas/:id` (sem mexer na pasta no disco)
-- [ ] `public/js/list.js`: lista + busca por nome/artista (digitação, diacrítico-insensível)
-- [ ] **Estilos por música** (1..n): campo no editor, linha `Estilo:` na
+- [x] `public/js/list.js`: lista + busca por nome/artista (digitação, diacrítico-insensível)
+- [x] **Estilos por música** (1..n): campo no editor, linha `Estilo:` na
       importação, sugestões padrão no autocomplete
-- [ ] **Filtro por estilo** na lista (select no header, combinado com a busca)
+- [x] **Filtro por estilo** na lista (select no header, combinado com a busca)
 - [x] Reordenação por **drag & drop**, persistida no catálogo
-- [ ] Extratação de `tomBase` no scan (cached)
+- [x] Extratação de `tomBase` no scan (cached)
 - ✅ Feito quando: drop de um `.txt` na pasta **ou importação pela tela** → a
   música aparece no app; reordeno; a ordem sobrevive a restart.
 

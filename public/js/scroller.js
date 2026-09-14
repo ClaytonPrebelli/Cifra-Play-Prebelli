@@ -13,8 +13,10 @@ export function createScroller(tela, cifra) {
     if (st.onPagina) st.onPagina(st.ativa)
   }
 
-  function rebuild(paginas) {
+  function rebuild(paginas, aoTopo = false) {
     cifra.textContent = ''
+    if (aoTopo) st.ativa = 0
+    else if (st.ativa > paginas.length - 1) st.ativa = Math.max(0, paginas.length - 1)
     if (paginas.length) cifra.append(...paginas)
     st.total = Math.max(1, paginas.length)
     layout()

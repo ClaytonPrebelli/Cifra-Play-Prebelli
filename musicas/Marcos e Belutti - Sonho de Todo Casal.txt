@@ -1,8 +1,4 @@
-Tom: D
-[Intro] D9  Em7  G7M
-
-[Primeira Parte]
-
+D9  Em7  G7M
 D9
 Quando eu bati o olho
                   Em    G
@@ -11,8 +7,6 @@ Bm
 Exatamente como sonho
 A9                                G
 E não precisa fechar o olho pra ver
-
-[Pré-Refrão]
 
        Bm
 Sorte a minha
@@ -24,10 +18,8 @@ Sorte a nossa
 É agora
 
 [Refrão]
-
   D9
 Arrepia
-
 Dá gelo na barriga
    Em              G
 Me tira um sorriso bobo
@@ -40,10 +32,8 @@ A9
 E a parte principal
          G
 É que a gente é o sonho de todo casal
-
 D9
 Arrepia
-
 Dá gelo na barriga
    Em              G
 Me tira um sorriso bobo
@@ -56,10 +46,11 @@ E a parte principal
          G
 É que a gente é o sonho de todo casal
 
-[Intro] D9  Em7  G
-        Bm  A9  G
+ D9  Em7  G
+ Bm  A9  G
+[fim]
 
-[Segunda Parte]
+
 
 D9
 Quando eu bati o olho

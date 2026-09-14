@@ -16,12 +16,22 @@ async function request(method, url, body) {
   return res.json()
 }
 
-export const getCatalog = () => request('GET', '/api/musicas')
+export const getCatalog = async () => {
+  const data = await request('GET', '/api/musicas')
+  return Array.isArray(data)
+    ? { musicas: data, ordens: {} }
+    : { musicas: data.musicas || [], ordens: data.ordens || {} }
+}
 
 export const getMusica = (id) => request('GET', `/api/musicas/${encodeURIComponent(id)}`)
 
-export const putMusica = (id, conteudo, estilos, tomBase) =>
-  request('PUT', `/api/musicas/${encodeURIComponent(id)}`, { conteudo, estilos, tomBase })
+export const putMusica = (id, conteudo, estilos, tomBase, capotraste) =>
+  request('PUT', `/api/musicas/${encodeURIComponent(id)}`, {
+    conteudo,
+    estilos,
+    tomBase,
+    capotraste,
+  })
 
 export const deleteMusica = (id) =>
   request('DELETE', `/api/musicas/${encodeURIComponent(id)}`)

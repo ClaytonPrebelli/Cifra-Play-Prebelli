@@ -41,10 +41,6 @@
         <div id="show-cifra" class="show-cifra">
           <p class="placeholder" style="padding:1.25rem;">Toque numa música para começar.</p>
         </div>
-        <div id="show-fim" class="show-fim" hidden>
-          <p id="show-fim-texto"></p>
-          <button id="btn-fim-proxima" class="btn primary">Próxima música →</button>
-        </div>
       </div>
     </section>
   </main>
@@ -55,9 +51,19 @@
       <div class="editor-campos">
         <input id="ed-artista" type="text" placeholder="Artista">
         <input id="ed-titulo" type="text" placeholder="Título">
-        <input id="ed-tom" type="text" placeholder="Tom (ex.: D, Bb)" maxlength="3">
+        <input id="ed-tom" type="text" placeholder="Tom" title="Tom da cifra (ex.: D, Bb)" maxlength="3">
+        <select id="ed-capo" title="Capotraste: casa onde o capotraste é preso, ou Sem capo">
+          <option value="0">Sem capo</option>
+          <option value="1">1ª</option>
+          <option value="2">2ª</option>
+          <option value="3">3ª</option>
+          <option value="4">4ª</option>
+          <option value="5">5ª</option>
+          <option value="6">6ª</option>
+          <option value="7">7ª</option>
+        </select>
+        <div id="ed-estilos-wrap"></div>
       </div>
-      <div id="ed-estilos-wrap"></div>
       <textarea id="ed-texto" placeholder="Cole ou escreva a cifra aqui… (ou arraste um arquivo .txt)"></textarea>
       <input id="ed-arquivo" type="file" accept=".txt,text/plain" hidden>
       <p id="editor-status" class="editor-status"></p>

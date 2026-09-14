@@ -8,6 +8,7 @@
   --text-dim: #8b93a3;
   --chord: #2e7d32;
   --section: #e53935;
+  --capo: #c62828;
   --accent: #4c9aff;
   --input-bg: #0d1016;
 }
@@ -22,6 +23,7 @@ body[data-tema='claro'] {
   --text-dim: #6b7484;
   --chord: #1b5e20;
   --section: #c62828;
+  --capo: #8b0000;
   --accent: #2f6fdc;
   --input-bg: #ffffff;
 }
@@ -267,14 +269,20 @@ select {
 
 .musica-item.dragging {
   opacity: 0.4;
+  border-style: dashed;
+}
+
+.musica-item.drop-before,
+.musica-item.drop-after {
+  border-color: var(--accent);
 }
 
 .musica-item.drop-before {
-  box-shadow: inset 0 2px 0 var(--accent);
+  box-shadow: 0 -4px 0 0 var(--accent);
 }
 
 .musica-item.drop-after {
-  box-shadow: inset 0 -2px 0 var(--accent);
+  box-shadow: 0 4px 0 0 var(--accent);
 }
 
 .musica-item:hover {
@@ -343,12 +351,33 @@ select {
 
 .editor-campos {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.6rem;
+  align-items: center;
 }
 
 .editor-campos input {
-  flex: 1 1 50%;
   min-width: 0;
+}
+
+#ed-artista,
+#ed-titulo {
+  flex: 1 1 42%;
+}
+
+#ed-tom {
+  width: 8ch;
+  flex: 0 0 auto;
+}
+
+#ed-capo {
+  flex: 0 0 auto;
+  width: 8.5rem;
+}
+
+#ed-estilos-wrap {
+  flex: 1 1 200px;
+  min-width: 200px;
 }
 
 .editor-panel textarea {
@@ -405,6 +434,11 @@ select {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.show-titulo .capo {
+  color: var(--capo);
+  font-weight: 800;
 }
 
 .show-controles {
@@ -518,8 +552,7 @@ select {
 .pw-acordes {
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   display: inline-flex;
   gap: 0.28em;
   white-space: nowrap;

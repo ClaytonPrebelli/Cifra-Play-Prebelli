@@ -1,6 +1,7 @@
 import { getCatalog, getMusica, putMusica, deleteMusica, saveCatalog } from './api.js'
 import { createMultiselect } from './multiselect.js'
 import { openShow } from './show.js'
+import { ordemParaEstilo } from './app.js'
 
 const TEMA_STORAGE_KEY = 'cifra-prebelli:tema'
 
@@ -67,6 +68,7 @@ export function initList(state) {
   const artistEl = document.getElementById('ed-artista')
   const tituloEl = document.getElementById('ed-titulo')
   const tomEl = document.getElementById('ed-tom')
+  const capoEl = document.getElementById('ed-capo')
   const statusEl = document.getElementById('editor-status')
   const btnSalvar = document.getElementById('btn-salvar')
   const btnCancelar = document.getElementById('btn-cancelar')
@@ -75,64 +77,115 @@ export function initList(state) {
   const edEstilosWrapEl = document.getElementById('ed-estilos-wrap')
 
   let editId = null
-  let dragId = null
+
+  function filtroEstiloAtivo() {
+    return state.filters.estilos.length === 1 ? state.filters.estilos[0] : null
+  }
 
   function moverItem(idArrastado, idAlvo, depois) {
+    const est = filtroEstiloAtivo()
+    if (est) {
+      const lista = ordemParaEstilo(state, est)
+      return moverNaLista(lista, idArrastado, idAlvo, depois, (l) => {
+        state.ordens[est] = l
+      })
+    }
+    return moverNaLista(state.catalog, idArrastado, idAlvo, depois, (l) => {
+      state.catalog = l
+    })
+  }
+
+  function moverParaFim(idArrastado) {
+    const est = filtroEstiloAtivo()
+    if (est) {
+      const lista = ordemParaEstilo(state, est)
+      const de = lista.indexOf(idArrastado)
+      if (de === -1) return false
+      const [item] = lista.splice(de, 1)
+      lista.push(item)
+      state.ordens[est] = lista
+      return true
+    }
     const de = state.catalog.findIndex((m) => m.id === idArrastado)
-    const alvo = state.catalog.findIndex((m) => m.id === idAlvo)
-    if (de === -1 || alvo === -1 || de === alvo) return false
+    if (de === -1) return false
     const [item] = state.catalog.splice(de, 1)
-    let para = state.catalog.findIndex((m) => m.id === idAlvo)
-    if (depois) para += 1
-    state.catalog.splice(para, 0, item)
+    state.catalog.push(item)
+    return true
+  }
+
+  function moverNaLista(lista, idArrastado, idAlvo, depois, aplicar) {
+    const ids = lista.map((m) => (typeof m === 'string' ? m : m.id))
+    const de = ids.indexOf(idArrastado)
+    const alvo = ids.indexOf(idAlvo)
+    if (de === -1 || alvo === -1 || de === alvo) return false
+    const [item] = lista.splice(de, 1)
+    const para = ids.indexOf(idAlvo) + (depois ? 1 : 0)
+    lista.splice(para, 0, item)
+    aplicar(lista)
     return true
   }
 
   async function persistirOrdem() {
     try {
-      await saveCatalog({ versoes: 1, musicas: state.catalog })
+      await saveCatalog({ versoes: 1, musicas: state.catalog, ordens: state.ordens })
     } catch (err) {
       console.error('erro ao salvar ordem', err)
     }
   }
 
-  function limparDnd() {
-    dragId = null
+  function limparIndicadores() {
     listEl.querySelectorAll('.dragging, .drop-before, .drop-after')
       .forEach((el) => el.classList.remove('dragging', 'drop-before', 'drop-after'))
   }
 
-  function configurarDnd(li) {
-    li.draggable = true
-    li.addEventListener('dragstart', (e) => {
+  function configurarDnd() {
+    let dragId = null
+    listEl.addEventListener('dragstart', (e) => {
+      const li = e.target.closest('.musica-item')
+      if (!li) return
       dragId = li.dataset.id
       e.dataTransfer.effectAllowed = 'move'
       e.dataTransfer.setData('text/plain', dragId)
       requestAnimationFrame(() => li.classList.add('dragging'))
     })
-    li.addEventListener('dragover', (e) => {
-      if (!dragId || dragId === li.dataset.id) return
+    listEl.addEventListener('dragover', (e) => {
+      if (!dragId) return
       e.preventDefault()
       e.dataTransfer.dropEffect = 'move'
+      limparIndicadores()
+      const li = e.target.closest('.musica-item')
+      if (!li || li.dataset.id === dragId) return
       const r = li.getBoundingClientRect()
       const depois = e.clientY - r.top > r.height / 2
-      li.classList.toggle('drop-after', !!depois)
-      li.classList.toggle('drop-before', !depois)
+      li.classList.add(depois ? 'drop-after' : 'drop-before')
     })
-    li.addEventListener('dragleave', () => {
-      li.classList.remove('drop-before', 'drop-after')
+    listEl.addEventListener('dragleave', (e) => {
+      if (!e.relatedTarget || !listEl.contains(e.relatedTarget)) limparIndicadores()
     })
-    li.addEventListener('drop', (e) => {
+    listEl.addEventListener('drop', (e) => {
       e.preventDefault()
-      if (!dragId || dragId === li.dataset.id) return
-      const depois = li.classList.contains('drop-after')
-      if (moverItem(dragId, li.dataset.id, depois)) {
+      if (!dragId) return
+      const li = e.target.closest('.musica-item')
+      let mexeu = false
+      if (li) {
+        if (li.dataset.id !== dragId) {
+          const depois = li.classList.contains('drop-after')
+          mexeu = moverItem(dragId, li.dataset.id, depois)
+        }
+      } else {
+        mexeu = moverParaFim(dragId)
+      }
+      if (mexeu) {
         persistirOrdem()
         refresh()
       }
       dragId = null
+      limparIndicadores()
     })
-    li.addEventListener('dragend', limparDnd)
+    listEl.addEventListener('dragend', () => {
+      dragId = null
+      limparIndicadores()
+    })
   }
 
   function estilosDaLista() {
@@ -174,7 +227,8 @@ export function initList(state) {
   function render() {
     const q = norm(state.filters.busca)
     const estilosSelecionados = state.filters.estilos
-    const items = state.catalog.filter((m) => {
+    const est = filtroEstiloAtivo()
+    let items = state.catalog.filter((m) => {
       if (q && !norm(`${m.artista} ${m.titulo}`).includes(q)) return false
       if (
         estilosSelecionados.length &&
@@ -183,6 +237,11 @@ export function initList(state) {
         return false
       return true
     })
+    if (est) {
+      const ordem = ordemParaEstilo(state, est)
+      const pos = new Map(ordem.map((id, i) => [id, i]))
+      items = [...items].sort((a, b) => (pos.get(a.id) ?? Infinity) - (pos.get(b.id) ?? Infinity))
+    }
     listEl.textContent = ''
     vaziaEl.textContent = ''
     if (items.length === 0) {
@@ -195,7 +254,7 @@ export function initList(state) {
       const li = document.createElement('li')
       li.className = 'musica-item'
       li.dataset.id = m.id
-      configurarDnd(li)
+      li.draggable = true
 
       const info = document.createElement('div')
       info.className = 'musica-info'
@@ -207,7 +266,12 @@ export function initList(state) {
 
       const meta = document.createElement('span')
       meta.className = 'musica-meta'
-      meta.textContent = [m.artista, m.tomBase ? `Tom ${m.tomBase}` : '', (m.estilos || []).join(' · ')]
+      meta.textContent = [
+        m.artista,
+        m.tomBase ? `Tom ${m.tomBase}` : '',
+        m.capotraste ? `Capo ${m.capotraste}ª` : '',
+        (m.estilos || []).join(' · '),
+      ]
         .filter(Boolean)
         .join(' · ')
 
@@ -229,7 +293,9 @@ export function initList(state) {
         e.stopPropagation()
         if (!confirm(`Remover "${m.titulo}"?`)) return
         await deleteMusica(m.id)
-        state.catalog = await getCatalog()
+        const data = await getCatalog()
+        state.catalog = data.musicas
+        state.ordens = data.ordens || {}
         refresh()
       })
       acoes.append(btnEditar, btnRemover)
@@ -246,6 +312,7 @@ export function initList(state) {
     artistEl.value = m?.artista ?? ''
     tituloEl.value = m?.titulo ?? ''
     tomEl.value = m?.tomBase ?? ''
+    capoEl.value = String(m?.capotraste ?? 0)
     editorEstilos.setValor(m?.estilos || [])
     textoEl.value = ''
     statusEl.textContent = ''
@@ -277,12 +344,15 @@ export function initList(state) {
       return
     }
     const novoId = fileNameFrom(artista, titulo)
+    const capo = Number(capoEl.value) || null
     try {
-      await putMusica(novoId, conteudo, estilos, tomEl.value.trim() || null)
+      await putMusica(novoId, conteudo, estilos, tomEl.value.trim() || null, capo)
       if (editId && novoId !== editId) {
         await deleteMusica(editId)
       }
-      state.catalog = await getCatalog()
+      const data = await getCatalog()
+      state.catalog = data.musicas
+      state.ordens = data.ordens || {}
       closeEditor()
       refresh()
     } catch (err) {
@@ -297,8 +367,8 @@ export function initList(state) {
   }
 
   listEl.addEventListener('dragover', (e) => e.preventDefault())
-  listEl.addEventListener('dragleave', limparDnd)
-  listEl.addEventListener('drop', (e) => e.preventDefault())
+
+  configurarDnd()
 
   buscaEl.addEventListener('input', () => {
     state.filters.busca = buscaEl.value

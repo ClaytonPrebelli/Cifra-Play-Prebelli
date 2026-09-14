@@ -5,9 +5,19 @@ import { initShow } from './show.js'
 export const AppState = {
   mode: 'list',
   catalog: [],
+  ordens: {},
   filters: { busca: '', estilos: [] },
   atual: null,
   show: { tomOffset: 0 },
+}
+
+export function ordemParaEstilo(state, est) {
+  if (!est) return state.catalog.map((m) => m.id)
+  const comEstilo = state.catalog.filter((m) => (m.estilos || []).includes(est))
+  const ids = new Set(comEstilo.map((m) => m.id))
+  const conhecidos = (state.ordens[est] || []).filter((id) => ids.has(id))
+  const faltantes = comEstilo.filter((m) => !conhecidos.includes(m.id)).map((m) => m.id)
+  return [...conhecidos, ...faltantes]
 }
 
 function setMode(mode) {
@@ -18,7 +28,9 @@ function setMode(mode) {
 
 async function boot() {
   try {
-    AppState.catalog = await getCatalog()
+    const data = await getCatalog()
+    AppState.catalog = data.musicas || []
+    AppState.ordens = data.ordens || {}
   } catch (err) {
     AppState.catalog = []
     console.error(err)
