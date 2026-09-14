@@ -1,4 +1,4 @@
-import { getCatalog, getMusica, putMusica, deleteMusica } from './api.js'
+import { getCatalog, getMusica, putMusica, deleteMusica, saveCatalog } from './api.js'
 import { createMultiselect } from './multiselect.js'
 import { openShow } from './show.js'
 
@@ -75,6 +75,65 @@ export function initList(state) {
   const edEstilosWrapEl = document.getElementById('ed-estilos-wrap')
 
   let editId = null
+  let dragId = null
+
+  function moverItem(idArrastado, idAlvo, depois) {
+    const de = state.catalog.findIndex((m) => m.id === idArrastado)
+    const alvo = state.catalog.findIndex((m) => m.id === idAlvo)
+    if (de === -1 || alvo === -1 || de === alvo) return false
+    const [item] = state.catalog.splice(de, 1)
+    let para = state.catalog.findIndex((m) => m.id === idAlvo)
+    if (depois) para += 1
+    state.catalog.splice(para, 0, item)
+    return true
+  }
+
+  async function persistirOrdem() {
+    try {
+      await saveCatalog({ versoes: 1, musicas: state.catalog })
+    } catch (err) {
+      console.error('erro ao salvar ordem', err)
+    }
+  }
+
+  function limparDnd() {
+    dragId = null
+    listEl.querySelectorAll('.dragging, .drop-before, .drop-after')
+      .forEach((el) => el.classList.remove('dragging', 'drop-before', 'drop-after'))
+  }
+
+  function configurarDnd(li) {
+    li.draggable = true
+    li.addEventListener('dragstart', (e) => {
+      dragId = li.dataset.id
+      e.dataTransfer.effectAllowed = 'move'
+      e.dataTransfer.setData('text/plain', dragId)
+      requestAnimationFrame(() => li.classList.add('dragging'))
+    })
+    li.addEventListener('dragover', (e) => {
+      if (!dragId || dragId === li.dataset.id) return
+      e.preventDefault()
+      e.dataTransfer.dropEffect = 'move'
+      const r = li.getBoundingClientRect()
+      const depois = e.clientY - r.top > r.height / 2
+      li.classList.toggle('drop-after', !!depois)
+      li.classList.toggle('drop-before', !depois)
+    })
+    li.addEventListener('dragleave', () => {
+      li.classList.remove('drop-before', 'drop-after')
+    })
+    li.addEventListener('drop', (e) => {
+      e.preventDefault()
+      if (!dragId || dragId === li.dataset.id) return
+      const depois = li.classList.contains('drop-after')
+      if (moverItem(dragId, li.dataset.id, depois)) {
+        persistirOrdem()
+        refresh()
+      }
+      dragId = null
+    })
+    li.addEventListener('dragend', limparDnd)
+  }
 
   function estilosDaLista() {
     const set = new Set()
@@ -135,6 +194,8 @@ export function initList(state) {
     for (const m of items) {
       const li = document.createElement('li')
       li.className = 'musica-item'
+      li.dataset.id = m.id
+      configurarDnd(li)
 
       const info = document.createElement('div')
       info.className = 'musica-info'
@@ -234,6 +295,10 @@ export function initList(state) {
     editorEstilos.setOpcoes(estilosSugeridos())
     render()
   }
+
+  listEl.addEventListener('dragover', (e) => e.preventDefault())
+  listEl.addEventListener('dragleave', limparDnd)
+  listEl.addEventListener('drop', (e) => e.preventDefault())
 
   buscaEl.addEventListener('input', () => {
     state.filters.busca = buscaEl.value

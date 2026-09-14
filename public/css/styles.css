@@ -258,7 +258,23 @@ select {
   border-radius: 8px;
   margin-bottom: 0.5rem;
   background: var(--bg-panel);
-  cursor: pointer;
+  cursor: grab;
+}
+
+.musica-item:active {
+  cursor: grabbing;
+}
+
+.musica-item.dragging {
+  opacity: 0.4;
+}
+
+.musica-item.drop-before {
+  box-shadow: inset 0 2px 0 var(--accent);
+}
+
+.musica-item.drop-after {
+  box-shadow: inset 0 -2px 0 var(--accent);
 }
 
 .musica-item:hover {

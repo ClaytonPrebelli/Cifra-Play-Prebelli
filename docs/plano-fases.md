@@ -35,7 +35,7 @@ depois a tela que é o coração do app, e por último as extensões.
 - [ ] **Estilos por música** (1..n): campo no editor, linha `Estilo:` na
       importação, sugestões padrão no autocomplete
 - [ ] **Filtro por estilo** na lista (select no header, combinado com a busca)
-- [ ] Reordenação por **drag & drop**, persistida no catálogo
+- [x] Reordenação por **drag & drop**, persistida no catálogo
 - [ ] Extratação de `tomBase` no scan (cached)
 - ✅ Feito quando: drop de um `.txt` na pasta **ou importação pela tela** → a
   música aparece no app; reordeno; a ordem sobrevive a restart.
