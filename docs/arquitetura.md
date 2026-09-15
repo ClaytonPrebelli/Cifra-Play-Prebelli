@@ -24,9 +24,13 @@ transposição de tom por música.
 - O header é o mesmo nos dois modos (lista e show) e mostra apenas o
   essencial: navegação, título da música e controles ativos (busca/tom/
   velocidade). Controle em estado ocioso ficam colapsados.
-- **Importar música pela própria tela**: seletor de arquivo (`.txt`), drag &
-  drop de arquivos e área de colar texto — sem precisar abrir/editar a pasta
-  no disco. O app grava via `PUT /api/musicas/:id`.
+- **Importar música pela própria tela**: botão de upload (ícone, início do
+  header), seletor de arquivo (`.txt`/`.dec`), drag & drop e área de colar texto
+  — sem precisar abrir/editar a pasta no disco. `.dec` (DeCifra) e texto puro
+  são convertidos em `importar.js`/`decifra.js`; o app grava via
+  `PUT /api/musicas/:id`. Na conversão, grupos de acordes entre parênteses
+  (ex.: `(C F F#m)`) são desempacotados virarem linha de acordes; parênteses
+  com acorde único ou texto permanecem como estão.
 - A pasta `musicas/` continua sendo a fonte da verdade; a UI é só um atalho
   que escrive por cima.
 
@@ -47,10 +51,12 @@ Cifra Prebelli/
 │       ├── app.js             # bootstrap + estado global (AppState)
 │       ├── api.js             # cliente da API REST
 │       ├── parser.js          # .txt → CifraModel (acordes, seções, tom)
+│       ├── decifra.js         # conversão DeCifra: .dec (mapa de códigos) e texto puro
 │       ├── transpositor.js    # semitons
 │       ├── render.js          # CifraModel → DOM em 3 colunas, âncora acorde→palavra
 │       ├── scroller.js        # teleponto (raf, velocidade, páginas)
 │       ├── show.js            # tela de apresentação (estado + atalhos)
+│       ├── importar.js        # janela de importação (.dec/.txt/colar) → PUT /api/musicas/:id
 │       ├── list.js            # lista de músicas + busca + reorder (drag & drop)
 │       └── voice.js           # [FASE 2] assistente de voz (Web Speech API)
 ├── test/

@@ -37,11 +37,14 @@ acorde.
 ## Regex de acorde (use e não reinvente)
 
 ```
-^[A-G](#|b)?(?:(?:maj7?|min7?|M7?|m|dim|aug|\+|°)(?:6|7|9|11|13)?|sus(?:2|4)?|add[2-9]?|6|7|9|11|13)?(?:\([^)]*\))?(?:/[A-G](#|b)?)?$
+^[A-G](#|b)?(?:(?:maj7?|min7?|M7?|m|dim|aug|\+|°)(?:2|4|6|7|9|11|13)?|sus(?:2|4)?|add[2-9]?|7M(?:6|9|11|13)?|2|4|6|7|9|11|13)?(?:\([^)]*\))?(?:/[A-G](#|b)?)?$
 ```
 
 `bb` não é aceito — normalizar. Extrair `tonica`, `sufixo`, `baixo` (após `/`).
 Transposição muda `tonica` e `baixo`; `sufixo` permanece.
+`2`/`4` sozinhos são sufixo válido (ex.: `D2`, `A2`, `B2` — o "2" do Cifra
+Club, add2); linhas de acordes com `D2` NÃO viram letra (regressão:
+`golden: D2/A2/B2 são linha de acordes`).
 
 Casos de fronteira: `Am F C G` é acordes; `Amor é fogo` é letra;
 `C com você` é letra; letra maiúscula isolada válida (`C`, `D`) é acorde.
@@ -66,3 +69,12 @@ Mapa cromático de 12 semitons (`C C# D D# E F F# G G# A A# B`). Nota +offset
 - Fronteiras: acorde de 1 letra vs. preposição; `[Refrão]` vs `[C]`; acorde
   antes da 1ª palavra (ancora em `w1`).
 - Rodar `npm test`; nada de comentários em código.
+
+## Consumo pelo assistente de voz (`voice.js`)
+
+- As "linhas de letra" do modelo (items de `conteudo[]` com `letra` não vazio)
+  são a lista que o pareamento de voz usa; a linha renderizada tem classe
+  `.frase` e `data-idx = posição no modelo`. Linhas só-acorde ficam de fora.
+- `normalizar()` (sem acento, minúsculo) + `palavras()` do `voice.js` é o mesmo
+  tratamento aplicado a letra e à fala — usar essa normalização ao comparar
+  texto de letra com transcrição, jamais as strings cruas.

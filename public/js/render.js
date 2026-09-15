@@ -1,8 +1,9 @@
 import { transporCompasso, textoDoAcorde } from './transpositor.js'
 
-function montarCompasso(c) {
+function montarCompasso(c, idx) {
   const row = document.createElement('div')
   row.className = 'compasso'
+  row.dataset.idx = String(idx)
 
   if (c.letra == null) {
     const sov = document.createElement('div')
@@ -28,6 +29,7 @@ function montarCompasso(c) {
 
   const frase = document.createElement('div')
   frase.className = 'frase'
+  if (porPalavra.size === 0) frase.classList.add('frase-sem-cifra')
   c.palavras.forEach((p, i) => {
     const wrap = document.createElement('span')
     wrap.className = 'pw'
@@ -61,21 +63,22 @@ export function renderShow(modelo, { tomOffset = 0, colunas = 3 } = {}) {
     ? modelo.conteudo
     : modelo.conteudo.map((c) => (c.tipo === 'compasso' ? transporCompasso(c, tomOffset) : c))
   let destacar = false
-  for (const item of conteudo) {
+  conteudo.forEach((item, i) => {
     if (item.tipo === 'secao') {
       destacar = !/^(fim|final)$/i.test(item.nome || '')
-      continue
+      return
     }
     if (item.tipo === 'espaco') {
       const g = document.createElement('div')
       g.className = 'espaco'
+      g.dataset.idx = String(i)
       container.append(g)
-      continue
+      return
     }
-    const c = montarCompasso(item)
+    const c = montarCompasso(item, i)
     if (destacar) c.classList.add('secao-atual')
     container.append(c)
-  }
+  })
   return container
 }
 

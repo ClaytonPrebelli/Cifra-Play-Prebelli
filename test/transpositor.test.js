@@ -40,6 +40,10 @@ test('transporAcorde preserva sufixo e transpõe tônica e baixo', () => {
   const semBaixo = transporAcorde({ tonica: 'C', sufixo: '', baixo: null }, 2)
   assert.equal(semBaixo.tonica, 'D')
   assert.equal(semBaixo.baixo, null)
+
+  assert.deepEqual(transporAcorde({ tonica: 'D', sufixo: '2', baixo: null }, 2), {
+    tonica: 'E', sufixo: '2', baixo: null,
+  })
 })
 
 test('transporTexto remonta o acorde de ponta a ponta', () => {

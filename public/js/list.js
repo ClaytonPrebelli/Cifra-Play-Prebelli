@@ -419,4 +419,6 @@ export function initList(state) {
   })
 
   refresh()
+  window.addEventListener('cifra:lista-mudou', refresh)
+  return { refresh }
 }

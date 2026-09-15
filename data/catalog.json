@@ -2,6 +2,31 @@
   "versoes": 1,
   "musicas": [
     {
+      "id": "Marcos e Belutti - Sonho de Todo Casal.txt",
+      "artista": "Marcos e Belutti",
+      "titulo": "Sonho de Todo Casal",
+      "tomBase": "D",
+      "estilos": [
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Panda - Eu Te Seguro.txt",
+      "artista": "Panda",
+      "titulo": "Eu Te Seguro",
+      "tomBase": "A",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
       "id": "Henrique e Juliano - A Maior Saudade.txt",
       "artista": "Henrique e Juliano",
       "titulo": "A Maior Saudade",
@@ -15,10 +40,113 @@
       "capotraste": null
     },
     {
-      "id": "Marcos e Belutti - Sonho de Todo Casal.txt",
-      "artista": "Marcos e Belutti",
-      "titulo": "Sonho de Todo Casal",
-      "tomBase": "D",
+      "id": "Bruno e Marrone - Agarrada em mim.txt",
+      "artista": "Bruno e Marrone",
+      "titulo": "Agarrada em mim",
+      "tomBase": "G",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Henrique e Juliano - A Mala é Falsa.txt",
+      "artista": "Henrique e Juliano",
+      "titulo": "A Mala é Falsa",
+      "tomBase": "F",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Daniel - Adoro Amar Voce.txt",
+      "artista": "Daniel",
+      "titulo": "Adoro Amar Voce",
+      "tomBase": "C",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Chitãozinho e Chororó - Ah Se Deus me Ouvisse.txt",
+      "artista": "Chitãozinho e Chororó",
+      "titulo": "Ah Se Deus me Ouvisse",
+      "tomBase": "E",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Bon Jovi - Always.txt",
+      "artista": "Bon Jovi",
+      "titulo": "Always",
+      "tomBase": "E",
+      "capotraste": null,
+      "estilos": [
+        "Rock",
+        "Internacional"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Jorge e Mateus - Ai Ja Era.txt",
+      "artista": "Jorge e Mateus",
+      "titulo": "Ai Ja Era",
+      "tomBase": "C",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Joao Mineiro e Marciano - Ainda Ontem Chorei de Saudade.txt",
+      "artista": "Joao Mineiro e Marciano",
+      "titulo": "Ainda Ontem Chorei de Saudade",
+      "tomBase": "C",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Tião Carreiro e Pardinho - Amargurado.txt",
+      "artista": "Tião Carreiro e Pardinho",
+      "titulo": "Amargurado",
+      "tomBase": "B",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ]
+    },
+    {
+      "id": "João Bosco e Vinicius - Amiga Linda.txt",
+      "artista": "João Bosco e Vinicius",
+      "titulo": "Amiga Linda",
+      "tomBase": "G",
+      "capotraste": null,
       "estilos": [
         "Sertanejo Universitário"
       ],

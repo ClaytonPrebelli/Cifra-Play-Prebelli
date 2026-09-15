@@ -10,6 +10,13 @@
   <main id="app">
     <section id="lista" class="view">
       <header class="app-header">
+        <button id="btn-importar" class="btn btn-icone" title="Importar arquivos .dec ou texto puro do DeCifra" aria-label="Importar arquivos">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 5 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="5"></line>
+          </svg>
+        </button>
         <h1>Cifra Prebelli</h1>
         <div class="header-actions">
           <input id="busca" type="search" placeholder="Buscar música ou artista…">
@@ -27,12 +34,18 @@
       <header class="app-header show-header">
         <button id="show-voltar" class="btn" title="Voltar para a lista">← Lista</button>
         <span id="show-titulo" class="show-titulo">Modo show</span>
+        <div id="show-busca" class="show-busca" title="Buscar música pelo nome ou cantor">
+          <input id="show-busca-input" type="search" placeholder="Buscar música/artista…" autocomplete="off">
+          <div id="show-busca-resultados" class="show-busca-resultados" hidden></div>
+        </div>
         <div class="header-actions show-controles">
           <span class="ctl">
             <button id="btn-tom-menos" class="btn ctl" title="Diminuir tom">−</button>
             <span id="show-tom" class="ctl-valor" title="Tom atual">–</span>
             <button id="btn-tom-mais" class="btn ctl" title="Aumentar tom">+</button>
           </span>
+          <button id="btn-tom-salvar" class="btn ctl" title="Salvar este tom como o tom da música (substitui o tom salvo)">Tom ✓</button>
+          <!-- <button id="btn-voz" class="btn ctl" title="Assistente de voz — acompanha a letra cantada"><span>Voz</span></button> -->
           <button id="btn-proxima" class="btn primary" hidden>Próxima ▸</button>
         </div>
       </header>
@@ -51,7 +64,7 @@
       <div class="editor-campos">
         <input id="ed-artista" type="text" placeholder="Artista">
         <input id="ed-titulo" type="text" placeholder="Título">
-        <input id="ed-tom" type="text" placeholder="Tom" title="Tom da cifra (ex.: D, Bb)" maxlength="3">
+        <input id="ed-tom" type="text" placeholder="Tom" title="Tom da cifra (ex.: D, Bb)" maxlength="7">
         <select id="ed-capo" title="Capotraste: casa onde o capotraste é preso, ou Sem capo">
           <option value="0">Sem capo</option>
           <option value="1">1ª</option>
@@ -71,6 +84,37 @@
         <button id="btn-arquivo" class="btn">Abrir arquivo</button>
         <button id="btn-cancelar" class="btn">Cancelar</button>
         <button id="btn-salvar" class="btn primary">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="importar" class="editor" hidden>
+    <div class="editor-panel">
+      <h2>Importar músicas</h2>
+      <p class="editor-status importar-hint">
+        Arraste arquivos <strong>.dec</strong> (DeCifra) ou <strong>.txt</strong> para esta janela, escolha no
+        seletor ou cole abaixo o texto puro exportado do DeCifra (refrão marcado com <code>&lt;O&gt;</code>).
+      </p>
+      <div class="importar-entradas">
+        <button id="imp-selecionar" class="btn">Escolher arquivos…</button>
+        <input id="imp-arquivos" type="file" accept=".dec,.txt,text/plain" multiple hidden>
+        <textarea id="imp-cola" placeholder="Cole o texto puro do DeCifra aqui e clique em Adicionar acima…"></textarea>
+        <button id="imp-adicionar-cola" class="btn">Adicionar texto colado</button>
+      </div>
+      <details id="imp-codigos" class="importar-codigos">
+        <summary>Mapa de códigos DeCifra (.dec)</summary>
+        <p class="importar-hint">
+          Código = desenho de acorde no arquivo .dec. Preencha o acorde para cada código usado nos arquivos
+          abaixo; os conhecidos já vêm preenchidos. A prévia é recalculada a cada mudança.
+        </p>
+        <div id="imp-codigos-grade" class="importar-codigos-grade"></div>
+      </details>
+      <div id="imp-estilos-wrap" class="importar-estilos"></div>
+      <div id="imp-lista" class="importar-lista"></div>
+      <p id="imp-status" class="editor-status"></p>
+      <div class="editor-acoes">
+        <button id="imp-cancelar" class="btn">Fechar</button>
+        <button id="imp-importar" class="btn primary" disabled>Importar</button>
       </div>
     </div>
   </div>

@@ -59,14 +59,18 @@ esquerdos, 1/3 direito em branco para video de playback) e rolamento automático
 **Entrega:** conforto e produtividade.
 - [ ] Temas claro/escuro e paleta da tela de show
 - [ ] Editor de cifra no app (editar/salvar o `.txt`) — decidir se entra
-- [ ] Importação em lote (colar várias cifras / arrastar arquivos para criar)
+- [x] Importação em lote: botão de upload no header abre a janela de importar
+      (arrastar/`selecionar`/colar várias cifras) → grava via `PUT /api/musicas/:id`
+- [x] Conversor DeCifra na plataforma: aceita `.dec` (mapa de códigos de acorde
+      editável, prévia recalculada) e texto puro do DeCifra (`<O>` → `[Refrão]`);
+      lógica pura em `public/js/decifra.js` compartilhada com `tools/dec2txt.mjs`
 - [ ] Atalhos completos e persistência de preferências globais
 - ✅ Feito quando: uso o app em um ensaio completo com o setlist real.
 
 ## Fase 5 — Assistente de voz (extensão)
 
 **Entrega:** módulo opcional que ajusta a rolagem por reconhecimento de fala.
-- [ ] `public/js/voice.js` — Web Speech API (`pt-BR`, contínuo, botão de ativar)
-- [ ] Fuzzy-match fala × linha de letra; ajusta página ativa/destaca seção
-- [ ] Fallback gracioso: qualquer erro/ausência de permissão apenas desliga o módulo
+- [x] `public/js/voice.js` — Web Speech API (`pt-BR`, contínuo, botão de ativar)
+- [x] Fuzzy-match fala × linha de letra; ajusta página ativa/destaca seção
+- [x] Fallback gracioso: qualquer erro/ausência de permissão apenas desliga o módulo
 - ✅ Feito quando: canto um refrão ao microfone e a seção destacada acompanha.

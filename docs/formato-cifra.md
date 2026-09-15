@@ -90,11 +90,11 @@ Cada linha útil (não vazia) é classificada por este algoritmo:
 ^[A-G](#|b)?                     # tônica + acidente
  (?:
     (?:maj7?|min7?|M7?|m|dim|aug|\+|°)   # sufixo base
-    (?:6|7|9|11|13)?                     # extensões numéricas
+    (?:2|4|6|7|9|11|13)?                  # extensões numéricas
   | sus(?:2|4)? 
   | add[2-9]?
   | 7M(?:6|9|11|13)?                    # 7ª maior (Cifra Club: G7M)
-  | 6|7|9|11|13                          # extensões diretas
+  | 2|4|6|7|9|11|13                      # extensões diretas (Cifra Club: D2 = add2)
  )?
  (\([^)]*\))?                     # anotações: (b5), (add9), (9+)
  (/[A-G](#|b)?)?                  # baixo invertido: C/E, D/F#
@@ -103,6 +103,10 @@ $
 Tokenize depois compactando espaços múltiplos em um. Notas válidas:
 `C D E F G A B` e variantes `C# Db` etc. (`bb` não é aceito; normalizar).
 `7M` (ex.: `G7M`) é 7ª maior, aceita extensões `7M9`, `7M11`, `7M13`.
+`2` e `4` sozinhos são aceitos como sufixo (ex.: `D2`, `A2`, `B2` — o "2" do
+Cifra Club, equivalente a add2). Linhas de acordes com `D2` NÃO viram letra.
+`5` sozinho é aceito como sufixo de power chord (ex.: `A5`, `E5`, `C#5` — Cifra
+Club). Linhas de acordes com `x5` NÃO viram letra.
 
 ### Extração do acorde
 

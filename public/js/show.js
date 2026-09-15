@@ -3,11 +3,20 @@ import { parseCifra } from './parser.js'
 import { transporNota } from './transpositor.js'
 import { renderShow, paginarRows } from './render.js'
 import { createScroller } from './scroller.js'
+// import { createVoice } from './voice.js'
 import { ordemParaEstilo } from './app.js'
 
 const PADRAO = { tomOffset: 0 }
 
 let abrirFn = null
+
+function norma(s) {
+  return (s || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+}
 
 export function openShow(item) {
   if (!abrirFn) return Promise.reject(new Error('modo show não inicializado'))
@@ -22,11 +31,17 @@ export function initShow(state) {
   const tomEl = document.getElementById('show-tom')
   const btnTomMenos = document.getElementById('btn-tom-menos')
   const btnTomMais = document.getElementById('btn-tom-mais')
+  const btnTomSalvar = document.getElementById('btn-tom-salvar')
   const btnProximoBloco = document.getElementById('btn-proximo-bloco')
   const btnProxima = document.getElementById('btn-proxima')
+  // const btnVoz = document.getElementById('btn-voz')
+  const buscaEl = document.getElementById('show-busca-input')
+  const resultadosEl = document.getElementById('show-busca-resultados')
 
   const scroller = createScroller(telaEl, cifraEl)
+  // let voz = null
   let timerSalvar = null
+  let selBusca = -1
 
   function modo(mode) {
     state.mode = mode
@@ -81,7 +96,7 @@ export function initShow(state) {
     atualizarControles()
   }
 
-  function montarCifra(salvar, aoTopo = false) {
+  function montarCifra(salvar, aoTopo = false, forcarVoz = false) {
     const p = prefsAtuais()
     const rows = [...renderShow(state.atual.modelo, { tomOffset: p.tomOffset }).children]
     const paginas = paginarRows(rows, {
@@ -89,6 +104,18 @@ export function initShow(state) {
       largura: Math.max(1, cifraEl.clientWidth),
     })
     scroller.rebuild(paginas, aoTopo)
+    // const estavaAtivo = forcarVoz || (voz ? voz.ativo : false)
+    // if (voz) voz.parar()
+    // voz = createVoice(
+    //   state.atual.modelo,
+    //   rows,
+    //   paginas,
+    //   () => {},
+    //   (nivel) => btnVoz.style.setProperty('--nivel', String(nivel)),
+    //   (ativo) => btnVoz.classList.toggle('ativo', Boolean(ativo)),
+    // )
+    // if (estavaAtivo) voz.iniciar()
+    // btnVoz.classList.toggle('ativo', voz.ativo)
     if (salvar) salvarPrefs()
     atualizarControles()
   }
@@ -122,9 +149,8 @@ export function initShow(state) {
         capo.textContent = ` · Capo ${item.capotraste}ª casa`
         tituloEl.append(capo)
       }
-      state.proxima = state.catalog[state.catalog.findIndex((c) => c.id === item.id) + 1] || null
       modo('show')
-      montarCifra(true, true)
+      montarCifra(true, true, true)
     } catch (err) {
       alert(`Erro ao abrir "${item.titulo}": ${err.message}`)
     }
@@ -132,8 +158,12 @@ export function initShow(state) {
 
   function voltarLista() {
     modo('list')
+    // if (voz) voz.parar()
+    // btnVoz.classList.remove('ativo')
+    // btnVoz.style.setProperty('--nivel', '0')
     state.atual = null
     state.proxima = null
+    fecharBusca(true)
     cifraEl.textContent = ''
     scroller.rebuild([])
   }
@@ -150,14 +180,36 @@ export function initShow(state) {
   document.getElementById('show-voltar').addEventListener('click', voltarLista)
   btnTomMenos.addEventListener('click', () => { state.atual.prefs = prefsAtuais(); state.atual.prefs.tomOffset -= 1; aoMudarProp() })
   btnTomMais.addEventListener('click', () => { state.atual.prefs = prefsAtuais(); state.atual.prefs.tomOffset += 1; aoMudarProp() })
+  btnTomSalvar.addEventListener('click', () => {
+    if (!state.atual) return
+    const p = prefsAtuais()
+    const disp = p.tomBase ? transporNota(p.tomBase, p.tomOffset) : null
+    if (!disp) return
+    const idx = state.catalog.findIndex((c) => c.id === state.atual.id)
+    if (idx === -1) return
+    state.catalog[idx].tomBase = disp
+    state.atual.item.tomBase = disp
+    state.atual.prefs = { tomOffset: 0 }
+    montarCifra(true)
+  })
   btnProximoBloco.addEventListener('click', () => scroller.irPara(scroller.estado.ativa + 1))
   btnProxima.addEventListener('click', proximaMusica)
+  // btnVoz.addEventListener('click', () => {
+  //   if (!voz || !voz.disponivel) return
+  //   if (voz.ativo) voz.parar()
+  //   else voz.iniciar()
+  //   btnVoz.classList.toggle('ativo', voz.ativo)
+  // })
 
   document.addEventListener('keydown', (e) => {
     if (state.mode !== 'show') return
     const tag = (e.target.tagName || '').toLowerCase()
     if (tag === 'input' || tag === 'textarea' || !document.getElementById('editor').hidden) return
-    if (e.key === 'ArrowRight') {
+    if (e.key === '/') {
+      e.preventDefault()
+      buscaEl.focus()
+      buscaEl.select()
+    } else if (e.key === 'ArrowRight') {
       e.preventDefault()
       if (e.shiftKey) proximaMusica()
       else scroller.irPara(scroller.estado.ativa + 1)
@@ -168,6 +220,135 @@ export function initShow(state) {
       voltarLista()
     }
   })
+
+  function buscarMusicas() {
+    const q = norma(buscaEl.value)
+    if (!q) {
+      resultadosEl.hidden = true
+      return
+    }
+    const itens = state.catalog
+      .filter((m) => norma(`${m.artista} ${m.titulo}`).includes(q))
+      .slice(0, 8)
+    resultadosEl.textContent = ''
+    selBusca = -1
+    if (itens.length === 0) {
+      const p = document.createElement('p')
+      p.className = 'show-busca-vazio'
+      p.textContent = 'Nenhuma música encontrada.'
+      resultadosEl.append(p)
+      resultadosEl.hidden = false
+      return
+    }
+    for (const m of itens) {
+      const row = document.createElement('div')
+      row.className = 'show-musica-resultado'
+      const nome = document.createElement('span')
+      nome.className = 'show-musica-nome'
+      nome.textContent = m.artista ? `${m.artista} — ${m.titulo}` : m.titulo
+      const btnAgora = document.createElement('button')
+      btnAgora.type = 'button'
+      btnAgora.className = 'btn show-musica-acao'
+      btnAgora.title = 'Tocar agora'
+      btnAgora.textContent = 'Agora'
+      const btnFila = document.createElement('button')
+      btnFila.type = 'button'
+      btnFila.className = 'btn show-musica-acao'
+      btnFila.title = 'Colocar como próxima do setlist'
+      btnFila.textContent = 'Fila'
+      row.append(nome, btnAgora, btnFila)
+      row.addEventListener('click', (e) => {
+        if (e.target !== btnFila) {
+          fecharBusca(true)
+          abrir(m)
+        }
+      })
+      btnAgora.addEventListener('click', (e) => {
+        e.stopPropagation()
+        fecharBusca(true)
+        abrir(m)
+      })
+      btnFila.addEventListener('click', (e) => {
+        e.stopPropagation()
+        colocarNaFila(m)
+      })
+      resultadosEl.append(row)
+    }
+    resultadosEl.hidden = false
+  }
+
+  function fecharBusca(limpar = false) {
+    resultadosEl.hidden = true
+    selBusca = -1
+    if (limpar) buscaEl.value = ''
+  }
+
+  buscaEl.addEventListener('input', buscarMusicas)
+  buscaEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      fecharBusca(true)
+      buscaEl.blur()
+      return
+    }
+    const butoes = [...resultadosEl.querySelectorAll('.show-musica-resultado')]
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault()
+      if (butoes.length === 0) return
+      selBusca = e.key === 'ArrowDown'
+        ? (selBusca + 1) % butoes.length
+        : (selBusca - 1 + butoes.length) % butoes.length
+      butoes.forEach((b, i) => b.classList.toggle('sel', i === selBusca))
+      butoes[selBusca].scrollIntoView({ block: 'nearest' })
+      return
+    }
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      const alvo = selBusca >= 0 ? butoes[selBusca] : butoes[0]
+      if (alvo) alvo.click()
+    }
+  })
+  buscaEl.addEventListener('focus', () => {
+    if (buscaEl.value) buscarMusicas()
+  })
+  document.addEventListener('click', (e) => {
+    if (!document.getElementById('show-busca').contains(e.target)) fecharBusca()
+  })
+
+  function recomporProxima(ids) {
+    if (!state.atual) return
+    const atualId = state.atual.id
+    const i = ids.indexOf(atualId)
+    const proxId = i >= 0 && i < ids.length - 1 ? ids[i + 1] : null
+    state.proxima = proxId ? state.catalog.find((m) => m.id === proxId) || null : null
+    state.atual.ordem = [...ids]
+    atualizarControles()
+  }
+
+  function colocarNaFila(item) {
+    if (!state.atual || item.id === state.atual.id) return
+    const est = state.atual.estilo
+    let ids
+    if (est) {
+      ids = ordemParaEstilo(state, est)
+    } else {
+      ids = state.catalog.map((m) => m.id)
+    }
+    const de = ids.indexOf(item.id)
+    if (de === -1) return
+    ids.splice(de, 1)
+    const ref = ids.indexOf(state.atual.id)
+    const alvo = ref === -1 ? 0 : ref + 1
+    ids.splice(alvo, 0, item.id)
+    if (est) {
+      state.ordens[est] = ids
+    } else {
+      const porId = new Map(state.catalog.map((m) => [m.id, m]))
+      state.catalog = ids.map((id) => porId.get(id)).filter(Boolean)
+    }
+    saveCatalog({ versoes: 1, musicas: state.catalog, ordens: state.ordens }).catch(() => {})
+    window.dispatchEvent(new CustomEvent('cifra:lista-mudou'))
+    recomporProxima(ids)
+  }
 
   abrirFn = abrir
 }

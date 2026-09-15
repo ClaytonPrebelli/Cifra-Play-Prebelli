@@ -138,7 +138,7 @@ export function createMultiselect({
   })
 
   document.addEventListener('click', (e) => {
-    if (!inline && !el.contains(e.target)) fechar()
+    if (!el.contains(e.target)) fechar()
   })
 
   document.addEventListener('keydown', (e) => {

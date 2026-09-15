@@ -1,6 +1,7 @@
 import { getCatalog } from './api.js'
 import { initList } from './list.js'
 import { initShow } from './show.js'
+import { initImport } from './importar.js'
 
 export const AppState = {
   mode: 'list',
@@ -36,8 +37,9 @@ async function boot() {
     console.error(err)
   }
   setMode('list')
-  initList(AppState)
+  const lista = initList(AppState)
   initShow(AppState)
+  initImport(AppState, () => lista.refresh())
 }
 
 boot()

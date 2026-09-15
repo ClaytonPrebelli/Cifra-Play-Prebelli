@@ -118,9 +118,50 @@ test('parseChord extrai tonica, sufixo, anotação e baixo', () => {
   assert.equal(parseChord('Amaj7').sufixo, 'maj7')
   assert.equal(parseChord('G7M').sufixo, '7M')
   assert.equal(parseChord('Bb').tonica, 'Bb')
+  assert.equal(parseChord('D2').sufixo, '2')
+  assert.equal(parseChord('D2').tonica, 'D')
+  assert.equal(parseChord('A2').sufixo, '2')
+  assert.equal(parseChord('B2/F#').sufixo, '2')
+  assert.equal(parseChord('B2/F#').baixo, 'F#')
   assert.equal(parseChord('com'), null)
   assert.equal(parseChord('C/'), null)
   assert.equal(parseChord('H7'), null)
+})
+
+test('sufixo "2" (Cifra Club add2) não quebra linha de letra', () => {
+  const m = parseCifra('C2 me diz o que você quer\n')
+  const [c] = m.conteudo.filter((i) => i.tipo === 'compasso')
+  assert.equal(c.letra, 'C2 me diz o que você quer')
+  assert.equal(c.acordes.length, 0)
+})
+
+test('golden: D2/A2/B2 são linha de acordes (Panda - Eu Te Seguro)', () => {
+  const m = parseCifra(
+    'D2\nÉ linda de todos os ângulos\n\nC#m7  F#m7  D2\n\nA2\nSó hoje, eu falei\n',
+  )
+  const [c1, c2, c3] = m.conteudo.filter((i) => i.tipo === 'compasso')
+  assert.equal(c1.letra, 'É linda de todos os ângulos')
+  assert.deepEqual(c1.acordes.map((a) => `${a.tonica}${a.sufixo}`), ['D2'])
+  assert.deepEqual(c1.vinculos, [{ acorde: 0, palavra: 0 }])
+  assert.equal(c2.letra, null)
+  assert.equal(c2.acordes.length, 3)
+  assert.deepEqual(c2.acordes.map((a) => a.sufixo), ['m7', 'm7', '2'])
+  assert.equal(c3.letra, 'Só hoje, eu falei')
+  assert.equal(c3.acordes[0].sufixo, '2')
+  assert.equal(c3.vinculos[0].palavra, 0)
+})
+
+test('sufixo "5" (power chord Cifra Club) é linha de acordes', () => {
+  assert.equal(parseChord('E5').tonica, 'E')
+  assert.equal(parseChord('E5').sufixo, '5')
+  assert.equal(parseChord('C#5/F#').baixo, 'F#')
+  const m = parseCifra('A5  C#5  B5  A5\n\nE5\nThis Romeo is bleeding\n')
+  const [c1, c2] = m.conteudo.filter((i) => i.tipo === 'compasso')
+  assert.equal(c1.letra, null)
+  assert.deepEqual(c1.acordes.map((a) => `${a.tonica}${a.sufixo}`), ['A5', 'C#5', 'B5', 'A5'])
+  assert.equal(c2.letra, 'This Romeo is bleeding')
+  assert.deepEqual(c2.acordes.map((a) => a.sufixo), ['5'])
+  assert.deepEqual(c2.vinculos, [{ acorde: 0, palavra: 0 }])
 })
 
 test('tom case-insensitive normaliza para maiúsculo', () => {
