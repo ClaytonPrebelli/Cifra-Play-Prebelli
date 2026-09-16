@@ -3,7 +3,7 @@ import { parseCifra } from './parser.js'
 import { transporNota } from './transpositor.js'
 import { renderShow, paginarRows } from './render.js'
 import { createScroller } from './scroller.js'
-// import { createVoice } from './voice.js'
+import { createComandosVoz } from './comandosVoz.js'
 import { ordemParaEstilo } from './app.js'
 
 const PADRAO = { tomOffset: 0 }
@@ -34,12 +34,73 @@ export function initShow(state) {
   const btnTomSalvar = document.getElementById('btn-tom-salvar')
   const btnProximoBloco = document.getElementById('btn-proximo-bloco')
   const btnProxima = document.getElementById('btn-proxima')
-  // const btnVoz = document.getElementById('btn-voz')
+  const btnVoz = document.getElementById('btn-voz')
   const buscaEl = document.getElementById('show-busca-input')
   const resultadosEl = document.getElementById('show-busca-resultados')
 
   const scroller = createScroller(telaEl, cifraEl)
-  // let voz = null
+
+  function candidatosDeVoz(fr) {
+    const q = norma(fr)
+    if (!q) return []
+    return state.catalog.filter((m) => norma(`${m.artista} ${m.titulo}`).includes(q))
+  }
+
+  let acaoVoz = null
+
+  function tratarVoz(e) {
+    if (!state.atual) return
+    if (e.tipo === 'rolar') {
+      scroller.irPara(scroller.estado.ativa + (e.direcao === 'baixo' ? 1 : -1))
+      return
+    }
+    if (e.tipo === 'muda-proxima') {
+      proximaMusica()
+      return
+    }
+    if (e.tipo === 'ativa') {
+      acaoVoz = e.acao === 'fila' ? 'fila' : 'agora'
+      return
+    }
+    if (e.tipo === 'fragmento') {
+      buscaEl.value = e.texto
+      buscarMusicas()
+      const [m] = candidatosDeVoz(e.texto)
+      if (m && acaoVoz) {
+        if (acaoVoz === 'agora') {
+          fecharBusca(true)
+          abrir(m)
+        } else {
+          colocarNaFila(m)
+        }
+        acaoVoz = null
+      }
+      return
+    }
+    if (e.tipo === 'sim') {
+      const [m] = candidatosDeVoz(buscaEl.value)
+      if (m && acaoVoz) {
+        if (acaoVoz === 'agora') {
+          fecharBusca(true)
+          abrir(m)
+        } else {
+          colocarNaFila(m)
+        }
+      }
+      acaoVoz = null
+      return
+    }
+    if (e.tipo === 'cancelar') {
+      fecharBusca(true)
+      acaoVoz = null
+    }
+  }
+
+  const voz = createComandosVoz({
+    onComando: tratarVoz,
+    onStatus: (ativo) => btnVoz.classList.toggle('ativo', Boolean(ativo)),
+    onNivel: (n) => btnVoz.style.setProperty('--nivel', String(n)),
+  })
   let timerSalvar = null
   let selBusca = -1
 
@@ -87,7 +148,8 @@ export function initShow(state) {
     btnProximoBloco.hidden = !state.atual || noFim
     const prox = state.proxima
     btnProxima.hidden = !prox
-    btnProxima.textContent = prox ? `Próxima ▸ ${prox.titulo}` : 'Próxima ▸'
+    const tomProx = prox?.tomBase ? ` · Tom ${prox.tomBase}` : ''
+    btnProxima.textContent = prox ? `Próxima ▸ ${prox.titulo}${tomProx}` : 'Próxima ▸'
   }
 
   scroller.onPagina = (i) => {
@@ -104,18 +166,8 @@ export function initShow(state) {
       largura: Math.max(1, cifraEl.clientWidth),
     })
     scroller.rebuild(paginas, aoTopo)
-    // const estavaAtivo = forcarVoz || (voz ? voz.ativo : false)
-    // if (voz) voz.parar()
-    // voz = createVoice(
-    //   state.atual.modelo,
-    //   rows,
-    //   paginas,
-    //   () => {},
-    //   (nivel) => btnVoz.style.setProperty('--nivel', String(nivel)),
-    //   (ativo) => btnVoz.classList.toggle('ativo', Boolean(ativo)),
-    // )
-    // if (estavaAtivo) voz.iniciar()
-    // btnVoz.classList.toggle('ativo', voz.ativo)
+    // voz global (createComandosVoz) religado no initShow — comando tratado em tratarVoz(e)
+    if (forcarVoz && voz && voz.disponivel && !voz.ativo) voz.iniciar()
     if (salvar) salvarPrefs()
     atualizarControles()
   }
@@ -158,9 +210,9 @@ export function initShow(state) {
 
   function voltarLista() {
     modo('list')
-    // if (voz) voz.parar()
-    // btnVoz.classList.remove('ativo')
-    // btnVoz.style.setProperty('--nivel', '0')
+    if (voz) voz.parar()
+    btnVoz.classList.remove('ativo')
+    btnVoz.style.setProperty('--nivel', '0')
     state.atual = null
     state.proxima = null
     fecharBusca(true)
@@ -194,12 +246,12 @@ export function initShow(state) {
   })
   btnProximoBloco.addEventListener('click', () => scroller.irPara(scroller.estado.ativa + 1))
   btnProxima.addEventListener('click', proximaMusica)
-  // btnVoz.addEventListener('click', () => {
-  //   if (!voz || !voz.disponivel) return
-  //   if (voz.ativo) voz.parar()
-  //   else voz.iniciar()
-  //   btnVoz.classList.toggle('ativo', voz.ativo)
-  // })
+  btnVoz.addEventListener('click', () => {
+    if (!voz || !voz.disponivel) return
+    if (voz.ativo) voz.parar()
+    else voz.iniciar()
+    btnVoz.classList.toggle('ativo', voz.ativo)
+  })
 
   document.addEventListener('keydown', (e) => {
     if (state.mode !== 'show') return
