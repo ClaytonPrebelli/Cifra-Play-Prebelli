@@ -89,6 +89,37 @@ limpo do scroller.
 - `show.js` acopla: botão liga/desliga; highlight da linha cantada via classe
   `.voz-atual` (sublinhado no `.pw-texto`). **Nenhum `scroller.irPara` vindo da voz.**
 
+### Parser de comandos de voz (`comandosVoz.js`)
+
+Módulo **puro** (sem DOM), gera os comandos que `show.js` executa via
+`tratarVoz`. Entrada: `comandoDe(fala, estado)` → `{ comando, estado }`.
+Toda comparação usa `palavrasVoz` (normalização: lowercase, sem acento, só
+`[a-z0-9]`). Conjuntos de gatilho: `ATIVA` (ativa/ativar), `CANCELA`
+(cancelar/desativa/sai/esquece/...), `ROLA`+`BAIXO`/`ALTO`, `MUDA`+`proxima`,
+`AGORA`/`FILA`, `SIM`, `BUSCA`.
+
+Fluxo `state.modo`:
+- `normal` — virar comandos de rolagem, próxima, ficar esperando `fragmento`
+  (palavras do candidato são capturadas em `estado.fragmento`) ou, se a fala
+  tem `AGORA`/`FILA`, disparar a execução imediata/em fila do candidato.
+- `pick` — aguarda confirmação do candidato da busca; aceita `SIM`
+  (confirmar), `CANCELA` (cancelar e voltar a `normal`) e re-arm:
+  **`ATIVA` → `{ comando: { tipo: 'ativa' }, estado }` (no-op de re-arm)**.
+  Este guard é **anterior** ao `trechoDe`/`fragmento`: repetir "ativa busca"
+  já em `pick` **rearma** (sem preencher nada) em vez de virar `fragmento
+  "busca"`, que era o bug do campo enchido sozinho com a repetição da mesma
+  frase (ver relato do usuário: repetia por falta de feedback visual).
+
+`show.js` → `tratarVoz(e)` (handler assíncrono por `e.tipo`):
+- `rolar` → `scroller.irPara(ativa ± 1)`;
+- `muda-proxima` → `proximaMusica()`;
+- `fragmento` → preenche `buscaEl.value` + `buscarMusicas()` (filtra a lista);
+- `agora`/`fila` → abre ou enfileira o candidato (via `candidatosDeVoz`);
+- `sim` → abre o candidato destacado;
+- `cancelar` → `fecharBusca(true)`;
+- **`ativa` → abre/foca/`select()` em `buscaEl`** — o sinal visual de que o
+  modo de busca por voz está armado (espelha o atalho de teclado `/`).
+
 ### Matcher puro (módulo sem DOM, testável)
 
 `casarProximaLinha(fala, linhas, ref)`:

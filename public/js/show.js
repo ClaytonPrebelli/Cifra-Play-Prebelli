@@ -46,9 +46,7 @@ export function initShow(state) {
     return state.catalog.filter((m) => norma(`${m.artista} ${m.titulo}`).includes(q))
   }
 
-  let acaoVoz = null
-
-  function tratarVoz(e) {
+    function tratarVoz(e) {
     if (!state.atual) return
     if (e.tipo === 'rolar') {
       scroller.irPara(scroller.estado.ativa + (e.direcao === 'baixo' ? 1 : -1))
@@ -58,41 +56,40 @@ export function initShow(state) {
       proximaMusica()
       return
     }
-    if (e.tipo === 'ativa') {
-      acaoVoz = e.acao === 'fila' ? 'fila' : 'agora'
-      return
-    }
     if (e.tipo === 'fragmento') {
       buscaEl.value = e.texto
       buscarMusicas()
+      return
+    }
+    if (e.tipo === 'agora' || e.tipo === 'fila') {
       const [m] = candidatosDeVoz(e.texto)
-      if (m && acaoVoz) {
-        if (acaoVoz === 'agora') {
+      if (m) {
+        if (e.tipo === 'agora') {
           fecharBusca(true)
           abrir(m)
         } else {
           colocarNaFila(m)
         }
-        acaoVoz = null
       }
       return
     }
     if (e.tipo === 'sim') {
       const [m] = candidatosDeVoz(buscaEl.value)
-      if (m && acaoVoz) {
-        if (acaoVoz === 'agora') {
-          fecharBusca(true)
-          abrir(m)
-        } else {
-          colocarNaFila(m)
-        }
+      if (m) {
+        fecharBusca(true)
+        abrir(m)
       }
-      acaoVoz = null
       return
     }
     if (e.tipo === 'cancelar') {
       fecharBusca(true)
-      acaoVoz = null
+      return
+    }
+    if (e.tipo === 'ativa') {
+      if (buscaEl.hidden) buscaEl.hidden = false
+      buscaEl.focus()
+      buscaEl.select()
+      return
     }
   }
 

@@ -2,31 +2,6 @@
   "versoes": 1,
   "musicas": [
     {
-      "id": "Marcos e Belutti - Sonho de Todo Casal.txt",
-      "artista": "Marcos e Belutti",
-      "titulo": "Sonho de Todo Casal",
-      "tomBase": "D",
-      "estilos": [
-        "Sertanejo Universitário"
-      ],
-      "prefs": {
-        "tomOffset": 0
-      }
-    },
-    {
-      "id": "Panda - Eu Te Seguro.txt",
-      "artista": "Panda",
-      "titulo": "Eu Te Seguro",
-      "tomBase": "A",
-      "capotraste": null,
-      "estilos": [
-        "Sertanejo Universitário"
-      ],
-      "prefs": {
-        "tomOffset": 0
-      }
-    },
-    {
       "id": "Henrique e Juliano - A Maior Saudade.txt",
       "artista": "Henrique e Juliano",
       "titulo": "A Maior Saudade",
@@ -47,6 +22,57 @@
       "capotraste": null,
       "estilos": [
         "Sertanejo Romântico"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Jorge e Mateus - Ai Ja Era.txt",
+      "artista": "Jorge e Mateus",
+      "titulo": "Ai Ja Era",
+      "tomBase": "C",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Marcos e Belutti - Sonho de Todo Casal.txt",
+      "artista": "Marcos e Belutti",
+      "titulo": "Sonho de Todo Casal",
+      "tomBase": "D",
+      "estilos": [
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "João Bosco e Vinicius - Amiga Linda.txt",
+      "artista": "João Bosco e Vinicius",
+      "titulo": "Amiga Linda",
+      "tomBase": "G",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Panda - Eu Te Seguro.txt",
+      "artista": "Panda",
+      "titulo": "Eu Te Seguro",
+      "tomBase": "A",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
       ],
       "prefs": {
         "tomOffset": 0
@@ -92,27 +118,13 @@
       }
     },
     {
-      "id": "Bon Jovi - Always.txt",
-      "artista": "Bon Jovi",
-      "titulo": "Always",
-      "tomBase": "E",
+      "id": "Tião Carreiro e Pardinho - Amargurado.txt",
+      "artista": "Tião Carreiro e Pardinho",
+      "titulo": "Amargurado",
+      "tomBase": "B",
       "capotraste": null,
       "estilos": [
-        "Rock",
-        "Internacional"
-      ],
-      "prefs": {
-        "tomOffset": 0
-      }
-    },
-    {
-      "id": "Jorge e Mateus - Ai Ja Era.txt",
-      "artista": "Jorge e Mateus",
-      "titulo": "Ai Ja Era",
-      "tomBase": "C",
-      "capotraste": null,
-      "estilos": [
-        "Sertanejo Universitário"
+        "Sertanejo Romântico"
       ],
       "prefs": {
         "tomOffset": 0
@@ -132,20 +144,24 @@
       }
     },
     {
-      "id": "Tião Carreiro e Pardinho - Amargurado.txt",
-      "artista": "Tião Carreiro e Pardinho",
-      "titulo": "Amargurado",
-      "tomBase": "B",
+      "id": "Bon Jovi - Always.txt",
+      "artista": "Bon Jovi",
+      "titulo": "Always",
+      "tomBase": "E",
       "capotraste": null,
       "estilos": [
-        "Sertanejo Romântico"
-      ]
+        "Rock",
+        "Internacional"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
     },
     {
-      "id": "João Bosco e Vinicius - Amiga Linda.txt",
-      "artista": "João Bosco e Vinicius",
-      "titulo": "Amiga Linda",
-      "tomBase": "G",
+      "id": "Jorge e mateus - Amo Noite e Dia.txt",
+      "artista": "Jorge e mateus",
+      "titulo": "Amo Noite e Dia",
+      "tomBase": null,
       "capotraste": null,
       "estilos": [
         "Sertanejo Universitário"

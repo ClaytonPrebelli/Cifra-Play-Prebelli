@@ -15,11 +15,12 @@ const ALTO = new Set(['alto', 'acima', 'cima', 'sobe', 'subir', 'subindo', 'suba
 const ATIVA = new Set(['ativa', 'ativar'])
 const AGORA = new Set(['agora', 'já', 'ja'])
 const FILA = new Set(['fila', 'proxima', 'proximo'])
-const MUDA = new Set(['muda', 'mudar', 'toca', 'tocar', 'toque'])
+const MUDA = new Set(['muda', 'mudar', 'toca', 'tocar', 'toque', 'poe', 'põe', 'bota'])
 const SIM = new Set(['sim', 'isso', 'afirmativo'])
 const SOLO = new Set(['pacoca', 'paçoca', 'jilo', 'jiló'])
+const BUSCA = new Set(['busca', 'buscar'])
 
-const CANCELA = new Set(['nao', 'não', 'cancelar', 'cancela', 'cancel', 'sair', 'sai', 'para', 'esquecer', 'esquece', 'volta'])
+const CANCELA = new Set(['nao', 'não', 'cancelar', 'cancela', 'cancel', 'sair', 'sai', 'para', 'esquecer', 'esquece', 'volta', 'desativa', 'desativar'])
 
 const FILLER = new Set([
   'a', 'o', 'e', 'de', 'da', 'do', 'em', 'no', 'na', 'pra', 'para', 'página', 'pagina',
@@ -57,9 +58,11 @@ function mudaProximaDe(toks) {
 }
 
 function ativaDe(toks) {
-  const r = escanear(toks, ATIVA, new Set([...AGORA, ...FILA]))
+  const r = escanear(toks, ATIVA, new Set([...AGORA, ...FILA, ...BUSCA]))
   if (!r) return null
-  return AGORA.has(toks[r.fim]) ? { acao: 'agora', fim: r.fim } : { acao: 'fila', fim: r.fim }
+  if (AGORA.has(toks[r.fim])) return { acao: 'agora', fim: r.fim }
+  if (FILA.has(toks[r.fim])) return { acao: 'fila', fim: r.fim }
+  return { acao: null, fim: r.fim }
 }
 
 export function trechoDe(toks) {
@@ -77,19 +80,44 @@ export function comandoDe(fala, estado = { modo: 'normal', acao: null }) {
 
   if (estado.modo === 'pick') {
     if (toks.some((t) => SIM.has(t))) {
-      return { comando: { tipo: 'sim' }, estado: { modo: 'normal', acao: null } }
+      return { comando: { tipo: 'sim' }, estado }
     }
     if (toks.some((t) => CANCELA.has(t))) {
-      return { comando: { tipo: 'cancelar' }, estado: { modo: 'normal', acao: null } }
+      return { comando: { tipo: 'cancelar' }, estado: { modo: 'normal', acao: null, fragmento: null } }
+    }
+    if (toks.some((t) => ATIVA.has(t))) {
+      return { comando: { tipo: 'ativa' }, estado }
     }
     if (rolaDe(toks)) {
       return { comando: { tipo: 'rolar', direcao: rolaDe(toks) }, estado }
     }
     if (mudaProximaDe(toks)) {
-      return { comando: { tipo: 'muda-proxima' }, estado: { modo: 'normal', acao: null } }
+      return { comando: { tipo: 'muda-proxima' }, estado }
+    }
+    const executarAgora = toks.some((t) => AGORA.has(t))
+    const executarFila = toks.some((t) => FILA.has(t))
+    if (executarAgora || executarFila) {
+      if (estado.fragmento) {
+        return {
+          comando: { tipo: executarAgora ? 'agora' : 'fila', texto: estado.fragmento },
+          estado: { modo: 'normal', acao: null, fragmento: null },
+        }
+      }
+      return { comando: null, estado }
+    }
+    if (toks.some((t) => ATIVA.has(t))) {
+      return { comando: { tipo: 'ativa' }, estado }
     }
     const trecho = trechoDe(toks)
-    if (trecho) return { comando: { tipo: 'fragmento', texto: trecho }, estado }
+    if (trecho) {
+      if (estado.fragmento) {
+        if (trecho.startsWith(estado.fragmento) && trecho.length > estado.fragmento.length) {
+          return { comando: { tipo: 'fragmento', texto: trecho }, estado: { ...estado, fragmento: trecho } }
+        }
+        return { comando: null, estado }
+      }
+      return { comando: { tipo: 'fragmento', texto: trecho }, estado: { ...estado, fragmento: trecho } }
+    }
     return { comando: null, estado }
   }
 
