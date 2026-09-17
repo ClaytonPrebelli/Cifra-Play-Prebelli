@@ -160,6 +160,60 @@ test('deDecParaLinhas usa a metadata na ordem das chaves mesmo sem códigos cont
   ])
 })
 
+test('deDecParaLinhas repete o 1º acorde da intro (ciclo distinto) p/ os versos só com o 2º acorde (Amo)', () => {
+  const cifra = [
+    '0 Amo Noite e Dia',
+    '3 3333333333333333333333333 3 4 5 6',
+    '2 ',
+    '3 33333333333333333333333333 4',
+    '2 Tem um pedaço do meu peito',
+    '2 Bem colado ao teu',
+    '3 33333333333333333333333337 6',
+    '2 Teu jeito tão gostoso de me abraçar',
+    '3 3333333333333333333333333 46',
+    '2 Não aguento mais',
+    'Efm 12 7523 3000 3300',
+    'Cf9 2 1363 5226 3001',
+    'Gf 1 1043 3417 5400',
+    'Df4 16 9855 36435 4981',
+    'Gf5 1 1043 3417 5400',
+  ].join('\n')
+  const saida = deDecParaLinhas(cifra)
+  assert.deepEqual(saida.map(colapso), [
+    'Em C9 G D4',
+    'Em C9',
+    'Tem um pedaço do meu peito',
+    'Bem colado ao teu',
+    'G5 D4',
+    'Teu jeito tão gostoso de me abraçar',
+    'C9 D4',
+    'Não aguento mais',
+  ])
+})
+
+test('deDecParaLinhas NÃO repete o 1º acorde quando a intro tem acordes repetidos (No Dia)', () => {
+  const cifra = [
+    '0 No Dia Em Que Eu Sai De Casa',
+    '3 3333333333333333333333333 3 4 5 4 5',
+    '3 3333333333333333333333333   5',
+    '2 No dia em que eu sai de casa',
+    '3 3333333333333333333333333    4',
+    '2 Passou a mao em meus cabelos',
+    'Efm 12 7523 3000 3300',
+    'Af 1 643 3072 2701',
+    'Df 1 843 2826 2103',
+    'Df7 25 15243 2718 2103',
+  ].join('\n')
+  const saida = deDecParaLinhas(cifra)
+  assert.deepEqual(saida.map(colapso), [
+    'Em A D A D',
+    'D',
+    'No dia em que eu sai de casa',
+    'A',
+    'Passou a mao em meus cabelos',
+  ])
+})
+
 test('deDecParaLinhas devolve a régua p/ a 1ª letra não vazia e lê acordes colados', () => {
   const cifra = [
     '0 X',

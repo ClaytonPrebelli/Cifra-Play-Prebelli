@@ -97,6 +97,7 @@ function mapaDeDec(conteudo, codigos) {
 
 function extraiRuler(resto, mapa) {
   const acordes = []
+  const codigos = []
   const toks = (resto || '').split(/\s+/).filter(Boolean)
   let idx = 0
   toks.forEach((tok, ti) => {
@@ -104,12 +105,13 @@ function extraiRuler(resto, mapa) {
     const corpo = ti === 0 ? tok.replace(/^3+/, '') : tok
     let col = i + (ti === 0 ? tok.length - corpo.length : 0)
     for (const c of corpo) {
+      codigos.push(c)
       if (mapa[c]) acordes.push({ acorde: mapa[c], col })
       col++
     }
     idx = i + tok.length
   })
-  return acordes
+  return { acordes, codigos }
 }
 
 function montaLinhaAcordes(acordes) {
@@ -155,6 +157,7 @@ export function deDecParaLinhas(conteudo, codigos) {
   const itens = []
   let emCorpo = false
   let pendentes = []
+  let cicloIntro = null
 
   for (const linha of linhas) {
     if (!emCorpo) {
@@ -166,7 +169,11 @@ export function deDecParaLinhas(conteudo, codigos) {
     const tipo = Number(m[1])
     const resto = m[2].replace(/\s+$/, '')
     if (tipo === 3) {
-      pendentes.push(extraiRuler(resto, mapa))
+      const ruler = extraiRuler(resto, mapa)
+      if (cicloIntro === null && ruler.codigos.length >= 2 && new Set(ruler.codigos).size === ruler.codigos.length) {
+        cicloIntro = ruler.codigos
+      }
+      pendentes.push(ruler)
       continue
     }
     if (tipo === 2 || tipo === 8) {
@@ -176,8 +183,13 @@ export function deDecParaLinhas(conteudo, codigos) {
         if (pendentes.length === 0) itens.push({ linha: '', refrao: 'flow' })
         continue
       }
-      for (const ac of pendentes) {
-        if (ac.length) itens.push({ linha: montaLinhaAcordes(ac), refrao })
+      for (const p of pendentes) {
+        let acordes = p.acordes
+        if (cicloIntro && p.codigos.length === 1 && p.codigos[0] === cicloIntro[1]) {
+          const base = mapa[cicloIntro[0]]
+          if (base) acordes = [{ acorde: base, col: 0 }, ...p.acordes]
+        }
+        if (acordes.length) itens.push({ linha: montaLinhaAcordes(acordes), refrao })
       }
       pendentes = []
       itens.push({ linha: texto, refrao })
