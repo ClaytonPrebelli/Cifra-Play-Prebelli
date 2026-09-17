@@ -113,7 +113,11 @@ Fluxo `state.modo`:
 `show.js` → `tratarVoz(e)` (handler assíncrono por `e.tipo`):
 - `rolar` → `scroller.irPara(ativa ± 1)`;
 - `muda-proxima` → `proximaMusica()`;
-- `fragmento` → preenche `buscaEl.value` + `buscarMusicas()` (filtra a lista);
+- `fragmento` → preenche `buscaEl.value` + `buscarMusicas()` (filtra a lista).
+  **Só dispara com um candidato real** (nome de música dito em `pick`); a palavra
+  solta "busca" **nunca** é comando — `comandoDe` só emite `fragmento` com o
+  `texto` vindo de um trecho que NÃO é o gatilho `ATIVA` (re-arm de "ativa
+  busca" já em `pick` vira no-op, ver guard em `comandosVoz.js`).
 - `agora`/`fila` → abre ou enfileira o candidato (via `candidatosDeVoz`);
 - `sim` → abre o candidato destacado;
 - `cancelar` → `fecharBusca(true)`;

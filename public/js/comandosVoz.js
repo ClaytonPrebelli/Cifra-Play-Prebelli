@@ -27,7 +27,7 @@ const FILLER = new Set([
   'aí', 'ai', 'é', 'que', 'por', 'uma', 'um', 'as', 'os', 'aqui', 'lá', 'ta', 'tá',
 ])
 
-const TIGA = new Set(['ativa', 'ativar', 'agora', 'já', 'ja', 'fila', 'proxima', 'proximo', 'muda', 'mudar'])
+const TIGA = new Set(['ativa', 'ativar', 'agora', 'já', 'ja', 'fila', 'proxima', 'proximo', 'muda', 'mudar', 'busca', 'buscar'])
 
 function escanear(toks, gatilho, alvo, max = 6) {
   for (let i = 0; i < toks.length; i++) {
@@ -80,12 +80,13 @@ export function comandoDe(fala, estado = { modo: 'normal', acao: null }) {
 
   if (estado.modo === 'pick') {
     if (toks.some((t) => SIM.has(t))) {
-      return { comando: { tipo: 'sim' }, estado }
+      return { comando: { tipo: 'sim' }, estado: { modo: 'normal', acao: null, fragmento: null } }
     }
     if (toks.some((t) => CANCELA.has(t))) {
       return { comando: { tipo: 'cancelar' }, estado: { modo: 'normal', acao: null, fragmento: null } }
     }
-    if (toks.some((t) => ATIVA.has(t))) {
+    const restante = toks.filter((t) => !FILLER.has(t))
+    if (restante.length && restante.every((t) => ATIVA.has(t) || BUSCA.has(t))) {
       return { comando: { tipo: 'ativa' }, estado }
     }
     if (rolaDe(toks)) {
@@ -104,9 +105,6 @@ export function comandoDe(fala, estado = { modo: 'normal', acao: null }) {
         }
       }
       return { comando: null, estado }
-    }
-    if (toks.some((t) => ATIVA.has(t))) {
-      return { comando: { tipo: 'ativa' }, estado }
     }
     const trecho = trechoDe(toks)
     if (trecho) {
@@ -205,6 +203,7 @@ export function createComandosVoz({ onComando = () => {}, onStatus = () => {}, o
 
   function iniciar() {
     if (!api.disponivel || api.ativo || falhou) return
+    estado = { modo: 'normal', acao: null, fragmento: null }
     api.ativo = true
     onStatus(true)
     abrirMic()
