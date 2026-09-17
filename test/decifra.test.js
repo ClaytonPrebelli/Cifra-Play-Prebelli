@@ -41,11 +41,141 @@ test('deTextoParaLinhas: <O> vira [Refrão] único e desempacota grupos', () => 
   ])
 })
 
-test('deDecParaLinhas funciona com o mapa padrão do ALWAYS', () => {
+const colapso = (l) => l.replace(/\s+/g, ' ').trim()
+
+test('deDecParaLinhas usa o mapa padrão do ALWAYS', () => {
   const tmp = tituloDeDec('0 Always\n3 3 4 5 6 4\n')
   assert.equal(tmp, 'Always')
   const sem = codigosSemAcorde('3 3 4 5 6 7 8 9 : ; < = > ? @', DEC_CODES_PADRAO)
   assert.deepEqual([...sem], [])
-  const linhas = deDecParaLinhas('0 Always\n3 3 4 5 6 4\n2 This Romeo is bleeding\n', DEC_CODES_PADRAO)
-  assert.ok(linhas.some((l) => l.includes('E5')))
+  const linhas = deDecParaLinhas('0 Always\n3 33333333333333333333333333 4 5 6 4\n2 \n2 This Romeo is bleeding\n', DEC_CODES_PADRAO)
+  assert.deepEqual(linhas, ['A5 C#5 B5 A5', 'This Romeo is bleeding'])
+})
+
+test('deDecParaLinhas casa a metadata com os códigos por índice (NO DIA)', () => {
+  const cifra = [
+    '0 No Dia Em Que Eu Sai De Casa',
+    '3 3333333333333333333333333 3 4 5 4 5',
+    '3 3333333333333333333333333   5',
+    '2 No dia em que eu sai de casa',
+    '2 Minha mae me disse',
+    '3 3333333333333333333333333            6',
+    '2 Filho, vem ca',
+    '3 3333333333333333333333333    4',
+    '2 Passou a mao em meus cabelos',
+    '2 Olhou em meus olhos',
+    '3 3333333333333333333333333           5',
+    '2 Comecou falar',
+    '3 3333333333333333333333333           6',
+    '8 Eu sei que ela nunca compreendeu',
+    '3 3333333333333333333333333                            5',
+    '8 Os meus motivos de sair de la',
+    '3 3333333333333333333333333                              4',
+    '8 Mas ela sabe que depois que cresce',
+    '2 ',
+    '2 ',
+    '2 ',
+    '2 ',
+    '2 ',
+    '3 3333333333333333333333333              6                  5',
+    '8 O filho vira passarinho e quer voar',
+    '2 ',
+    '2 ( Em  A  D  A  D )',
+    '2 ',
+    '2 [Segunda Parte]',
+    '2 ',
+    '2 A minha mae naquele dia',
+    'Efm 12 7523 3000 3300',
+    'Af 1 643 3072 2701',
+    'Df 1 843 2826 2103',
+    'Gf 1 1043 3417 5400',
+    'Df7 25 15243 2718 2103',
+  ].join('\n')
+  const saida = deDecParaLinhas(cifra)
+  assert.deepEqual(saida.map(colapso), [
+    'Em A D A D',
+    'D',
+    'No dia em que eu sai de casa',
+    'Minha mae me disse',
+    'G',
+    'Filho, vem ca',
+    'A',
+    'Passou a mao em meus cabelos',
+    'Olhou em meus olhos',
+    'D',
+    'Comecou falar',
+    '[Refrão]',
+    'G',
+    'Eu sei que ela nunca compreendeu',
+    'D',
+    'Os meus motivos de sair de la',
+    'A',
+    'Mas ela sabe que depois que cresce',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '[Refrão]',
+    'G D',
+    'O filho vira passarinho e quer voar',
+    '',
+    '( Em A D A D )',
+    '',
+    '[Segunda Parte]',
+    '',
+    'A minha mae naquele dia',
+  ])
+})
+
+test('deDecParaLinhas usa a metadata na ordem das chaves mesmo sem códigos contíguos (ALWAYS)', () => {
+  const cifra = [
+    '0 Always',
+    '3 33333333333333333333333333 4 5 6 4',
+    '2 ',
+    '2 This Romeo is bleeding',
+    '3 33333333333333333333333333         3   6',
+    '2 Final chord',
+    'Ef5 1 923 990 3300',
+    'Af5 1 643 3072 2701',
+    'Cs5 1 812 36435 4927',
+    'Bf5 1 723 38289 6781',
+    'Csm 12 7412 36444 2536',
+    'Ef/G# 1 927 1335 5582',
+    'Af9 2 1243 3072 6301',
+    'Ef9 2 1523 963 3003',
+    'Af 1 643 3072 2701',
+    'Bf 1 723 38289 6781',
+    'Fs5 1 1003 47307 4698',
+    'Df5 1 843 2826 2103',
+    'Gf5 1 1043 3417 5400',
+    'Bf5/A 25 15124 32700 9002',
+  ].join('\n')
+  const saida = deDecParaLinhas(cifra)
+  assert.deepEqual(saida.map(colapso), [
+    'A5 C#5 B5 A5',
+    'This Romeo is bleeding',
+    'E5 B5',
+    'Final chord',
+  ])
+})
+
+test('deDecParaLinhas devolve a régua p/ a 1ª letra não vazia e lê acordes colados', () => {
+  const cifra = [
+    '0 X',
+    '3 3333333333333333333333333 4 5 6 4',
+    '2 ',
+    '2   lyric pra frente',
+    '3 33333333333333333333333338',
+    '2   To touch your lips',
+    '3 3333333333333333333333333 46',
+    '2 Nao aguento mais',
+  ].join('\n')
+  const saida = deDecParaLinhas(cifra, DEC_CODES_PADRAO)
+  assert.equal(saida[0], 'A5 C#5 B5 A5')
+  assert.equal(colapso(saida[1]), 'lyric pra frente')
+  assert.equal(saida[2], 'E/G#')
+  assert.equal(colapso(saida[3]), 'To touch your lips')
+  assert.equal(saida[4], 'A5 B5')
+  assert.equal(saida[5], 'Nao aguento mais')
 })
