@@ -17,7 +17,7 @@ export const DEC_CODES_PADRAO = {
   '@': 'A',
 }
 
-const RE_TIPO = /^(\d+)\s+(.*)$/
+const RE_TIPO = /^(\d+)(\s?)(.*)$/
 
 export function tituloDeDec(conteudo) {
   const linhas = (conteudo || '').split(/\r?\n/)
@@ -29,12 +29,20 @@ export function tituloDeDec(conteudo) {
   return tm && tm[1] ? tm[1].trim() : ''
 }
 
+function codigosDaRuler(resto) {
+  return (resto || '')
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((tok, ti) => (ti === 0 ? tok.replace(/^3+/, '') : tok))
+    .join('')
+}
+
 export function codigosDeDec(conteudo) {
   const set = new Set()
   for (const linha of (conteudo || '').split(/\r?\n/)) {
     const m = /^3\s+(.*)$/.exec(linha)
     if (!m) continue
-    for (const c of m[1] || '') if (!/\s/.test(c)) set.add(c)
+    for (const c of codigosDaRuler(m[1])) set.add(c)
   }
   return set
 }
@@ -75,13 +83,13 @@ function acordesDeDec(conteudo) {
 
 function mapaDeDec(conteudo, codigos) {
   const acordes = acordesDeDec(conteudo)
-  const chaves = Object.keys(DEC_CODES_PADRAO)
+  const usados = [...codigosDeDec(conteudo)].sort((a, b) => a.codePointAt(0) - b.codePointAt(0))
   const derivado = {}
-  for (let i = 0; i < acordes.length && i < chaves.length; i++) {
-    derivado[chaves[i]] = acordes[i]
+  for (let i = 0; i < acordes.length && i < usados.length; i++) {
+    derivado[usados[i]] = acordes[i]
   }
   const mapa = {}
-  for (const c of codigosDeDec(conteudo)) {
+  for (const c of usados) {
     if (codigos && codigos[c] && codigos[c] !== DEC_CODES_PADRAO[c]) {
       mapa[c] = codigos[c]
     } else if (derivado[c]) {
@@ -99,11 +107,12 @@ function extraiRuler(resto, mapa) {
   const acordes = []
   const codigos = []
   const toks = (resto || '').split(/\s+/).filter(Boolean)
+  const run = ((toks[0] || '').match(/^3+/) || [''])[0].length
   let idx = 0
   toks.forEach((tok, ti) => {
     const i = resto.indexOf(tok, idx)
     const corpo = ti === 0 ? tok.replace(/^3+/, '') : tok
-    let col = i + (ti === 0 ? tok.length - corpo.length : 0)
+    let col = i + (ti === 0 ? tok.length - corpo.length : 0) - run + 1
     for (const c of corpo) {
       codigos.push(c)
       if (mapa[c]) acordes.push({ acorde: mapa[c], col })
@@ -118,13 +127,13 @@ function montaLinhaAcordes(acordes) {
   let buf = ''
   let fim = -1
   for (const { acorde, col } of acordes) {
-    let c = col
-    if (c <= fim + 1) c = fim + 2
+    let c = Math.max(0, col)
+    if (fim >= 0 && c <= fim + 1) c = fim + 2
     while (buf.length < c) buf += ' '
     buf += acorde
     fim = buf.length - 1
   }
-  return buf.replace(/^\s+/, '')
+  return buf
 }
 
 function aplicaRefrao(itens) {
@@ -161,13 +170,13 @@ export function deDecParaLinhas(conteudo, codigos) {
 
   for (const linha of linhas) {
     if (!emCorpo) {
-      if (/^0\s+/.test(linha)) emCorpo = true
-      continue
+      if (!/^0\s+/.test(linha) && !/^3\s+/.test(linha)) continue
+      emCorpo = true
     }
     const m = RE_TIPO.exec(linha)
     if (!m) continue
     const tipo = Number(m[1])
-    const resto = m[2].replace(/\s+$/, '')
+    const resto = m[3].replace(/\s+$/, '')
     if (tipo === 3) {
       const ruler = extraiRuler(resto, mapa)
       if (cicloIntro === null && ruler.codigos.length >= 2 && new Set(ruler.codigos).size === ruler.codigos.length) {
@@ -180,7 +189,16 @@ export function deDecParaLinhas(conteudo, codigos) {
       const refrao = tipo === 8
       const texto = resto
       if (!texto.trim()) {
-        if (pendentes.length === 0) itens.push({ linha: '', refrao: 'flow' })
+        for (const p of pendentes) {
+          let acordes = p.acordes
+          if (cicloIntro && p.codigos.length === 1 && p.codigos[0] === cicloIntro[1]) {
+            const base = mapa[cicloIntro[0]]
+            if (base) acordes = [{ acorde: base, col: 0 }, ...p.acordes]
+          }
+          if (acordes.length) itens.push({ linha: montaLinhaAcordes(acordes), refrao: false })
+        }
+        pendentes = []
+        itens.push({ linha: '', refrao: 'flow' })
         continue
       }
       for (const p of pendentes) {

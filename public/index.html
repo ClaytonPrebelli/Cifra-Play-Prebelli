@@ -20,11 +20,15 @@
         <h1>Cifra Prebelli</h1>
         <div class="header-actions">
           <input id="busca" type="search" placeholder="Buscar música ou artista…">
+          <button id="btn-letras" class="btn" aria-expanded="false" title="Mostrar/ocultar as letras">A-Z</button>
           <div id="filtro-estilos" class="multiselect"></div>
           <button id="btn-adicionar" class="btn primary">Adicionar</button>
           <button id="btn-tema" class="btn" title="Alternar tema">Tema</button>
         </div>
       </header>
+      <div id="filtro-letra-wrap" class="barra-letras-wrap" hidden>
+        <div id="filtro-letra"></div>
+      </div>
       <div class="content-area">
         <p id="lista-vazia" class="placeholder"></p>
         <ul id="lista-musicas"></ul>
@@ -39,6 +43,7 @@
           <div id="show-busca-resultados" class="show-busca-resultados" hidden></div>
         </div>
         <div class="header-actions show-controles">
+          <button id="show-btn-letras" class="btn ctl" aria-expanded="false" title="Mostrar/ocultar as letras">A-Z</button>
           <span class="ctl">
             <button id="btn-tom-menos" class="btn ctl" title="Diminuir tom">−</button>
             <span id="show-tom" class="ctl-valor" title="Tom atual">–</span>
@@ -49,6 +54,9 @@
           <button id="btn-proxima" class="btn primary" hidden>Próxima ▸</button>
         </div>
       </header>
+      <div id="show-filtro-letra-wrap" class="barra-letras-wrap" hidden>
+        <div id="show-filtro-letra"></div>
+      </div>
       <div id="show-tela" class="show-tela">
         <button id="btn-proximo-bloco" class="btn proximo-bloco" title="Próximo bloco">Próximo ▾</button>
         <div id="show-cifra" class="show-cifra">

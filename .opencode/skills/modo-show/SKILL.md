@@ -18,9 +18,11 @@ automático estilo teleponto, transposição por música. Spec de referência:
 
 ## Módulos
 
-- `public/js/render.js` — `CifraModel` (já transposto) → DOM. Acorde ancorado à
-  palavra **sempre junto** dela; reflow das colunas não quebra o vínculo
-  (usa o CifraModel ancorado da skill `formato-cifra`).
+- `public/js/render.js` — `CifraModel` (já transposto) → DOM. Impressão
+  **literal** das colunas do arquivo: monoespaçada + `white-space: pre`; cada
+  compasso vira a linha de acordes e/ou a linha de letra como no `.txt`
+  (recuos e espaços internos preservados), acorde na coluna `col` de origem.
+  `ajustarFonte` encolhe o corpo para a linha mais longa caber na coluna.
 - `public/js/scroller.js` — o app divide a cifra em **páginas** que nunca partem
   um verso (verso inteiro cabe sempre). Avanço automático página a página
   (velocidade = segundos por página). Motor `requestAnimationFrame`.

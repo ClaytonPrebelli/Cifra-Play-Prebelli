@@ -2,6 +2,7 @@ import { getCatalog, getMusica, putMusica, deleteMusica, saveCatalog } from './a
 import { createMultiselect } from './multiselect.js'
 import { openShow } from './show.js'
 import { ordemParaEstilo } from './app.js'
+import { createBarraLetras, casaLetra } from './letras.js'
 
 const TEMA_STORAGE_KEY = 'cifra-prebelli:tema'
 
@@ -216,6 +217,27 @@ export function initList(state) {
   })
   filtroWrapEl.append(filtroEstilos.elemento)
 
+  const filtroLetras = createBarraLetras({
+    onchange: (letra) => {
+      state.filters.letra = letra
+      render()
+    },
+  })
+  document.getElementById('filtro-letra').append(filtroLetras.elemento)
+
+  const btnLetras = document.getElementById('btn-letras')
+  const letrasWrapEl = document.getElementById('filtro-letra-wrap')
+  btnLetras.addEventListener('click', () => {
+    letrasWrapEl.hidden = !letrasWrapEl.hidden
+    btnLetras.setAttribute('aria-expanded', String(!letrasWrapEl.hidden))
+    btnLetras.classList.toggle('ativo', !letrasWrapEl.hidden)
+    if (!letrasWrapEl.hidden) {
+      filtroLetras.elemento
+        .querySelector('.letra-btn.ativa')
+        ?.scrollIntoView({ block: 'nearest', inline: 'center' })
+    }
+  })
+
   const editorEstilos = createMultiselect({
     textoVazio: 'Selecionar estilos…',
     inline: true,
@@ -230,6 +252,7 @@ export function initList(state) {
     const est = filtroEstiloAtivo()
     let items = state.catalog.filter((m) => {
       if (q && !norm(`${m.artista} ${m.titulo}`).includes(q)) return false
+      if (!casaLetra(m, state.filters.letra)) return false
       if (
         estilosSelecionados.length &&
         !(m.estilos || []).some((s) => estilosSelecionados.includes(s))
@@ -363,6 +386,8 @@ export function initList(state) {
   function refresh() {
     filtroEstilos.setOpcoes(estilosDaLista())
     editorEstilos.setOpcoes(estilosSugeridos())
+    filtroLetras.setValor(state.filters.letra)
+    state.filters.letra = filtroLetras.atualizarDisponiveis(state.catalog)
     render()
   }
 

@@ -97,6 +97,7 @@ export function parseCifra(texto) {
         palavras: [],
         vinculos: [],
         inline: [],
+        indent: pendente[0] ? pendente[0].col : 0,
       })
       pendente = []
     }
@@ -161,6 +162,7 @@ export function parseCifra(texto) {
       palavras,
       vinculos,
       inline: inlines,
+      indent: palavras[0] ? palavras[0].inicio : 0,
     })
   }
 

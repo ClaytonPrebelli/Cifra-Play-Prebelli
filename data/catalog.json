@@ -15,6 +15,19 @@
       "capotraste": null
     },
     {
+      "id": "Panda - Eu Te Seguro.txt",
+      "artista": "Panda",
+      "titulo": "Eu Te Seguro",
+      "tomBase": "A",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
       "id": "Bruno e Marrone - Agarrada em mim.txt",
       "artista": "Bruno e Marrone",
       "titulo": "Agarrada em mim",
@@ -22,19 +35,6 @@
       "capotraste": null,
       "estilos": [
         "Sertanejo Romântico"
-      ],
-      "prefs": {
-        "tomOffset": 0
-      }
-    },
-    {
-      "id": "Jorge e Mateus - Ai Ja Era.txt",
-      "artista": "Jorge e Mateus",
-      "titulo": "Ai Ja Era",
-      "tomBase": "C",
-      "capotraste": null,
-      "estilos": [
-        "Sertanejo Universitário"
       ],
       "prefs": {
         "tomOffset": 0
@@ -66,10 +66,10 @@
       }
     },
     {
-      "id": "Panda - Eu Te Seguro.txt",
-      "artista": "Panda",
-      "titulo": "Eu Te Seguro",
-      "tomBase": "A",
+      "id": "Henrique e Juliano - A Mala é Falsa.txt",
+      "artista": "Henrique e Juliano",
+      "titulo": "A Mala é Falsa",
+      "tomBase": "F",
       "capotraste": null,
       "estilos": [
         "Sertanejo Universitário"
@@ -79,10 +79,10 @@
       }
     },
     {
-      "id": "Henrique e Juliano - A Mala é Falsa.txt",
-      "artista": "Henrique e Juliano",
-      "titulo": "A Mala é Falsa",
-      "tomBase": "F",
+      "id": "Jorge e Mateus - Ai Ja Era.txt",
+      "artista": "Jorge e Mateus",
+      "titulo": "Ai Ja Era",
+      "tomBase": "C",
       "capotraste": null,
       "estilos": [
         "Sertanejo Universitário"
@@ -158,8 +158,8 @@
       }
     },
     {
-      "id": "Jorge e mateus - Amo Noite e Dia.txt",
-      "artista": "Jorge e mateus",
+      "id": "Jorge e Mateus - Amo Noite e Dia.txt",
+      "artista": "Jorge e Mateus",
       "titulo": "Amo Noite e Dia",
       "tomBase": null,
       "capotraste": null,
@@ -169,6 +169,104 @@
       "prefs": {
         "tomOffset": 0
       }
+    },
+    {
+      "id": "Eduardo Costa - Amor de Violeiro.txt",
+      "artista": "Eduardo Costa",
+      "titulo": "Amor de Violeiro",
+      "tomBase": "A",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Murilo Huff - Anestesiado.txt",
+      "artista": "Murilo Huff",
+      "titulo": "Anestesiado",
+      "tomBase": null,
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ]
+    },
+    {
+      "id": "Fiduma e Jeca - Anjo Chapadex.txt",
+      "artista": "Fiduma e Jeca",
+      "titulo": "Anjo Chapadex",
+      "tomBase": "E",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Edson e Hudson - Azul.txt",
+      "artista": "Edson e Hudson",
+      "titulo": "Azul",
+      "tomBase": "D",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Joao Carreiro - Bagulho e Loco.txt",
+      "artista": "Joao Carreiro",
+      "titulo": "Bagulho e Loco",
+      "tomBase": "D",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Bruno e Marrone - Bijuteria.txt",
+      "artista": "Bruno e Marrone",
+      "titulo": "Bijuteria",
+      "tomBase": null,
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Zezé di Camargo e Luciano - Meu País.txt",
+      "artista": "Zezé di Camargo e Luciano",
+      "titulo": "Meu País",
+      "tomBase": "G",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Bruno e Marrone - Boate Azul.txt",
+      "artista": "Bruno e Marrone",
+      "titulo": "Boate Azul",
+      "tomBase": null,
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ]
     }
   ],
   "ordens": {}

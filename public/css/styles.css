@@ -123,6 +123,63 @@ select {
   min-width: 0;
 }
 
+.barra-letras-wrap {
+  flex: 0 0 auto;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border);
+  padding: 0.4rem 1.25rem;
+  overflow-x: auto;
+}
+
+.barra-letras {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: max-content;
+}
+
+.letra-btn {
+  font: inherit;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 2.6rem;
+  height: 2.6rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.letra-btn:hover:not(:disabled) {
+  background: var(--bg);
+}
+
+.letra-btn.ativa {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.letra-btn.vazia,
+.letra-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.letra-todas,
+.letra-outros {
+  font-size: 1rem;
+  padding: 0 0.9rem;
+}
+
+.btn.ativo {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .multiselect {
   position: relative;
   flex: 0 0 auto;
@@ -750,8 +807,9 @@ select {
 .show-cifra {
   position: relative;
   width: calc(200% / 3);
-  font-size: clamp(17px, 2.9vh, 30px);
-  line-height: 1.95;
+  font-family: ui-monospace, Consolas, "Courier New", monospace;
+  font-size: var(--show-fs, clamp(17px, 2.9vh, 30px));
+  line-height: 1.55;
 }
 
 .pagina {
@@ -782,12 +840,17 @@ select {
   column-break-inside: avoid;
 }
 
-.compasso.secao-atual .pw-texto {
+.linha-acordes,
+.linha-letra {
+  white-space: pre;
+}
+
+.compasso.secao-atual .linha-letra {
   font-weight: 700;
   color: var(--section);
 }
 
-.compasso.voz-atual .pw-texto {
+.compasso.voz-atual .linha-letra {
   text-decoration: underline;
   text-underline-offset: 0.12em;
   text-decoration-thickness: 0.08em;
@@ -797,44 +860,9 @@ select {
   font-weight: 800;
 }
 
-.compasso-so {
-  display: flex;
-  align-items: baseline;
-  gap: 0.85em;
-}
-
-.frase {
-  display: block;
-}
-
-.frase.frase-sem-cifra {
-  line-height: 1.5;
-}
-
-.pw {
-  position: relative;
-  display: inline-block;
-}
-
-.pw:has(.pw-acordes) {
-  padding-top: 0.95em;
-}
-
-.pw-acordes {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: inline-flex;
-  gap: 0.28em;
-  white-space: nowrap;
-  z-index: 2;
-}
-
 .acorde {
   color: var(--chord);
   font-weight: 800;
-  font-size: 0.82em;
-  line-height: 1.05;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4);
 }
 

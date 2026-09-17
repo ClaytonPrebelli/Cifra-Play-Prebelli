@@ -1,10 +1,11 @@
 import { getMusica, saveCatalog } from './api.js'
 import { parseCifra } from './parser.js'
 import { transporNota } from './transpositor.js'
-import { renderShow, paginarRows } from './render.js'
+import { renderShow, paginarRows, ajustarFonte } from './render.js'
 import { createScroller } from './scroller.js'
 import { createComandosVoz } from './comandosVoz.js'
 import { ordemParaEstilo } from './app.js'
+import { createBarraLetras, casaLetra } from './letras.js'
 
 const PADRAO = { tomOffset: 0 }
 
@@ -39,6 +40,32 @@ export function initShow(state) {
   const resultadosEl = document.getElementById('show-busca-resultados')
 
   const scroller = createScroller(telaEl, cifraEl)
+
+  const filtroLetras = createBarraLetras({ onchange: aplicarLetra })
+  document.getElementById('show-filtro-letra').append(filtroLetras.elemento)
+
+  const btnLetras = document.getElementById('show-btn-letras')
+  const letrasWrapEl = document.getElementById('show-filtro-letra-wrap')
+
+  function alternarLetras(mostrar) {
+    const abrir = mostrar ?? letrasWrapEl.hidden
+    letrasWrapEl.hidden = !abrir
+    btnLetras.setAttribute('aria-expanded', String(abrir))
+    btnLetras.classList.toggle('ativo', abrir)
+    if (abrir) {
+      filtroLetras.elemento
+        .querySelector('.letra-btn.ativa')
+        ?.scrollIntoView({ block: 'nearest', inline: 'center' })
+    }
+  }
+
+  btnLetras.addEventListener('click', () => alternarLetras())
+
+  function ordemFiltrada() {
+    const est = state.filters.estilos.length === 1 ? state.filters.estilos[0] : null
+    const porId = new Map(state.catalog.map((m) => [m.id, m]))
+    return ordemParaEstilo(state, est).filter((id) => casaLetra(porId.get(id), state.filters.letra))
+  }
 
   function candidatosDeVoz(fr) {
     const q = norma(fr)
@@ -158,11 +185,10 @@ export function initShow(state) {
 
   function montarCifra(salvar, aoTopo = false, forcarVoz = false) {
     const p = prefsAtuais()
+    const largura = Math.max(1, cifraEl.clientWidth)
     const rows = [...renderShow(state.atual.modelo, { tomOffset: p.tomOffset }).children]
-    const paginas = paginarRows(rows, {
-      altura: scroller.altura(),
-      largura: Math.max(1, cifraEl.clientWidth),
-    })
+    const fontSize = ajustarFonte(cifraEl, rows, largura)
+    const paginas = paginarRows(rows, { altura: scroller.altura(), largura, fontSize })
     scroller.rebuild(paginas, aoTopo)
     // voz global (createComandosVoz) religado no initShow — comando tratado em tratarVoz(e)
     if (forcarVoz && voz && voz.disponivel && !voz.ativo) voz.iniciar()
@@ -174,7 +200,9 @@ export function initShow(state) {
     try {
       const data = await getMusica(item.id)
       const est = state.filters.estilos.length === 1 ? state.filters.estilos[0] : null
-      const ordem = ordemParaEstilo(state, est)
+      filtroLetras.setValor(state.filters.letra)
+      state.filters.letra = filtroLetras.atualizarDisponiveis(state.catalog)
+      const ordem = ordemFiltrada()
       state.atual = {
         id: item.id,
         item,
@@ -200,6 +228,7 @@ export function initShow(state) {
         tituloEl.append(capo)
       }
       modo('show')
+      alternarLetras(false)
       montarCifra(true, true, true)
     } catch (err) {
       alert(`Erro ao abrir "${item.titulo}": ${err.message}`)
@@ -208,6 +237,7 @@ export function initShow(state) {
 
   function voltarLista() {
     modo('list')
+    alternarLetras(false)
     if (voz) voz.parar()
     btnVoz.classList.remove('ativo')
     btnVoz.style.setProperty('--nivel', '0')
@@ -280,6 +310,10 @@ export function initShow(state) {
     const itens = state.catalog
       .filter((m) => norma(`${m.artista} ${m.titulo}`).includes(q))
       .slice(0, 8)
+    renderResultados(itens)
+  }
+
+  function renderResultados(itens) {
     resultadosEl.textContent = ''
     selBusca = -1
     if (itens.length === 0) {
@@ -327,6 +361,22 @@ export function initShow(state) {
     resultadosEl.hidden = false
   }
 
+  function mostrarLetra(letra) {
+    renderResultados(state.catalog.filter((m) => casaLetra(m, letra)))
+  }
+
+  function aplicarLetra(letra) {
+    state.filters.letra = letra
+    recomporProxima(ordemFiltrada())
+    if (letra) {
+      buscaEl.value = ''
+      mostrarLetra(letra)
+    } else {
+      fecharBusca(true)
+    }
+    window.dispatchEvent(new CustomEvent('cifra:lista-mudou'))
+  }
+
   function fecharBusca(limpar = false) {
     resultadosEl.hidden = true
     selBusca = -1
@@ -361,7 +411,11 @@ export function initShow(state) {
     if (buscaEl.value) buscarMusicas()
   })
   document.addEventListener('click', (e) => {
-    if (!document.getElementById('show-busca').contains(e.target)) fecharBusca()
+    if (
+      !document.getElementById('show-busca').contains(e.target) &&
+      !filtroLetras.elemento.contains(e.target)
+    )
+      fecharBusca()
   })
 
   function recomporProxima(ids) {
@@ -397,8 +451,10 @@ export function initShow(state) {
     }
     saveCatalog({ versoes: 1, musicas: state.catalog, ordens: state.ordens }).catch(() => {})
     window.dispatchEvent(new CustomEvent('cifra:lista-mudou'))
-    recomporProxima(ids)
+    recomporProxima(ordemFiltrada())
   }
 
+  filtroLetras.setValor(state.filters.letra)
+  filtroLetras.atualizarDisponiveis(state.catalog)
   abrirFn = abrir
 }

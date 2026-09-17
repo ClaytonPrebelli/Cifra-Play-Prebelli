@@ -104,6 +104,15 @@ test('âncora: acorde antes da primeira palavra ancora em w1', () => {
   ])
 })
 
+test('preserva o recuo (coluna inicial) de acordes isolados e da letra', () => {
+  const m = parseCifra('   Em  C9\n\n    Tem um pedaço do meu peito\n')
+  const [c1, c2] = m.conteudo.filter((i) => i.tipo === 'compasso')
+  assert.equal(c1.letra, null)
+  assert.equal(c1.indent, 3)
+  assert.equal(c2.letra, '    Tem um pedaço do meu peito')
+  assert.equal(c2.indent, 4)
+})
+
 test('parseChord extrai tonica, sufixo, anotação e baixo', () => {
   assert.deepEqual(parseChord('Dm7/G'), {
     texto: 'Dm7/G', tonica: 'D', sufixo: 'm7', baixo: 'G', anotacao: null,

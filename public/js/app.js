@@ -7,7 +7,7 @@ export const AppState = {
   mode: 'list',
   catalog: [],
   ordens: {},
-  filters: { busca: '', estilos: [] },
+  filters: { busca: '', estilos: [], letra: '' },
   atual: null,
   show: { tomOffset: 0 },
 }

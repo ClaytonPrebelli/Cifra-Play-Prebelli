@@ -133,9 +133,11 @@ Lado linha de acordes + linha de letra imediatamente abaixo dela:
 - Se não há linha de letra abaixo (acordes no fim), ancoram-se à própria linha
   (render como linha apenas de acordes, posicionamento livre).
 
-**Na renderização em 3 colunas**: a palavra é transportada com seu acorde (o
-acorde renderiza logo acima da palavra, sempre junto dela) — a reflow das
-colunas NÃO quebra esse vínculo.
+**Na renderização**: o modo show reproduz as colunas do arquivo (fonte
+monoespaçada, `white-space: pre`): as linhas de acorde e de letra são impressas
+literalmente, preservando recuos e espaços internos, e os acordes são
+posicionados pela coluna `col` de origem. `vinculos`/`palavras` continuam no
+modelo para casamento de voz, mas não definem mais a posição do acorde.
 
 > Ajuste fino da regra (folga de coluna, prefixos de sílaba) é área aberta;
 > testes de golden (amostras de cifra → modelo esperado) fixam o comportamento.
