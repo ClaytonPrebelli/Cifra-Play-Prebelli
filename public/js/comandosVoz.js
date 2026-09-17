@@ -29,6 +29,8 @@ const FILLER = new Set([
 
 const TIGA = new Set(['ativa', 'ativar', 'agora', 'já', 'ja', 'fila', 'proxima', 'proximo', 'muda', 'mudar', 'busca', 'buscar'])
 
+const PICK_STRIP = new Set(['ativa', 'ativar', 'busca', 'buscar', 'agora', 'fila', 'proxima', 'proximo', 'muda', 'mudar'])
+
 function escanear(toks, gatilho, alvo, max = 6) {
   for (let i = 0; i < toks.length; i++) {
     if (!gatilho.has(toks[i])) continue
@@ -74,49 +76,53 @@ export function trechoDe(toks) {
   return limpos.length ? limpos.join(' ') : null
 }
 
-export function comandoDe(fala, estado = { modo: 'normal', acao: null }) {
+export function comandoDe(fala, estado = { modo: 'normal', acao: null }, { final = true } = {}) {
   const toks = palavrasVoz(fala)
   if (!toks.length) return { comando: null, estado }
 
   if (estado.modo === 'pick') {
     if (toks.some((t) => SIM.has(t))) {
+      if (!final) return { comando: null, estado }
       return { comando: { tipo: 'sim' }, estado: { modo: 'normal', acao: null, fragmento: null } }
     }
     if (toks.some((t) => CANCELA.has(t))) {
       return { comando: { tipo: 'cancelar' }, estado: { modo: 'normal', acao: null, fragmento: null } }
     }
-    const restante = toks.filter((t) => !FILLER.has(t))
-    if (restante.length && restante.every((t) => ATIVA.has(t) || BUSCA.has(t))) {
-      return { comando: { tipo: 'ativa' }, estado }
-    }
     if (rolaDe(toks)) {
       return { comando: { tipo: 'rolar', direcao: rolaDe(toks) }, estado }
     }
     if (mudaProximaDe(toks)) {
+      if (!final) return { comando: null, estado }
       return { comando: { tipo: 'muda-proxima' }, estado }
     }
-    const executarAgora = toks.some((t) => AGORA.has(t))
-    const executarFila = toks.some((t) => FILA.has(t))
-    if (executarAgora || executarFila) {
-      if (estado.fragmento) {
+    const comando = toks.filter((t) => !FILLER.has(t) && !ATIVA.has(t) && !BUSCA.has(t) && !AGORA.has(t) && !FILA.has(t) && !MUDA.has(t) && !ROLA.has(t) && !SIM.has(t) && !CANCELA.has(t))
+    if (comando.length === 0) {
+      const viraAgora = toks.some((t) => AGORA.has(t))
+      const viraFila = toks.some((t) => FILA.has(t))
+      const rearma = toks.some((t) => ATIVA.has(t)) || toks.some((t) => BUSCA.has(t))
+      if ((viraAgora || viraFila) && estado.fragmento) {
+        if (!final) return { comando: null, estado }
         return {
-          comando: { tipo: executarAgora ? 'agora' : 'fila', texto: estado.fragmento },
+          comando: { tipo: viraAgora ? 'agora' : 'fila', texto: estado.fragmento },
           estado: { modo: 'normal', acao: null, fragmento: null },
         }
       }
+      if (rearma) return { comando: { tipo: 'ativa' }, estado }
       return { comando: null, estado }
     }
-    const trecho = trechoDe(toks)
-    if (trecho) {
-      if (estado.fragmento) {
-        if (trecho.startsWith(estado.fragmento) && trecho.length > estado.fragmento.length) {
-          return { comando: { tipo: 'fragmento', texto: trecho }, estado: { ...estado, fragmento: trecho } }
-        }
-        return { comando: null, estado }
+    let cabeca = 0
+    while (cabeca < toks.length && PICK_STRIP.has(toks[cabeca])) cabeca++
+    const trecho = toks.slice(cabeca).join(' ')
+    if (estado.fragmento) {
+      if (
+        trecho.length > estado.fragmento.length &&
+        (trecho.startsWith(estado.fragmento) || trecho.endsWith(estado.fragmento))
+      ) {
+        return { comando: { tipo: 'fragmento', texto: trecho }, estado: { ...estado, fragmento: trecho } }
       }
-      return { comando: { tipo: 'fragmento', texto: trecho }, estado: { ...estado, fragmento: trecho } }
+      return { comando: null, estado }
     }
-    return { comando: null, estado }
+    return { comando: { tipo: 'fragmento', texto: trecho }, estado: { ...estado, fragmento: trecho } }
   }
 
   const rolar = rolaDe(toks)
@@ -137,6 +143,10 @@ export function comandoDe(fala, estado = { modo: 'normal', acao: null }) {
       estado: { modo: 'pick', acao: ativa.acao },
       fragmentoInicial: trecho,
     }
+  }
+
+  if (toks.some((t) => CANCELA.has(t))) {
+    return { comando: { tipo: 'cancelar' }, estado: { modo: 'normal', acao: null, fragmento: null } }
   }
 
   return { comando: null, estado }
@@ -236,7 +246,7 @@ export function createComandosVoz({ onComando = () => {}, onStatus = () => {}, o
     if (!api.ativo) return
     const r = ev.results[ev.results.length - 1]
     const fala = r[0].transcript || ''
-    const { comando, estado: novoEstado, fragmentoInicial } = comandoDe(fala, estado)
+    const { comando, estado: novoEstado, fragmentoInicial } = comandoDe(fala, estado, { final: Boolean(r.isFinal) })
     estado = novoEstado
 
     const eventos = []

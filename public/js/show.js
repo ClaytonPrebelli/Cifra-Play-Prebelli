@@ -83,6 +83,7 @@ export function initShow(state) {
     }
     if (e.tipo === 'cancelar') {
       fecharBusca(true)
+      buscaEl.blur()
       return
     }
     if (e.tipo === 'ativa') {
