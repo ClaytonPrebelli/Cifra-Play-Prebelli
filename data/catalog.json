@@ -267,6 +267,72 @@
       "estilos": [
         "Sertanejo Romântico"
       ]
+    },
+    {
+      "id": "Vitor e Leo - Borboletas.txt",
+      "artista": "Vitor e Leo",
+      "titulo": "Borboletas",
+      "tomBase": "D",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Fagner - Bobulhas de Amor.txt",
+      "artista": "Fagner",
+      "titulo": "Bobulhas de Amor",
+      "tomBase": "D",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ]
+    },
+    {
+      "id": "Altemar Dutra - Brigas.txt",
+      "artista": "Altemar Dutra",
+      "titulo": "Brigas",
+      "tomBase": "F",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ]
+    },
+    {
+      "id": "Gustavo Lima - Canudinho.txt",
+      "artista": "Gustavo Lima",
+      "titulo": "Canudinho",
+      "tomBase": null,
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ]
+    },
+    {
+      "id": "Xand Aviao - Casal Raiz.txt",
+      "artista": "Xand Aviao",
+      "titulo": "Casal Raiz",
+      "tomBase": "C",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ]
+    },
+    {
+      "id": "Junior Laino - Orgulho Caipira.txt",
+      "artista": "Junior Laino",
+      "titulo": "Orgulho Caipira",
+      "tomBase": "E",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
     }
   ],
   "ordens": {}
