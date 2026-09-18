@@ -236,7 +236,7 @@
       "id": "Bruno e Marrone - Bijuteria.txt",
       "artista": "Bruno e Marrone",
       "titulo": "Bijuteria",
-      "tomBase": null,
+      "tomBase": "Gm",
       "capotraste": null,
       "estilos": [
         "Sertanejo Romântico"
@@ -262,7 +262,7 @@
       "id": "Bruno e Marrone - Boate Azul.txt",
       "artista": "Bruno e Marrone",
       "titulo": "Boate Azul",
-      "tomBase": null,
+      "tomBase": "Am",
       "capotraste": null,
       "estilos": [
         "Sertanejo Romântico"
@@ -333,7 +333,58 @@
       "prefs": {
         "tomOffset": 0
       }
+    },
+    {
+      "id": "Chrystian e Ralf - Nova York.txt",
+      "artista": "Chrystian e Ralf",
+      "titulo": "Nova York",
+      "tomBase": "G",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Vitor e Leo - Deus e Eu No Sertão.txt",
+      "artista": "Vitor e Leo",
+      "titulo": "Deus e Eu No Sertão",
+      "tomBase": "G#m",
+      "capotraste": 4,
+      "estilos": [
+        "Sertanejo Romântico"
+      ]
+    },
+    {
+      "id": "Vitor e Leo - Vida Boa.txt",
+      "artista": "Vitor e Leo",
+      "titulo": "Vida Boa",
+      "tomBase": "F#",
+      "capotraste": 4,
+      "estilos": [
+        "Sertanejo Romântico"
+      ]
     }
   ],
-  "ordens": {}
+  "ordens": {
+    "Sertanejo Romântico": [
+      "Chrystian e Ralf - Nova York.txt",
+      "Bruno e Marrone - Agarrada em mim.txt",
+      "Zezé di Camargo e Luciano - Meu País.txt",
+      "Bruno e Marrone - Bijuteria.txt",
+      "Daniel - Adoro Amar Voce.txt",
+      "Chitãozinho e Chororó - Ah Se Deus me Ouvisse.txt",
+      "Vitor e Leo - Deus e Eu No Sertão.txt",
+      "Vitor e Leo - Vida Boa.txt",
+      "Tião Carreiro e Pardinho - Amargurado.txt",
+      "Joao Mineiro e Marciano - Ainda Ontem Chorei de Saudade.txt",
+      "Bruno e Marrone - Boate Azul.txt",
+      "Fagner - Bobulhas de Amor.txt",
+      "Altemar Dutra - Brigas.txt",
+      "Junior Laino - Orgulho Caipira.txt",
+      "Eduardo Costa - Amor de Violeiro.txt"
+    ]
+  }
 }
