@@ -21,11 +21,12 @@
         <div class="header-actions">
           <input id="busca" type="search" placeholder="Buscar música ou artista…">
           <button id="btn-letras" class="btn" aria-expanded="false" title="Mostrar/ocultar as letras">A-Z</button>
-          <div id="filtro-estilos" class="multiselect"></div>
           <button id="btn-adicionar" class="btn primary">Adicionar</button>
           <button id="btn-tema" class="btn" title="Alternar tema">Tema</button>
         </div>
       </header>
+      <div id="abas-estilos" class="abas-estilos" role="tablist" aria-label="Estilos"></div>
+      <div id="lista-resumo" class="lista-resumo"></div>
       <div id="filtro-letra-wrap" class="barra-letras-wrap" hidden>
         <div id="filtro-letra"></div>
       </div>
@@ -50,7 +51,7 @@
             <button id="btn-tom-mais" class="btn ctl" title="Aumentar tom">+</button>
           </span>
           <button id="btn-tom-salvar" class="btn ctl" title="Salvar este tom como o tom da música (substitui o tom salvo)">Tom ✓</button>
-          <button id="btn-voz" class="btn ctl" title="Comandos de voz — rolar, tocar agora, fila, próxima"><span>Voz</span></button>
+          <button id="btn-pedal" class="btn ctl" title="Configurar pedal passador (PageDown/PageUp)">Pedal</button>
           <button id="btn-proxima" class="btn primary" hidden>Próxima ▸</button>
         </div>
       </header>
@@ -73,6 +74,7 @@
         <input id="ed-artista" type="text" placeholder="Artista">
         <input id="ed-titulo" type="text" placeholder="Título">
         <input id="ed-tom" type="text" placeholder="Tom" title="Tom da cifra (ex.: D, Bb)" maxlength="7">
+        <input id="ed-duracao" type="text" placeholder="3:45" title="Duração da música (min:seg)" maxlength="5" inputmode="numeric">
         <select id="ed-capo" title="Capotraste: casa onde o capotraste é preso, ou Sem capo">
           <option value="0">Sem capo</option>
           <option value="1">1ª</option>
@@ -123,6 +125,38 @@
       <div class="editor-acoes">
         <button id="imp-cancelar" class="btn">Fechar</button>
         <button id="imp-importar" class="btn primary" disabled>Importar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="pedal" class="editor" hidden>
+    <div class="editor-panel pedal-panel">
+      <h2>Pedal passador</h2>
+      <p id="pedal-status" class="editor-status importar-hint">
+        Deixe esta janela aberta e pressione o pedal: o sinal aparece abaixo.
+        Depois clique em Aprender para gravar cada pedal na ação.
+        No palco: toque curto desce/sobe a página (no fim, vai pra próxima música);
+        segurar o da descida vai direto pra próxima música, segurar o da subida
+        volta pra música anterior. Toque duplo rápido também troca de música
+        (para pedais que usam o segurar para outra função, como o Cube Turner).
+        Vale para pedal em modo teclado (PageDown/PageUp) ou multimídia
+        (faixa anterior/próxima).
+      </p>
+      <div class="pedal-linha">
+        <span class="pedal-acao">Descer página (no fim, vai pra próxima música)</span>
+        <code id="pedal-descer"></code>
+        <button id="btn-pedal-descer" class="btn">Aprender descida</button>
+      </div>
+      <div class="pedal-linha">
+        <span class="pedal-acao">Subir página (no início, volta pra anterior; segurar volta direto)</span>
+        <code id="pedal-subir"></code>
+        <button id="btn-pedal-subir" class="btn">Aprender subida</button>
+      </div>
+      <pre id="pedal-log" class="pedal-log">Aguardando tecla… pressione o pedal.</pre>
+      <div class="editor-acoes">
+        <button id="btn-pedal-inverter" class="btn" title="Troca subida com descida">Inverter</button>
+        <button id="btn-pedal-padrao" class="btn">Padrão</button>
+        <button id="btn-pedal-fechar" class="btn primary">Fechar</button>
       </div>
     </div>
   </div>

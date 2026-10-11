@@ -1,11 +1,13 @@
 import { getMusica, saveCatalog } from './api.js'
 import { parseCifra } from './parser.js'
-import { transporNota } from './transpositor.js'
+import { transporNota, transporTexto } from './transpositor.js'
 import { renderShow, paginarRows, ajustarFonte } from './render.js'
 import { createScroller } from './scroller.js'
-import { createComandosVoz } from './comandosVoz.js'
 import { ordemParaEstilo } from './app.js'
 import { createBarraLetras, casaLetra } from './letras.js'
+import { PEDAL_PADRAO, acaoParaTecla, rotuloToken, tokenDeEvento, validarMapa } from './pedal.js'
+
+const STORAGE_PEDAL = 'cifra-prebelli:pedal'
 
 const PADRAO = { tomOffset: 0 }
 
@@ -19,9 +21,9 @@ function norma(s) {
     .trim()
 }
 
-export function openShow(item) {
+export function openShow(item, aoFim = false) {
   if (!abrirFn) return Promise.reject(new Error('modo show não inicializado'))
-  return abrirFn(item)
+  return abrirFn(item, aoFim)
 }
 
 export function initShow(state) {
@@ -35,7 +37,6 @@ export function initShow(state) {
   const btnTomSalvar = document.getElementById('btn-tom-salvar')
   const btnProximoBloco = document.getElementById('btn-proximo-bloco')
   const btnProxima = document.getElementById('btn-proxima')
-  const btnVoz = document.getElementById('btn-voz')
   const buscaEl = document.getElementById('show-busca-input')
   const resultadosEl = document.getElementById('show-busca-resultados')
 
@@ -67,67 +68,69 @@ export function initShow(state) {
     return ordemParaEstilo(state, est).filter((id) => casaLetra(porId.get(id), state.filters.letra))
   }
 
-  function candidatosDeVoz(fr) {
-    const q = norma(fr)
-    if (!q) return []
-    return state.catalog.filter((m) => norma(`${m.artista} ${m.titulo}`).includes(q))
-  }
-
-    function tratarVoz(e) {
-    if (!state.atual) return
-    if (e.tipo === 'rolar') {
-      scroller.irPara(scroller.estado.ativa + (e.direcao === 'baixo' ? 1 : -1))
-      return
-    }
-    if (e.tipo === 'muda-proxima') {
-      proximaMusica()
-      return
-    }
-    if (e.tipo === 'fragmento') {
-      buscaEl.value = e.texto
-      buscarMusicas()
-      return
-    }
-    if (e.tipo === 'agora' || e.tipo === 'fila') {
-      const [m] = candidatosDeVoz(e.texto)
-      if (m) {
-        if (e.tipo === 'agora') {
-          fecharBusca(true)
-          abrir(m)
-        } else {
-          colocarNaFila(m)
-        }
-      }
-      return
-    }
-    if (e.tipo === 'sim') {
-      const [m] = candidatosDeVoz(buscaEl.value)
-      if (m) {
-        fecharBusca(true)
-        abrir(m)
-      }
-      return
-    }
-    if (e.tipo === 'cancelar') {
-      fecharBusca(true)
-      buscaEl.blur()
-      return
-    }
-    if (e.tipo === 'ativa') {
-      if (buscaEl.hidden) buscaEl.hidden = false
-      buscaEl.focus()
-      buscaEl.select()
-      return
-    }
-  }
-
-  const voz = createComandosVoz({
-    onComando: tratarVoz,
-    onStatus: (ativo) => btnVoz.classList.toggle('ativo', Boolean(ativo)),
-    onNivel: (n) => btnVoz.style.setProperty('--nivel', String(n)),
-  })
   let timerSalvar = null
   let selBusca = -1
+
+  function carregarMapaPedal() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(STORAGE_PEDAL) || 'null')
+      return validarMapa(raw || PEDAL_PADRAO)
+    } catch {
+      return { ...PEDAL_PADRAO, descer: [...PEDAL_PADRAO.descer], subir: [...PEDAL_PADRAO.subir] }
+    }
+  }
+
+  let mapaPedal = carregarMapaPedal()
+  let aprendendo = null
+  const historicoPedal = []
+  const pedalEl = document.getElementById('pedal')
+  const pedalSubirEl = document.getElementById('pedal-subir')
+  const pedalDescerEl = document.getElementById('pedal-descer')
+  const pedalLogEl = document.getElementById('pedal-log')
+  const pedalStatusEl = document.getElementById('pedal-status')
+  const btnPedalDescer = document.getElementById('btn-pedal-descer')
+  const btnPedalSubir = document.getElementById('btn-pedal-subir')
+
+  function mostrarMapaPedal() {
+    pedalDescerEl.textContent = mapaPedal.descer.map(rotuloToken).join(' · ')
+    pedalSubirEl.textContent = mapaPedal.subir.map(rotuloToken).join(' · ')
+  }
+
+  function salvarMapaPedal() {
+    try {
+      localStorage.setItem(STORAGE_PEDAL, JSON.stringify(mapaPedal))
+    } catch {}
+  }
+
+  function abrirPedal() {
+    aprendendo = null
+    btnPedalDescer.classList.remove('ativo')
+    btnPedalSubir.classList.remove('ativo')
+    pedalEl.hidden = false
+    mostrarMapaPedal()
+    pedalStatusEl.textContent = 'Deixe esta janela aberta e pressione o pedal: o sinal aparece abaixo. Depois clique em Aprender para gravar cada pedal na ação.'
+  }
+
+  function fecharPedal() {
+    pedalEl.hidden = true
+    aprendendo = null
+  }
+
+  function registrarPedal(e) {
+    const token = tokenDeEvento(e)
+    historicoPedal.unshift(`key=${JSON.stringify(e.key)} code=${JSON.stringify(e.code)} keyCode=${e.keyCode ?? e.which} → ${rotuloToken(token)}`)
+    pedalLogEl.textContent = historicoPedal.slice(0, 6).join('\n')
+    if (!aprendendo) return
+    const outra = aprendendo === 'descer' ? 'subir' : 'descer'
+    mapaPedal[outra] = mapaPedal[outra].filter((t) => t !== token)
+    if (!mapaPedal[aprendendo].includes(token)) mapaPedal[aprendendo].push(token)
+    salvarMapaPedal()
+    mostrarMapaPedal()
+    pedalStatusEl.textContent = `${rotuloToken(token)} gravado em "${aprendendo === 'descer' ? 'Descer página' : 'Subir página'}".`
+    aprendendo = null
+    btnPedalDescer.classList.remove('ativo')
+    btnPedalSubir.classList.remove('ativo')
+  }
 
   function modo(mode) {
     state.mode = mode
@@ -152,7 +155,7 @@ export function initShow(state) {
     state.catalog[idx].prefs = { tomOffset: p.tomOffset }
     clearTimeout(timerSalvar)
     timerSalvar = setTimeout(() => {
-      saveCatalog({ versoes: 1, musicas: state.catalog }).catch(() => {})
+      saveCatalog({ versoes: 1, musicas: state.catalog, ordens: state.ordens }).catch(() => {})
     }, 400)
   }
 
@@ -162,10 +165,53 @@ export function initShow(state) {
     if (prox) openShow(prox)
   }
 
+  function avancarPedal() {
+    if (!state.atual) return
+    const noFim = scroller.estado.total <= 1 || scroller.estado.ativa >= scroller.estado.total - 1
+    if (noFim) proximaMusica()
+    else scroller.irPara(scroller.estado.ativa + 1)
+  }
+
+  function voltarPedal() {
+    if (!state.atual) return
+    if (scroller.estado.ativa <= 0 && state.anterior) openShow(state.anterior, true)
+    else scroller.irPara(scroller.estado.ativa - 1)
+  }
+
+  function musicaAnterior() {
+    if (!state.atual || !state.anterior) return
+    openShow(state.anterior, true)
+  }
+
+  const SEGURAR_MS = 500
+  const DUPLO_MS = 350
+  const segurando = new Map()
+  let ultimoToqueDescer = 0
+  let ultimoToqueSubir = 0
+
+  function aoSegurar(token, acao) {
+    segurando.delete(token)
+    if (segurando.size === 0) btnProximoBloco.classList.remove('segurando')
+    if (acao === 'subir') musicaAnterior()
+    else proximaMusica()
+  }
+
+  function armarSegurar(token, acao) {
+    clearTimeout(segurando.get(token))
+    segurando.set(token, setTimeout(() => aoSegurar(token, acao), SEGURAR_MS))
+    if (acao === 'descer') btnProximoBloco.classList.add('segurando')
+  }
+
+  function desarmarSegurar(token) {
+    clearTimeout(segurando.get(token))
+    segurando.delete(token)
+    if (segurando.size === 0) btnProximoBloco.classList.remove('segurando')
+  }
+
   function atualizarControles() {
     const p = state.atual ? prefsAtuais() : PADRAO
     const base = p.tomBase
-    const disp = base ? transporNota(base, p.tomOffset) : null
+    const disp = base ? transporTexto(base, p.tomOffset) : null
     tomEl.textContent = disp
       ? `${disp}${p.tomOffset ? ` (${p.tomOffset > 0 ? '+' : ''}${p.tomOffset})` : ''}`
       : '–'
@@ -173,7 +219,9 @@ export function initShow(state) {
     btnProximoBloco.hidden = !state.atual || noFim
     const prox = state.proxima
     btnProxima.hidden = !prox
-    const tomProx = prox?.tomBase ? ` · Tom ${prox.tomBase}` : ''
+    const offProx = prox?.prefs?.tomOffset ?? 0
+    const efProx = prox?.tomBase && offProx ? transporTexto(prox.tomBase, offProx) ?? prox.tomBase : prox?.tomBase
+    const tomProx = efProx ? ` · Tom ${efProx}` : ''
     btnProxima.textContent = prox ? `Próxima ▸ ${prox.titulo}${tomProx}` : 'Próxima ▸'
   }
 
@@ -183,20 +231,38 @@ export function initShow(state) {
     atualizarControles()
   }
 
-  function montarCifra(salvar, aoTopo = false, forcarVoz = false) {
+  function atualizarTitulo() {
+    const item = state.atual?.item
+    if (!item) return
+    const p = prefsAtuais()
+    tituloEl.textContent = item.artista ? `${item.artista} — ${item.titulo}` : item.titulo
+    const disp = p.tomBase ? transporTexto(p.tomBase, p.tomOffset) : null
+    if (disp) {
+      const tom = document.createElement('span')
+      tom.textContent = ` · Tom ${disp}`
+      tituloEl.append(tom)
+    }
+    if (item.capotraste) {
+      const capo = document.createElement('span')
+      capo.className = 'capo'
+      capo.textContent = ` · Capo ${item.capotraste}ª casa`
+      tituloEl.append(capo)
+    }
+  }
+
+  function montarCifra(salvar, aoTopo = false) {
     const p = prefsAtuais()
     const largura = Math.max(1, cifraEl.clientWidth)
     const rows = [...renderShow(state.atual.modelo, { tomOffset: p.tomOffset }).children]
     const fontSize = ajustarFonte(cifraEl, rows, largura)
     const paginas = paginarRows(rows, { altura: scroller.altura(), largura, fontSize })
     scroller.rebuild(paginas, aoTopo)
-    // voz global (createComandosVoz) religado no initShow — comando tratado em tratarVoz(e)
-    if (forcarVoz && voz && voz.disponivel && !voz.ativo) voz.iniciar()
     if (salvar) salvarPrefs()
+    atualizarTitulo()
     atualizarControles()
   }
 
-  async function abrir(item) {
+  async function abrir(item, aoFim = false) {
     try {
       const data = await getMusica(item.id)
       const est = state.filters.estilos.length === 1 ? state.filters.estilos[0] : null
@@ -206,6 +272,7 @@ export function initShow(state) {
       state.atual = {
         id: item.id,
         item,
+        prefs: { tomOffset: item.prefs?.tomOffset ?? PADRAO.tomOffset },
         modelo: parseCifra(data.conteudo),
         ordem,
         estilo: est,
@@ -213,23 +280,12 @@ export function initShow(state) {
       const i = ordem.indexOf(item.id)
       const proxId = i >= 0 && i < ordem.length - 1 ? ordem[i + 1] : null
       state.proxima = proxId ? state.catalog.find((m) => m.id === proxId) || null : null
-      const p = prefsAtuais()
-      const nome = item.artista ? `${item.artista} — ${item.titulo}` : item.titulo
-      tituloEl.textContent = nome
-      if (p.tomBase) {
-        const tom = document.createElement('span')
-        tom.textContent = ` · Tom ${p.tomBase}`
-        tituloEl.append(tom)
-      }
-      if (item.capotraste) {
-        const capo = document.createElement('span')
-        capo.className = 'capo'
-        capo.textContent = ` · Capo ${item.capotraste}ª casa`
-        tituloEl.append(capo)
-      }
+      const antId = i > 0 ? ordem[i - 1] : null
+      state.anterior = antId ? state.catalog.find((m) => m.id === antId) || null : null
       modo('show')
       alternarLetras(false)
-      montarCifra(true, true, true)
+      montarCifra(true, true)
+      if (aoFim) scroller.irPara(scroller.estado.total - 1, 0)
     } catch (err) {
       alert(`Erro ao abrir "${item.titulo}": ${err.message}`)
     }
@@ -238,19 +294,20 @@ export function initShow(state) {
   function voltarLista() {
     modo('list')
     alternarLetras(false)
-    if (voz) voz.parar()
-    btnVoz.classList.remove('ativo')
-    btnVoz.style.setProperty('--nivel', '0')
     state.atual = null
     state.proxima = null
+    state.anterior = null
     fecharBusca(true)
     cifraEl.textContent = ''
     scroller.rebuild([])
   }
 
-  function aoMudarProp() {
+  function mudarTom(delta) {
     if (!state.atual) return
+    state.atual.prefs = prefsAtuais()
+    state.atual.prefs.tomOffset += delta
     montarCifra(true)
+    window.dispatchEvent(new CustomEvent('cifra:lista-mudou'))
   }
 
   window.addEventListener('resize', () => {
@@ -258,8 +315,8 @@ export function initShow(state) {
   })
 
   document.getElementById('show-voltar').addEventListener('click', voltarLista)
-  btnTomMenos.addEventListener('click', () => { state.atual.prefs = prefsAtuais(); state.atual.prefs.tomOffset -= 1; aoMudarProp() })
-  btnTomMais.addEventListener('click', () => { state.atual.prefs = prefsAtuais(); state.atual.prefs.tomOffset += 1; aoMudarProp() })
+  btnTomMenos.addEventListener('click', () => mudarTom(-1))
+  btnTomMais.addEventListener('click', () => mudarTom(1))
   btnTomSalvar.addEventListener('click', () => {
     if (!state.atual) return
     const p = prefsAtuais()
@@ -271,34 +328,142 @@ export function initShow(state) {
     state.atual.item.tomBase = disp
     state.atual.prefs = { tomOffset: 0 }
     montarCifra(true)
+    window.dispatchEvent(new CustomEvent('cifra:lista-mudou'))
   })
-  btnProximoBloco.addEventListener('click', () => scroller.irPara(scroller.estado.ativa + 1))
+  let holdBlocoTimer = 0
+  let holdBlocoDisparou = false
+  let ultimoCliqueBloco = 0
+  btnProximoBloco.style.setProperty('--hold-ms', `${SEGURAR_MS}ms`)
+  btnProximoBloco.addEventListener('pointerdown', () => {
+    holdBlocoDisparou = false
+    clearTimeout(holdBlocoTimer)
+    btnProximoBloco.classList.add('segurando')
+    holdBlocoTimer = setTimeout(() => {
+      holdBlocoDisparou = true
+      btnProximoBloco.classList.remove('segurando')
+      proximaMusica()
+    }, SEGURAR_MS)
+  })
+  for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) btnProximoBloco.addEventListener(ev, () => {
+    clearTimeout(holdBlocoTimer)
+    btnProximoBloco.classList.remove('segurando')
+  })
+  btnProximoBloco.addEventListener('contextmenu', (e) => e.preventDefault())
+  btnProximoBloco.addEventListener('click', () => {
+    clearTimeout(holdBlocoTimer)
+    if (holdBlocoDisparou) {
+      holdBlocoDisparou = false
+      return
+    }
+    const agora = Date.now()
+    if (agora - ultimoCliqueBloco < DUPLO_MS) {
+      ultimoCliqueBloco = 0
+      proximaMusica()
+      return
+    }
+    ultimoCliqueBloco = agora
+    scroller.irPara(scroller.estado.ativa + 1)
+  })
   btnProxima.addEventListener('click', proximaMusica)
-  btnVoz.addEventListener('click', () => {
-    if (!voz || !voz.disponivel) return
-    if (voz.ativo) voz.parar()
-    else voz.iniciar()
-    btnVoz.classList.toggle('ativo', voz.ativo)
+  document.getElementById('btn-pedal').addEventListener('click', abrirPedal)
+  document.getElementById('btn-pedal-fechar').addEventListener('click', fecharPedal)
+  btnPedalDescer.addEventListener('click', () => {
+    aprendendo = 'descer'
+    btnPedalDescer.classList.add('ativo')
+    btnPedalSubir.classList.remove('ativo')
+    btnPedalDescer.blur()
+    pedalStatusEl.textContent = 'Pressione o pedal da DESCIDA agora…'
+  })
+  btnPedalSubir.addEventListener('click', () => {
+    aprendendo = 'subir'
+    btnPedalSubir.classList.add('ativo')
+    btnPedalDescer.classList.remove('ativo')
+    btnPedalSubir.blur()
+    pedalStatusEl.textContent = 'Pressione o pedal da SUBIDA agora…'
+  })
+  document.getElementById('btn-pedal-inverter').addEventListener('click', (e) => {
+    const { descer, subir } = mapaPedal
+    mapaPedal = { descer: subir, subir: descer }
+    salvarMapaPedal()
+    mostrarMapaPedal()
+    pedalStatusEl.textContent = 'Pedais invertidos.'
+    e.currentTarget.blur()
+  })
+  document.getElementById('btn-pedal-padrao').addEventListener('click', () => {
+    mapaPedal = { ...PEDAL_PADRAO, descer: [...PEDAL_PADRAO.descer], subir: [...PEDAL_PADRAO.subir] }
+    salvarMapaPedal()
+    mostrarMapaPedal()
+    pedalStatusEl.textContent = 'Mapa padrão restaurado.'
   })
 
   document.addEventListener('keydown', (e) => {
+    if (state.mode !== 'show' || pedalEl.hidden) return
+    if (e.key === 'Escape') fecharPedal()
+    else if (!e.repeat) registrarPedal(e)
+    e.preventDefault()
+    e.stopPropagation()
+  }, true)
+
+  document.addEventListener('keydown', (e) => {
     if (state.mode !== 'show') return
+    if (!pedalEl.hidden) return
     const tag = (e.target.tagName || '').toLowerCase()
-    if (tag === 'input' || tag === 'textarea' || !document.getElementById('editor').hidden) return
+    if (tag === 'input' || tag === 'textarea') return
+    if (!document.getElementById('editor').hidden || !document.getElementById('importar').hidden) return
     if (e.key === '/') {
       e.preventDefault()
       buscaEl.focus()
       buscaEl.select()
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault()
-      if (e.shiftKey) proximaMusica()
-      else scroller.irPara(scroller.estado.ativa + 1)
-    } else if (e.key === 'ArrowLeft') {
-      e.preventDefault()
-      scroller.irPara(scroller.estado.ativa - 1)
     } else if (e.key === 'Escape') {
       voltarLista()
+    } else {
+      if (e.key === 'ArrowRight' && e.shiftKey) {
+        e.preventDefault()
+        proximaMusica()
+        return
+      }
+      const token = tokenDeEvento(e)
+      const acao = acaoParaTecla(token, mapaPedal)
+      if (acao === 'descer') {
+        e.preventDefault()
+        if (document.activeElement?.blur) document.activeElement.blur()
+        if (e.repeat) return
+        const agora = Date.now()
+        const noFim = scroller.estado.total <= 1 || scroller.estado.ativa >= scroller.estado.total - 1
+        avancarPedal()
+        if (noFim) ultimoToqueDescer = 0
+        else if (agora - ultimoToqueDescer < DUPLO_MS) {
+          ultimoToqueDescer = 0
+          desarmarSegurar(token)
+          proximaMusica()
+        } else {
+          ultimoToqueDescer = agora
+          armarSegurar(token, acao)
+        }
+      } else if (acao === 'subir') {
+        e.preventDefault()
+        if (document.activeElement?.blur) document.activeElement.blur()
+        if (e.repeat) return
+        const agora = Date.now()
+        const noTopo = scroller.estado.ativa <= 0
+        const mudou = noTopo && state.anterior
+        voltarPedal()
+        if (mudou) ultimoToqueSubir = 0
+        else if (agora - ultimoToqueSubir < DUPLO_MS) {
+          ultimoToqueSubir = 0
+          desarmarSegurar(token)
+          musicaAnterior()
+        } else {
+          ultimoToqueSubir = agora
+          armarSegurar(token, acao)
+        }
+      }
     }
+  })
+
+  document.addEventListener('keyup', (e) => {
+    if (state.mode !== 'show') return
+    desarmarSegurar(tokenDeEvento(e))
   })
 
   function buscarMusicas() {
@@ -424,6 +589,8 @@ export function initShow(state) {
     const i = ids.indexOf(atualId)
     const proxId = i >= 0 && i < ids.length - 1 ? ids[i + 1] : null
     state.proxima = proxId ? state.catalog.find((m) => m.id === proxId) || null : null
+    const antId = i > 0 ? ids[i - 1] : null
+    state.anterior = antId ? state.catalog.find((m) => m.id === antId) || null : null
     state.atual.ordem = [...ids]
     atualizarControles()
   }

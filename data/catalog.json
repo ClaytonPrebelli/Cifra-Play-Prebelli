@@ -12,20 +12,8 @@
       "prefs": {
         "tomOffset": 0
       },
-      "capotraste": null
-    },
-    {
-      "id": "Panda - Eu Te Seguro.txt",
-      "artista": "Panda",
-      "titulo": "Eu Te Seguro",
-      "tomBase": "A",
       "capotraste": null,
-      "estilos": [
-        "Sertanejo Universitário"
-      ],
-      "prefs": {
-        "tomOffset": 0
-      }
+      "duracao": 184
     },
     {
       "id": "Bruno e Marrone - Agarrada em mim.txt",
@@ -41,6 +29,20 @@
       }
     },
     {
+      "id": "Panda - Eu Te Seguro.txt",
+      "artista": "Panda",
+      "titulo": "Eu Te Seguro",
+      "tomBase": "A",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      },
+      "duracao": 160
+    },
+    {
       "id": "Marcos e Belutti - Sonho de Todo Casal.txt",
       "artista": "Marcos e Belutti",
       "titulo": "Sonho de Todo Casal",
@@ -50,7 +52,9 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "capotraste": null,
+      "duracao": 180
     },
     {
       "id": "João Bosco e Vinicius - Amiga Linda.txt",
@@ -144,20 +148,6 @@
       }
     },
     {
-      "id": "Bon Jovi - Always.txt",
-      "artista": "Bon Jovi",
-      "titulo": "Always",
-      "tomBase": "E",
-      "capotraste": null,
-      "estilos": [
-        "Rock",
-        "Internacional"
-      ],
-      "prefs": {
-        "tomOffset": 0
-      }
-    },
-    {
       "id": "Jorge e Mateus - Amo Noite e Dia.txt",
       "artista": "Jorge e Mateus",
       "titulo": "Amo Noite e Dia",
@@ -242,6 +232,19 @@
         "Sertanejo Romântico"
       ],
       "prefs": {
+        "tomOffset": 2
+      }
+    },
+    {
+      "id": "Altemar Dutra - Brigas.txt",
+      "artista": "Altemar Dutra",
+      "titulo": "Brigas",
+      "tomBase": "F",
+      "capotraste": null,
+      "estilos": [
+        "Sertanejo Romântico"
+      ],
+      "prefs": {
         "tomOffset": 0
       }
     },
@@ -292,16 +295,6 @@
       ]
     },
     {
-      "id": "Altemar Dutra - Brigas.txt",
-      "artista": "Altemar Dutra",
-      "titulo": "Brigas",
-      "tomBase": "F",
-      "capotraste": null,
-      "estilos": [
-        "Sertanejo Romântico"
-      ]
-    },
-    {
       "id": "Gustavo Lima - Canudinho.txt",
       "artista": "Gustavo Lima",
       "titulo": "Canudinho",
@@ -309,7 +302,10 @@
       "capotraste": null,
       "estilos": [
         "Sertanejo Universitário"
-      ]
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
     },
     {
       "id": "Xand Aviao - Casal Raiz.txt",
@@ -319,7 +315,10 @@
       "capotraste": null,
       "estilos": [
         "Sertanejo Universitário"
-      ]
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
     },
     {
       "id": "Junior Laino - Orgulho Caipira.txt",
@@ -355,7 +354,10 @@
       "capotraste": 4,
       "estilos": [
         "Sertanejo Romântico"
-      ]
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
     },
     {
       "id": "Vitor e Leo - Vida Boa.txt",
@@ -365,26 +367,25 @@
       "capotraste": 4,
       "estilos": [
         "Sertanejo Romântico"
-      ]
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Bon Jovi - Always.txt",
+      "artista": "Bon Jovi",
+      "titulo": "Always",
+      "tomBase": "E",
+      "capotraste": null,
+      "estilos": [
+        "Rock",
+        "Internacional"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
     }
   ],
-  "ordens": {
-    "Sertanejo Romântico": [
-      "Chrystian e Ralf - Nova York.txt",
-      "Bruno e Marrone - Agarrada em mim.txt",
-      "Zezé di Camargo e Luciano - Meu País.txt",
-      "Bruno e Marrone - Bijuteria.txt",
-      "Daniel - Adoro Amar Voce.txt",
-      "Chitãozinho e Chororó - Ah Se Deus me Ouvisse.txt",
-      "Vitor e Leo - Deus e Eu No Sertão.txt",
-      "Vitor e Leo - Vida Boa.txt",
-      "Tião Carreiro e Pardinho - Amargurado.txt",
-      "Joao Mineiro e Marciano - Ainda Ontem Chorei de Saudade.txt",
-      "Bruno e Marrone - Boate Azul.txt",
-      "Fagner - Bobulhas de Amor.txt",
-      "Altemar Dutra - Brigas.txt",
-      "Junior Laino - Orgulho Caipira.txt",
-      "Eduardo Costa - Amor de Violeiro.txt"
-    ]
-  }
+  "ordens": {}
 }

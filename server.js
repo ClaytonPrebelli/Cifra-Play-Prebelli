@@ -112,6 +112,14 @@ function normalizeCapo(value) {
   return n
 }
 
+function normalizeDuracao(value) {
+  if (value === undefined) return undefined
+  if (value === null || value === '') return null
+  const n = typeof value === 'number' ? value : parseInt(String(value).trim(), 10)
+  if (Number.isNaN(n) || !Number.isInteger(n) || n < 0) return undefined
+  return n
+}
+
 function capotrasteFromContent(text) {
   const m = /^[ \t]*Capotraste:\s*(\S*)[ \t]*$/im.exec(text || '')
   if (!m) return null
@@ -187,6 +195,7 @@ async function handlePutMusica(req, res, id) {
       existing?.tomBase ??
       null,
     capotraste: capo ?? existing?.capotraste ?? null,
+    duracao: normalizeDuracao(body.duracao) ?? existing?.duracao ?? null,
     estilos: Array.isArray(body.estilos)
       ? normalizeEstilos(body.estilos)
       : existing?.estilos ?? estilosFromContent(body.conteudo),

@@ -3,6 +3,7 @@ import { createMultiselect } from './multiselect.js'
 import { openShow } from './show.js'
 import { ordemParaEstilo } from './app.js'
 import { createBarraLetras, casaLetra } from './letras.js'
+import { transporTexto } from './transpositor.js'
 
 const TEMA_STORAGE_KEY = 'cifra-prebelli:tema'
 
@@ -22,8 +23,46 @@ function norm(s) {
   return (s || '')
     .toLowerCase()
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[̀-ͯ]/g, '')
     .trim()
+}
+
+function tomEfetivo(m) {
+  const off = m.prefs?.tomOffset ?? 0
+  if (m.tomBase && off) return transporTexto(m.tomBase, off) ?? m.tomBase
+  return m.tomBase ?? ''
+}
+
+function fmtDuracao(seg) {
+  if (!Number.isInteger(seg) || seg < 0) return ''
+  return `${Math.floor(seg / 60)}:${String(seg % 60).padStart(2, '0')}`
+}
+
+function parseDuracao(txt) {
+  const m = /^(\d{1,3}):([0-5]?\d)$/.exec((txt || '').trim())
+  if (!m) return undefined
+  return Number(m[1]) * 60 + Number(m[2])
+}
+
+function fmtTotal(seg) {
+  if (!(seg > 0)) return ''
+  const h = Math.floor(seg / 3600)
+  const min = Math.floor((seg % 3600) / 60)
+  if (h) return `${h} h ${String(min).padStart(2, '0')}`
+  return `${min} min`
+}
+
+function resumoDe(items) {
+  const n = items.length
+  const base = `${n} ${n === 1 ? 'música' : 'músicas'}`
+  let total = 0
+  let sem = 0
+  for (const m of items) {
+    if (Number.isInteger(m.duracao) && m.duracao >= 0) total += m.duracao
+    else sem += 1
+  }
+  if (!total) return n ? `${base} · tempos não lançados` : base
+  return `${base} · ${fmtTotal(total)}${sem ? ` · ${sem} sem tempo` : ''}`
 }
 
 function fileNameFrom(artista, titulo) {
@@ -61,7 +100,7 @@ export function initList(state) {
   const listEl = document.getElementById('lista-musicas')
   const vaziaEl = document.getElementById('lista-vazia')
   const buscaEl = document.getElementById('busca')
-  const filtroWrapEl = document.getElementById('filtro-estilos')
+  const abasEl = document.getElementById('abas-estilos')
   const btnAdicionar = document.getElementById('btn-adicionar')
   const btnTema = document.getElementById('btn-tema')
   const editorEl = document.getElementById('editor')
@@ -69,6 +108,8 @@ export function initList(state) {
   const artistEl = document.getElementById('ed-artista')
   const tituloEl = document.getElementById('ed-titulo')
   const tomEl = document.getElementById('ed-tom')
+  const duracaoEl = document.getElementById('ed-duracao')
+  const resumoEl = document.getElementById('lista-resumo')
   const capoEl = document.getElementById('ed-capo')
   const statusEl = document.getElementById('editor-status')
   const btnSalvar = document.getElementById('btn-salvar')
@@ -139,6 +180,22 @@ export function initList(state) {
       .forEach((el) => el.classList.remove('dragging', 'drop-before', 'drop-after'))
   }
 
+  function fecharMenus() {
+    listEl.querySelectorAll('.acoes-menu:not([hidden])').forEach((menu) => {
+      menu.hidden = true
+      menu.previousElementSibling?.setAttribute('aria-expanded', 'false')
+    })
+  }
+
+  async function removerMusica(m) {
+    if (!confirm(`Remover "${m.titulo}"?`)) return
+    await deleteMusica(m.id)
+    const data = await getCatalog()
+    state.catalog = data.musicas
+    state.ordens = data.ordens || {}
+    refresh()
+  }
+
   function configurarDnd() {
     let dragId = null
     listEl.addEventListener('dragstart', (e) => {
@@ -205,17 +262,45 @@ export function initList(state) {
     return [...set].sort((a, b) => a.localeCompare(b, 'pt-BR'))
   }
 
-  const filtroEstilos = createMultiselect({
-    textoVazio: 'Estilos',
-    mostrarTodos: true,
-    opcoesIniciais: estilosDaLista(),
-    selecionadosIniciais: state.filters.estilos,
-    onchange: (arr) => {
-      state.filters.estilos = arr
+  function renderAbas() {
+    const estilos = estilosDaLista()
+    const atual = filtroEstiloAtivo()
+    if (atual && !estilos.includes(atual)) state.filters.estilos = []
+    const ativo = filtroEstiloAtivo()
+    abasEl.textContent = ''
+    const todas = document.createElement('button')
+    todas.type = 'button'
+    todas.className = 'aba'
+    todas.setAttribute('role', 'tab')
+    todas.textContent = `Todas (${state.catalog.length})`
+    todas.setAttribute('aria-selected', String(!ativo))
+    if (!ativo) todas.classList.add('ativa')
+    todas.addEventListener('click', () => {
+      state.filters.estilos = []
+      renderAbas()
       render()
-    },
-  })
-  filtroWrapEl.append(filtroEstilos.elemento)
+    })
+    abasEl.append(todas)
+    const contagem = new Map()
+    for (const m of state.catalog) {
+      for (const s of m.estilos || []) contagem.set(s, (contagem.get(s) ?? 0) + 1)
+    }
+    for (const est of estilos) {
+      const aba = document.createElement('button')
+      aba.type = 'button'
+      aba.className = 'aba'
+      aba.setAttribute('role', 'tab')
+      aba.textContent = `${est} (${contagem.get(est) ?? 0})`
+      aba.setAttribute('aria-selected', String(ativo === est))
+      if (ativo === est) aba.classList.add('ativa')
+      aba.addEventListener('click', () => {
+        state.filters.estilos = [est]
+        renderAbas()
+        render()
+      })
+      abasEl.append(aba)
+    }
+  }
 
   const filtroLetras = createBarraLetras({
     onchange: (letra) => {
@@ -267,6 +352,7 @@ export function initList(state) {
     }
     listEl.textContent = ''
     vaziaEl.textContent = ''
+    resumoEl.textContent = resumoDe(items)
     if (items.length === 0) {
       vaziaEl.textContent =
         state.catalog.length === 0
@@ -289,42 +375,66 @@ export function initList(state) {
 
       const meta = document.createElement('span')
       meta.className = 'musica-meta'
-      meta.textContent = [
-        m.artista,
-        m.tomBase ? `Tom ${m.tomBase}` : '',
-        m.capotraste ? `Capo ${m.capotraste}ª` : '',
-        (m.estilos || []).join(' · '),
-      ]
-        .filter(Boolean)
-        .join(' · ')
+      const tom = tomEfetivo(m)
+      meta.textContent = ''
+      const partes = []
+      if (tom) partes.push([`Tom ${tom}`, 'meta-tom'])
+      const dur = fmtDuracao(m.duracao)
+      if (dur) partes.push([dur, 'meta-tempo'])
+      const est = (m.estilos || []).join(' · ')
+      if (est) partes.push([est, 'meta-est'])
+      partes.forEach(([txt, cls], i) => {
+        if (i) meta.append(' · ')
+        const s = document.createElement('span')
+        s.className = cls
+        s.textContent = txt
+        meta.append(s)
+      })
 
       info.append(nome, meta)
 
-      const acoes = document.createElement('div')
-      acoes.className = 'musica-acoes'
-      const btnEditar = document.createElement('button')
-      btnEditar.className = 'btn'
-      btnEditar.textContent = 'Editar'
-      btnEditar.addEventListener('click', (e) => {
+      const acoesWrap = document.createElement('div')
+      acoesWrap.className = 'acoes-wrap'
+      const btnAcoes = document.createElement('button')
+      btnAcoes.type = 'button'
+      btnAcoes.className = 'btn acoes-btn'
+      btnAcoes.textContent = '⋮'
+      btnAcoes.title = 'Ações'
+      btnAcoes.setAttribute('aria-haspopup', 'menu')
+      btnAcoes.setAttribute('aria-expanded', 'false')
+      const menu = document.createElement('div')
+      menu.className = 'acoes-menu'
+      menu.setAttribute('role', 'menu')
+      menu.hidden = true
+      const itemEditar = document.createElement('button')
+      itemEditar.type = 'button'
+      itemEditar.textContent = 'Editar'
+      itemEditar.addEventListener('click', (e) => {
         e.stopPropagation()
+        fecharMenus()
         openEditor(m)
       })
-      const btnRemover = document.createElement('button')
-      btnRemover.className = 'btn danger'
-      btnRemover.textContent = 'Remover'
-      btnRemover.addEventListener('click', async (e) => {
+      const itemRemover = document.createElement('button')
+      itemRemover.type = 'button'
+      itemRemover.className = 'danger'
+      itemRemover.textContent = 'Remover'
+      itemRemover.addEventListener('click', (e) => {
         e.stopPropagation()
-        if (!confirm(`Remover "${m.titulo}"?`)) return
-        await deleteMusica(m.id)
-        const data = await getCatalog()
-        state.catalog = data.musicas
-        state.ordens = data.ordens || {}
-        refresh()
+        fecharMenus()
+        removerMusica(m)
       })
-      acoes.append(btnEditar, btnRemover)
+      menu.append(itemEditar, itemRemover)
+      btnAcoes.addEventListener('click', (e) => {
+        e.stopPropagation()
+        const abrir = menu.hidden
+        fecharMenus()
+        menu.hidden = !abrir
+        btnAcoes.setAttribute('aria-expanded', String(abrir))
+      })
+      acoesWrap.append(btnAcoes, menu)
 
       li.addEventListener('click', () => openShow(m))
-      li.append(info, acoes)
+      li.append(info, acoesWrap)
       listEl.append(li)
     }
   }
@@ -335,6 +445,7 @@ export function initList(state) {
     artistEl.value = m?.artista ?? ''
     tituloEl.value = m?.titulo ?? ''
     tomEl.value = m?.tomBase ?? ''
+    duracaoEl.value = m?.duracao != null ? fmtDuracao(m.duracao) : ''
     capoEl.value = String(m?.capotraste ?? 0)
     editorEstilos.setValor(m?.estilos || [])
     textoEl.value = ''
@@ -368,8 +479,17 @@ export function initList(state) {
     }
     const novoId = fileNameFrom(artista, titulo)
     const capo = Number(capoEl.value) || null
+    const durTxt = duracaoEl.value.trim()
+    let duracao = null
+    if (durTxt) {
+      duracao = parseDuracao(durTxt)
+      if (duracao === undefined) {
+        statusEl.textContent = 'Duração inválida — use min:seg (ex.: 3:45).'
+        return
+      }
+    }
     try {
-      await putMusica(novoId, conteudo, estilos, tomEl.value.trim() || null, capo)
+      await putMusica(novoId, conteudo, estilos, tomEl.value.trim() || null, capo, duracao)
       if (editId && novoId !== editId) {
         await deleteMusica(editId)
       }
@@ -384,7 +504,7 @@ export function initList(state) {
   }
 
   function refresh() {
-    filtroEstilos.setOpcoes(estilosDaLista())
+    renderAbas()
     editorEstilos.setOpcoes(estilosSugeridos())
     filtroLetras.setValor(state.filters.letra)
     state.filters.letra = filtroLetras.atualizarDisponiveis(state.catalog)
@@ -392,6 +512,15 @@ export function initList(state) {
   }
 
   listEl.addEventListener('dragover', (e) => e.preventDefault())
+
+  listEl.addEventListener('pointerdown', (e) => {
+    const li = e.target.closest('.musica-item')
+    if (li) li.draggable = !e.target.closest('.acoes-wrap')
+  })
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.acoes-wrap')) fecharMenus()
+  })
 
   configurarDnd()
 
@@ -433,6 +562,7 @@ export function initList(state) {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !editorEl.hidden) closeEditor()
+    if (e.key === 'Escape') fecharMenus()
   })
 
   const temaSalvo = localStorage.getItem(TEMA_STORAGE_KEY) || 'claro'

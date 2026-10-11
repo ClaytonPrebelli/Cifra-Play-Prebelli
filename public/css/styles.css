@@ -11,6 +11,10 @@
   --capo: #c62828;
   --accent: #4c9aff;
   --input-bg: #0d1016;
+  --bg-card: #202634;
+  --border-card: #3d465e;
+  --tom: #71c174;
+  --tempo: #e08383;
 }
 
 body[data-tema='claro'] {
@@ -26,6 +30,10 @@ body[data-tema='claro'] {
   --capo: #8b0000;
   --accent: #2f6fdc;
   --input-bg: #ffffff;
+  --bg-card: #ffffff;
+  --border-card: #b7bfce;
+  --tom: #1b5e20;
+  --tempo: #8b0000;
 }
 
 * {
@@ -92,6 +100,48 @@ main#app {
   min-height: 0;
   overflow: auto;
   padding: 1.25rem;
+}
+
+.abas-estilos {
+  display: flex;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+  overflow-x: auto;
+  padding: 0.5rem 1.25rem;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border);
+}
+
+.aba {
+  flex: 0 0 auto;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.aba:hover {
+  border-color: var(--accent);
+}
+
+.aba.ativa {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.lista-resumo {
+  flex: 0 0 auto;
+  padding: 0.3rem 1.25rem;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border);
 }
 
 .placeholder {
@@ -317,18 +367,27 @@ select {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.4rem;
 }
 
 .musica-item {
+  position: relative;
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--border);
+  gap: 0.4rem;
+  aspect-ratio: 3 / 1;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--border-card);
   border-radius: 8px;
-  margin-bottom: 0.5rem;
-  background: var(--bg-panel);
+  margin-bottom: 0;
+  background: var(--bg-card);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--bg-card), white 8%), var(--bg-card) 65%);
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.35),
+    0 8px 20px rgba(0, 0, 0, 0.25);
   cursor: grab;
 }
 
@@ -356,32 +415,99 @@ select {
 
 .musica-item:hover {
   border-color: var(--accent);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.4),
+    0 12px 28px rgba(0, 0, 0, 0.3);
 }
 
 .musica-info {
   flex: 1 1 auto;
   min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  text-align: center;
 }
 
 .musica-nome {
   font-weight: 600;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .musica-meta {
+  flex: 0 0 auto;
+  max-width: 100%;
   color: var(--text-dim);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.musica-acoes {
-  display: flex;
-  gap: 0.4rem;
+.meta-tom {
+  color: var(--tom);
+  font-weight: 700;
+}
+
+.meta-tempo {
+  color: var(--tempo);
+  font-weight: 600;
+}
+
+.meta-est {
+  color: var(--accent);
+}
+
+.acoes-wrap {
+  position: relative;
   flex: 0 0 auto;
+}
+
+.acoes-btn {
+  padding: 0.15rem 0.55rem;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.acoes-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 2px);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  min-width: 7rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  padding: 0.25rem;
+}
+
+.acoes-menu button {
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 5px;
+  color: var(--text);
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+}
+
+.acoes-menu button:hover {
+  background: var(--bg);
+}
+
+.acoes-menu button.danger {
+  color: var(--section);
 }
 
 .editor {
@@ -646,34 +772,6 @@ select {
   color: #fff;
 }
 
-#btn-voz {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-}
-
-#btn-voz > span {
-  position: relative;
-  z-index: 1;
-}
-
-#btn-voz::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.35);
-  transform: scaleX(var(--nivel, 0));
-  transform-origin: left center;
-  transition: transform 90ms linear;
-  pointer-events: none;
-}
-
-#btn-voz.ativo {
-  background: #c0392b;
-  border-color: #c0392b;
-  color: #fff;
-}
-
 .show-titulo {
   font-weight: 600;
   white-space: nowrap;
@@ -807,6 +905,28 @@ select {
   border: 1px solid var(--border);
   color: var(--text);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.proximo-bloco::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: var(--accent);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.proximo-bloco.segurando::after {
+  width: 100%;
+  transition: width var(--hold-ms, 500ms) linear;
 }
 
 .show-cifra {
@@ -880,6 +1000,51 @@ select {
   gap: 1rem;
   padding: 0.85rem 1rem;
   background: linear-gradient(transparent, var(--bg) 45%);
+}
+
+.pedal-panel {
+  width: min(560px, 100%);
+  height: auto;
+  max-height: 90vh;
+}
+
+.pedal-linha {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.pedal-acao {
+  flex: 1 1 100%;
+  font-weight: 600;
+}
+
+.pedal-linha code {
+  flex: 1 1 auto;
+  min-width: 0;
+  font: inherit;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pedal-log {
+  margin: 0;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+  min-height: 5.5em;
+  max-height: 30vh;
+  overflow: auto;
+  white-space: pre-wrap;
+  font-size: 0.85rem;
+  font-family: ui-monospace, Consolas, "Courier New", monospace;
 }
 
 #show-fim-texto {

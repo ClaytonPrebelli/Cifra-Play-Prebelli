@@ -54,6 +54,13 @@ test('transporTexto remonta o acorde de ponta a ponta', () => {
   assert.equal(transporTexto('xyz', 4), null)
 })
 
+test('transporTexto transpõe tons com sufixo preservando a qualidade', () => {
+  assert.equal(transporTexto('Gm', 2), 'Am')
+  assert.equal(transporTexto('Am', -2), 'Gm')
+  assert.equal(transporTexto('G', 1), 'G#')
+  assert.equal(transporTexto('Gm', 0), 'Gm')
+})
+
 test('textoDoAcorde remonta tonica + sufixo + anotação + baixo', () => {
   assert.equal(textoDoAcorde({ tonica: 'C#', sufixo: 'm7', anotacao: '(b5)', baixo: 'G' }), 'C#m7(b5)/G')
   assert.equal(textoDoAcorde({ tonica: 'F', sufixo: '', anotacao: null, baixo: null }), 'F')
