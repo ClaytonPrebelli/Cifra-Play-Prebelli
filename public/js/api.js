@@ -25,13 +25,14 @@ export const getCatalog = async () => {
 
 export const getMusica = (id) => request('GET', `/api/musicas/${encodeURIComponent(id)}`)
 
-export const putMusica = (id, conteudo, estilos, tomBase, capotraste, duracao) =>
+export const putMusica = (id, conteudo, estilos, tomBase, capotraste, duracao, idAnterior) =>
   request('PUT', `/api/musicas/${encodeURIComponent(id)}`, {
     conteudo,
     estilos,
     tomBase,
     capotraste,
     duracao,
+    idAnterior,
   })
 
 export const deleteMusica = (id) =>

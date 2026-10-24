@@ -67,7 +67,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 173
     },
     {
       "id": "Henrique e Juliano - A Mala é Falsa.txt",
@@ -246,7 +247,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": null
     },
     {
       "id": "Zezé di Camargo e Luciano - Meu País.txt",
@@ -259,7 +261,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 180
     },
     {
       "id": "Bruno e Marrone - Boate Azul.txt",
@@ -298,14 +301,15 @@
       "id": "Gustavo Lima - Canudinho.txt",
       "artista": "Gustavo Lima",
       "titulo": "Canudinho",
-      "tomBase": null,
+      "tomBase": "E",
       "capotraste": null,
       "estilos": [
         "Sertanejo Universitário"
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": null
     },
     {
       "id": "Xand Aviao - Casal Raiz.txt",
@@ -331,7 +335,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 180
     },
     {
       "id": "Chrystian e Ralf - Nova York.txt",
@@ -384,8 +389,670 @@
       ],
       "prefs": {
         "tomOffset": 0
+      },
+      "duracao": 375
+    },
+    {
+      "id": "Oasis - Wonderwall.txt",
+      "artista": "Oasis",
+      "titulo": "Wonderwall",
+      "tomBase": "G",
+      "capotraste": 2,
+      "duracao": 200,
+      "estilos": [
+        "Rock",
+        "Internacional"
+      ],
+      "prefs": {
+        "tomOffset": 0
       }
+    },
+    {
+      "id": "Bruno Mars - Just The Way You Are.txt",
+      "artista": "Bruno Mars",
+      "titulo": "Just The Way You Are",
+      "tomBase": "F",
+      "capotraste": 1,
+      "duracao": 233,
+      "estilos": [
+        "Internacional"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Journey - Dont Stop Believin.txt",
+      "artista": "Journey",
+      "titulo": "Dont Stop Believin",
+      "tomBase": "E",
+      "capotraste": null,
+      "duracao": 254,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "REM - Losing my Religion.txt",
+      "artista": "REM",
+      "titulo": "Losing my Religion",
+      "tomBase": "Am",
+      "capotraste": null,
+      "duracao": 271,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "GOO GOO DOLLS - IRIS.txt",
+      "artista": "GOO GOO DOLLS",
+      "titulo": "IRIS",
+      "tomBase": "Bm",
+      "capotraste": null,
+      "duracao": 231,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "KANSAS - DUST IN THE WIND.txt",
+      "artista": "KANSAS",
+      "titulo": "DUST IN THE WIND",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 231,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "AC-DC - Highway To Hell.txt",
+      "artista": "AC-DC",
+      "titulo": "Highway To Hell",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 213,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "THE EAGLES - HOTEL CALIFORNIA.txt",
+      "artista": "THE EAGLES",
+      "titulo": "HOTEL CALIFORNIA",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 395,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ]
+    },
+    {
+      "id": "QUEEN - I Want To Break Free.txt",
+      "artista": "QUEEN",
+      "titulo": "I Want To Break Free",
+      "tomBase": "E",
+      "capotraste": null,
+      "duracao": 279,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "ROXETTE - IT MUST HAVE BEEN LOVE.txt",
+      "artista": "ROXETTE",
+      "titulo": "IT MUST HAVE BEEN LOVE",
+      "tomBase": "F",
+      "capotraste": null,
+      "duracao": 277,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "ROD STEWART - ITS A HEARTACHE.txt",
+      "artista": "ROD STEWART",
+      "titulo": "ITS A HEARTACHE",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 220,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "BON JOVI - LIVING ON A PRAYER.txt",
+      "artista": "BON JOVI",
+      "titulo": "LIVING ON A PRAYER",
+      "tomBase": "Em",
+      "capotraste": null,
+      "duracao": 272,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Adelle - Rolling In The Deep.txt",
+      "artista": "Adelle",
+      "titulo": "Rolling In The Deep",
+      "tomBase": "Cm",
+      "capotraste": 2,
+      "duracao": 231,
+      "estilos": [
+        "Internacional"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Lady Gaga - Shallow.txt",
+      "artista": "Lady Gaga",
+      "titulo": "Shallow",
+      "tomBase": "Em",
+      "capotraste": null,
+      "duracao": 224,
+      "estilos": [
+        "Internacional"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "Lynyrd Skynyrd - Simple Man.txt",
+      "artista": "Lynyrd Skynyrd",
+      "titulo": "Simple Man",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 180,
+      "estilos": [
+        "Internacional"
+      ]
+    },
+    {
+      "id": "SCORPIONS - STILL LOVING YOU.txt",
+      "artista": "SCORPIONS",
+      "titulo": "STILL LOVING YOU",
+      "tomBase": "Gm",
+      "capotraste": null,
+      "duracao": 380,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "TINA TURNER - The Best.txt",
+      "artista": "TINA TURNER",
+      "titulo": "The Best",
+      "tomBase": "F",
+      "capotraste": null,
+      "duracao": 267,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "BONIE TYLER - TOTAL ECLIPSE OF HEART.txt",
+      "artista": "BONIE TYLER",
+      "titulo": "TOTAL ECLIPSE OF HEART",
+      "tomBase": "A#m",
+      "capotraste": 1,
+      "duracao": 289,
+      "estilos": [
+        "Internacional"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "4 NOM BLONDES - WHATS UP.txt",
+      "artista": "4 NOM BLONDES",
+      "titulo": "WHATS UP",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 315,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "THE CALLING - WHEREVER WILL YOU GO.txt",
+      "artista": "THE CALLING",
+      "titulo": "WHEREVER WILL YOU GO",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 209,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "SCORPIONS - WIND OF CHANGE.txt",
+      "artista": "SCORPIONS",
+      "titulo": "WIND OF CHANGE",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 282,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "CREED - WITH ARMS WIDE OPEN.txt",
+      "artista": "CREED",
+      "titulo": "WITH ARMS WIDE OPEN",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 241,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "TRACY CHAPTMAN - BABY CAN I HOLD YOU.txt",
+      "artista": "TRACY CHAPTMAN",
+      "titulo": "BABY CAN I HOLD YOU",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 203,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "ELVIS PRESLEY - CANT HELP FALLING IN LOVE.txt",
+      "artista": "ELVIS PRESLEY",
+      "titulo": "CANT HELP FALLING IN LOVE",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 180,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "ELVIS PRESLEY - SUSPICIOUS MIND.txt",
+      "artista": "ELVIS PRESLEY",
+      "titulo": "SUSPICIOUS MIND",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 278,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ]
+    },
+    {
+      "id": "BEE GEES - HOW DEEP IS YOUR LOVE.txt",
+      "artista": "BEE GEES",
+      "titulo": "HOW DEEP IS YOUR LOVE",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 260,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "BEEN E KING - STAND BY ME.txt",
+      "artista": "BEEN E KING",
+      "titulo": "STAND BY ME",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 204,
+      "estilos": [
+        "Internacional"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "BEE GEES - WORDS.txt",
+      "artista": "BEE GEES",
+      "titulo": "WORDS",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 197,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "CREDENCE CLEARWATER - HAVE YOU EVER SEEN THE RAIN.txt",
+      "artista": "CREDENCE CLEARWATER",
+      "titulo": "HAVE YOU EVER SEEN THE RAIN",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 197,
+      "estilos": [
+        "Internacional",
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "SHANIA TWAIN - YOURE STILL THE ONE.txt",
+      "artista": "SHANIA TWAIN",
+      "titulo": "YOURE STILL THE ONE",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 224,
+      "estilos": [
+        "Internacional"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "FUNK COMO LE GUSTA - 16 TONELADAS.txt",
+      "artista": "FUNK COMO LE GUSTA",
+      "titulo": "16 TONELADAS",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 156,
+      "estilos": [
+        "Pagode/Samba"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "ROUPA NOVA - A FORÇA DO AMOR.txt",
+      "artista": "ROUPA NOVA",
+      "titulo": "A FORÇA DO AMOR",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 202,
+      "estilos": [
+        "MPB"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "MARINA LIMA - A FRANCESA.txt",
+      "artista": "MARINA LIMA",
+      "titulo": "A FRANCESA",
+      "tomBase": "Am",
+      "capotraste": null,
+      "duracao": 214,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "ROUPA NOVA - A VIAGEM.txt",
+      "artista": "ROUPA NOVA",
+      "titulo": "A VIAGEM",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 210,
+      "estilos": [
+        "MPB"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "RITA LEE - AGORA SO FALTA VOCE.txt",
+      "artista": "RITA LEE",
+      "titulo": "AGORA SO FALTA VOCE",
+      "tomBase": "Am",
+      "capotraste": null,
+      "duracao": 191,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "ALCEU VALENCA - AI QUE SAUDADE DOCE.txt",
+      "artista": "ALCEU VALENCA",
+      "titulo": "AI QUE SAUDADE DOCE",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 212,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "ALCEU VALENCA - ANUNCIAÇÃO.txt",
+      "artista": "ALCEU VALENCA",
+      "titulo": "ANUNCIAÇÃO",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 280,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "TIM MAIA - AZUL DA COR DO MAR.txt",
+      "artista": "TIM MAIA",
+      "titulo": "AZUL DA COR DO MAR",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 218,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "MARISA MONTE - BEM QUE SE QUIS.txt",
+      "artista": "MARISA MONTE",
+      "titulo": "BEM QUE SE QUIS",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 208,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "GILSON - CASINHA BRANCA.txt",
+      "artista": "GILSON",
+      "titulo": "CASINHA BRANCA",
+      "tomBase": "F",
+      "capotraste": null,
+      "duracao": 223,
+      "estilos": [
+        "MPB"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "FABIO JUNIOR - CAÇA E CAÇADOR.txt",
+      "artista": "FABIO JUNIOR",
+      "titulo": "CAÇA E CAÇADOR",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 259,
+      "estilos": [
+        "MPB"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "ZE RAMALHO - CHAO DE GIZ.txt",
+      "artista": "ZE RAMALHO",
+      "titulo": "CHAO DE GIZ",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 282,
+      "estilos": [
+        "MPB"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "ED MOTTA - COLOMBINA.txt",
+      "artista": "ED MOTTA",
+      "titulo": "COLOMBINA",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 245,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "ROBERTO CARLOS - COMO E GRANDE O MEU AMOR POR VOCE.txt",
+      "artista": "ROBERTO CARLOS",
+      "titulo": "COMO E GRANDE O MEU AMOR POR VOCE",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 145,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "ELIS REGINA - COMO NOSSOS PAIS.txt",
+      "artista": "ELIS REGINA",
+      "titulo": "COMO NOSSOS PAIS",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 254,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "LULU SANTOS - COMO UMA ONDA.txt",
+      "artista": "LULU SANTOS",
+      "titulo": "COMO UMA ONDA",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 192,
+      "estilos": [
+        "MPB"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "ROUPA NOVA - CORAÇÃO PIRATA.txt",
+      "artista": "ROUPA NOVA",
+      "titulo": "CORAÇÃO PIRATA",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 298,
+      "estilos": [
+        "MPB"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "TIM MAIA - DESCOBRIDOR DOS 7 MARES.txt",
+      "artista": "TIM MAIA",
+      "titulo": "DESCOBRIDOR DOS 7 MARES",
+      "tomBase": "Gm",
+      "capotraste": null,
+      "duracao": 199,
+      "estilos": [
+        "MPB"
+      ]
     }
   ],
-  "ordens": {}
+  "ordens": {
+    "Rock": [
+      "Oasis - Wonderwall.txt",
+      "Bon Jovi - Always.txt"
+    ]
+  }
 }

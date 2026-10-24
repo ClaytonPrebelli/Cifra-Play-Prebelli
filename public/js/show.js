@@ -1,9 +1,10 @@
 import { getMusica, saveCatalog } from './api.js'
 import { parseCifra } from './parser.js'
-import { transporNota, transporTexto } from './transpositor.js'
+import { transporTexto } from './transpositor.js'
 import { renderShow, paginarRows, ajustarFonte } from './render.js'
 import { createScroller } from './scroller.js'
 import { ordemParaEstilo } from './app.js'
+import { capitalize, nomeExibicao } from './texto.js'
 import { createBarraLetras, casaLetra } from './letras.js'
 import { PEDAL_PADRAO, acaoParaTecla, rotuloToken, tokenDeEvento, validarMapa } from './pedal.js'
 
@@ -31,6 +32,7 @@ export function initShow(state) {
   const telaEl = document.getElementById('show-tela')
   const cifraEl = document.getElementById('show-cifra')
   const tituloEl = document.getElementById('show-titulo')
+  const capoEl = document.getElementById('show-capo')
   const tomEl = document.getElementById('show-tom')
   const btnTomMenos = document.getElementById('btn-tom-menos')
   const btnTomMais = document.getElementById('btn-tom-mais')
@@ -222,7 +224,7 @@ export function initShow(state) {
     const offProx = prox?.prefs?.tomOffset ?? 0
     const efProx = prox?.tomBase && offProx ? transporTexto(prox.tomBase, offProx) ?? prox.tomBase : prox?.tomBase
     const tomProx = efProx ? ` · Tom ${efProx}` : ''
-    btnProxima.textContent = prox ? `Próxima ▸ ${prox.titulo}${tomProx}` : 'Próxima ▸'
+    btnProxima.textContent = prox ? `Próxima ▸ ${capitalize(prox.titulo)}${tomProx}` : 'Próxima ▸'
   }
 
   scroller.onPagina = (i) => {
@@ -234,20 +236,26 @@ export function initShow(state) {
   function atualizarTitulo() {
     const item = state.atual?.item
     if (!item) return
+    const titulo = nomeExibicao(item.artista, item.titulo)
+    tituloEl.textContent = titulo
+    tituloEl.title = titulo
     const p = prefsAtuais()
-    tituloEl.textContent = item.artista ? `${item.artista} — ${item.titulo}` : item.titulo
     const disp = p.tomBase ? transporTexto(p.tomBase, p.tomOffset) : null
+    capoEl.textContent = ''
     if (disp) {
       const tom = document.createElement('span')
-      tom.textContent = ` · Tom ${disp}`
-      tituloEl.append(tom)
+      tom.className = 'tom-destaque'
+      tom.textContent = `Tom ${disp}`
+      capoEl.append(tom)
     }
     if (item.capotraste) {
+      if (capoEl.hasChildNodes()) capoEl.append(document.createTextNode(' - '))
       const capo = document.createElement('span')
-      capo.className = 'capo'
-      capo.textContent = ` · Capo ${item.capotraste}ª casa`
-      tituloEl.append(capo)
+      capo.className = 'capo-destaque'
+      capo.textContent = `Capo ${item.capotraste}ª casa`
+      capoEl.append(capo)
     }
+    capoEl.hidden = !capoEl.hasChildNodes()
   }
 
   function montarCifra(salvar, aoTopo = false) {
@@ -299,6 +307,10 @@ export function initShow(state) {
     state.anterior = null
     fecharBusca(true)
     cifraEl.textContent = ''
+    tituloEl.textContent = 'Modo show'
+    tituloEl.title = ''
+    capoEl.textContent = ''
+    capoEl.hidden = true
     scroller.rebuild([])
   }
 
@@ -320,7 +332,7 @@ export function initShow(state) {
   btnTomSalvar.addEventListener('click', () => {
     if (!state.atual) return
     const p = prefsAtuais()
-    const disp = p.tomBase ? transporNota(p.tomBase, p.tomOffset) : null
+    const disp = p.tomBase ? transporTexto(p.tomBase, p.tomOffset) : null
     if (!disp) return
     const idx = state.catalog.findIndex((c) => c.id === state.atual.id)
     if (idx === -1) return
@@ -494,7 +506,7 @@ export function initShow(state) {
       row.className = 'show-musica-resultado'
       const nome = document.createElement('span')
       nome.className = 'show-musica-nome'
-      nome.textContent = m.artista ? `${m.artista} — ${m.titulo}` : m.titulo
+      nome.textContent = nomeExibicao(m.artista, m.titulo)
       const btnAgora = document.createElement('button')
       btnAgora.type = 'button'
       btnAgora.className = 'btn show-musica-acao'

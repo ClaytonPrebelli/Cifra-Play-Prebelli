@@ -62,7 +62,9 @@ export function renderShow(modelo, { tomOffset = 0, colunas = 3 } = {}) {
   let destacar = false
   conteudo.forEach((item, i) => {
     if (item.tipo === 'secao') {
-      destacar = !/^(fim|final)$/i.test(item.nome || '')
+      const nome = item.nome || ''
+      if (/^(fim|final)$/i.test(nome)) destacar = false
+      else if (/ref/i.test(nome)) destacar = true
       return
     }
     if (item.tipo === 'espaco') {
@@ -81,21 +83,48 @@ export function renderShow(modelo, { tomOffset = 0, colunas = 3 } = {}) {
 
 export function ajustarFonte(cifraEl, rows, largura) {
   const colW = Math.max(100, (largura - GAP_COLUNAS) / 2)
-  let max = 1
+  const lens = []
   for (const row of rows) {
     for (const linha of row.querySelectorAll('.linha-acordes, .linha-letra')) {
       const n = linha.textContent.length
-      if (n > max) max = n
+      if (n > 0) lens.push(n)
     }
   }
+  if (lens.length === 0) {
+    const base = Math.min(30, Math.max(19, window.innerHeight * 0.029))
+    const valor = `${base}px`
+    cifraEl.style.setProperty('--show-fs', valor)
+    return valor
+  }
+  lens.sort((a, b) => a - b)
+  const p75 = lens[Math.floor(lens.length * 0.75)] || lens[lens.length - 1]
+  const p80 = lens[Math.floor(lens.length * 0.8)] || lens[lens.length - 1]
+  const p90 = lens[Math.floor(lens.length * 0.9)] || lens[lens.length - 1]
+  const max = lens[lens.length - 1]
+  let maxEfetivo = p80
+  if (max <= p80 + 4) {
+    maxEfetivo = max
+  } else if (max <= p80 + 10) {
+    maxEfetivo = Math.round((p80 + max) / 2)
+  } else if (max <= p90 + 4) {
+    maxEfetivo = Math.round(p80 * 1.08)
+  } else {
+    maxEfetivo = Math.round(Math.min(p80 * 1.16, p90 * 1.12))
+  }
+  if (maxEfetivo < p75) maxEfetivo = p75
+  if (maxEfetivo < 36) maxEfetivo = Math.min(max, 36)
+  maxEfetivo = Math.max(1, maxEfetivo)
   const probe = document.createElement('span')
   probe.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;font-size:100px'
   probe.textContent = '0'.repeat(64)
   cifraEl.append(probe)
   const ratio = probe.getBoundingClientRect().width / 64 / 100 || 0.6
   probe.remove()
-  const base = Math.min(30, Math.max(17, window.innerHeight * 0.029))
-  const fs = Math.max(8, Math.min(base, colW / (max * ratio)))
+  const base = Math.min(30, Math.max(19, window.innerHeight * 0.029))
+  const fsCalc = colW / (maxEfetivo * ratio)
+  let fs = Math.min(base, fsCalc)
+  if (fs < 10) fs = Math.min(base, fsCalc * 1.12)
+  fs = Math.max(11, fs)
   const valor = `${fs}px`
   cifraEl.style.setProperty('--show-fs', valor)
   return valor

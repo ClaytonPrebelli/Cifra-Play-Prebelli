@@ -755,6 +755,7 @@ select {
 }
 
 .show-header {
+  gap: 0.75rem;
   background: var(--bg-header);
   border-bottom: 1px solid var(--border);
   color: var(--text);
@@ -772,6 +773,14 @@ select {
   color: #fff;
 }
 
+.show-titulo-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 0 1 auto;
+  line-height: 1.15;
+}
+
 .show-titulo {
   font-weight: 600;
   white-space: nowrap;
@@ -779,11 +788,28 @@ select {
   text-overflow: ellipsis;
 }
 
+.show-capo {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.show-capo .tom-destaque {
+  color: var(--tom);
+}
+
+.show-capo .capo-destaque {
+  color: var(--capo);
+}
+
 .show-busca {
   position: relative;
-  flex: 1 1 28rem;
+  flex: 1 1 auto;
   max-width: 52rem;
-  min-width: 0;
+  min-width: 8rem;
 }
 
 #show-busca-input {
@@ -857,13 +883,9 @@ select {
   font-size: 0.88rem;
 }
 
-.show-titulo .capo {
-  color: var(--capo);
-  font-weight: 800;
-}
-
 .show-controles {
-  gap: 0.9rem;
+  flex: 0 0 auto;
+  gap: 0.6rem;
   white-space: nowrap;
 }
 

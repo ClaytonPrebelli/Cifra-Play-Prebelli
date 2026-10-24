@@ -1,0 +1,13 @@
+import fs from 'fs';
+const f = 'musicas/ROUPA NOVA - CORAÇÃO PIRATA.txt';
+const c = fs.readFileSync(f,'utf8');
+const lines = c.split(/\r?\n/);
+const lens = lines.filter(l=>l.trim()).map(l=>({l,len:l.length}));
+lens.sort((a,b)=>a.len-b.len);
+console.log('count=' + lens.length);
+console.log('p50=' + lens[Math.floor(lens.length*0.5)].len);
+console.log('p75=' + lens[Math.floor(lens.length*0.75)].len);
+console.log('p80=' + lens[Math.floor(lens.length*0.8)].len);
+console.log('p90=' + lens[Math.floor(lens.length*0.9)].len);
+console.log('max=' + lens[lens.length-1].len);
+console.log(lens[lens.length-1].l);

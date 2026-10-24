@@ -53,7 +53,8 @@ Pra te lembrar
 ## 3. Linha Tom (opcional)
 
 - Primeira linha útil do arquivo, padrão `Tom: <Nota>` (aceita `Tom:` com
-  espaços variáveis, case-insensitive). Aceita acidente: `Tom: F#`, `Tom: Bb`.
+  espaços variáveis, case-insensitive). Aceita acidente e sufixo: `Tom: F#`,
+  `Tom: Bb`, `Tom: Bm`.
 - Define o tom de referência: base do offset 0 de transposição e o valor
   exibido como "Tom:" na tela.
 - Outras linhas-chave antes do conteúdo (ex.: `Alvo:`, `Compasso:`) são

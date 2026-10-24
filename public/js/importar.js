@@ -1,5 +1,6 @@
 import { createMultiselect } from './multiselect.js'
 import { getCatalog, putMusica } from './api.js'
+import { capitalize } from './texto.js'
 import {
   DEC_CODES_PADRAO,
   codigosDeDec,
@@ -114,7 +115,7 @@ export function initImport(state, onImportado = () => {}) {
 
     const nome = document.createElement('span')
     nome.className = 'importar-nome'
-    nome.textContent = r.nome || 'Texto colado'
+    nome.textContent = r.nome ? capitalize(r.nome) : 'Texto colado'
 
     const st = document.createElement('span')
     st.className = 'importar-status'
@@ -359,10 +360,6 @@ export function initImport(state, onImportado = () => {}) {
     importarEl.classList.remove('is-drag')
     const files = [...(e.dataTransfer.files || [])]
     if (files.length) adicionarArquivos(files)
-  })
-
-  importarEl.addEventListener('click', (e) => {
-    if (e.target === importarEl) fechar()
   })
 
   document.addEventListener('keydown', (e) => {

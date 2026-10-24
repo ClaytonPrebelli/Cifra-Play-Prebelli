@@ -4,6 +4,7 @@ import { openShow } from './show.js'
 import { ordemParaEstilo } from './app.js'
 import { createBarraLetras, casaLetra } from './letras.js'
 import { transporTexto } from './transpositor.js'
+import { capitalize, nomeExibicao } from './texto.js'
 
 const TEMA_STORAGE_KEY = 'cifra-prebelli:tema'
 
@@ -370,8 +371,8 @@ export function initList(state) {
 
       const nome = document.createElement('span')
       nome.className = 'musica-nome'
-      nome.textContent = m.titulo
-      nome.title = m.artista ? `${m.artista} — ${m.titulo}` : m.titulo
+      nome.textContent = capitalize(m.titulo)
+      nome.title = nomeExibicao(m.artista, m.titulo)
 
       const meta = document.createElement('span')
       meta.className = 'musica-meta'
@@ -441,7 +442,7 @@ export function initList(state) {
 
   function openEditor(m) {
     editId = m ? m.id : null
-    document.getElementById('editor-titulo').textContent = m ? `Editar — ${m.titulo}` : 'Adicionar música'
+    document.getElementById('editor-titulo').textContent = m ? `Editar — ${capitalize(m.titulo)}` : 'Adicionar música'
     artistEl.value = m?.artista ?? ''
     tituloEl.value = m?.titulo ?? ''
     tomEl.value = m?.tomBase ?? ''
@@ -489,10 +490,7 @@ export function initList(state) {
       }
     }
     try {
-      await putMusica(novoId, conteudo, estilos, tomEl.value.trim() || null, capo, duracao)
-      if (editId && novoId !== editId) {
-        await deleteMusica(editId)
-      }
+      await putMusica(novoId, conteudo, estilos, tomEl.value.trim() || null, capo, duracao, editId)
       const data = await getCatalog()
       state.catalog = data.musicas
       state.ordens = data.ordens || {}
@@ -554,10 +552,6 @@ export function initList(state) {
     if (!f) return
     textoEl.value = await fillFromFile(f)
     statusEl.textContent = `Carregado: ${f.name}`
-  })
-
-  editorEl.addEventListener('click', (e) => {
-    if (e.target === editorEl) closeEditor()
   })
 
   document.addEventListener('keydown', (e) => {

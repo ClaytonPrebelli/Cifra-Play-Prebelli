@@ -38,7 +38,10 @@
     <section id="show" class="view" hidden>
       <header class="app-header show-header">
         <button id="show-voltar" class="btn" title="Voltar para a lista">← Lista</button>
-        <span id="show-titulo" class="show-titulo">Modo show</span>
+        <div class="show-titulo-wrap">
+          <span id="show-titulo" class="show-titulo">Modo show</span>
+          <span id="show-capo" class="show-capo" hidden></span>
+        </div>
         <div id="show-busca" class="show-busca" title="Buscar música pelo nome ou cantor">
           <input id="show-busca-input" type="search" placeholder="Buscar música/artista…" autocomplete="off">
           <div id="show-busca-resultados" class="show-busca-resultados" hidden></div>

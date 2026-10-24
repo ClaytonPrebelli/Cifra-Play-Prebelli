@@ -1,0 +1,119 @@
+[REFRAO]
+DESCER 1 VIRTUAL
+[FIM]
+G  G/B  D
+
+E|--10-9-9-10-9---------------------------------| 
+B|--------------10------------8-7-7-8-7---------| 
+G|-----------------9-7------------------7-------| 
+D|----------------------------------------5-4---| 
+A|----------------------------------------------| 
+E|----------------------------------------------| 
+
+E|--10-9-9-10-9---------------------------------| 
+B|--------------10------------8-7---------------| 
+G|-----------------9-7-----7-----9-7------------| 
+D|----------------------------------------------| 
+A|----------------------------------------------| 
+E|----------------------------------------------| 
+
+                              A
+Abriu minha visão o jeito do amor
+D                                   A
+  Tocando o pé no chão alcança as estrelas
+ G                        D
+Tem poder de mover as montanhas
+        A7                           D
+Quando quer acontecer, derruba as barreiras
+
+ G                          D
+Para o amor não existem fronteiras
+        A7
+Tem a presa quando quer
+         G/A        A7               D4   D
+Não tem hora de chegar, e não vai embo-ra
+
+( G  G/B  D )
+
+                       G          A    G
+Chamou minha atenção a força do amor
+  D                               A
+Que é livre pra voar, durar para sempre
+  G                        D
+Quer voar, navegar outros mares
+       A                            D
+Dá um tempo sem se ver, mas não se separa
+
+     G
+A saudade vem
+                  D
+Quando vê não tem volta
+        A7
+Mesmo quando quis morrer
+     G/A       A7              D
+De ciúme de você, você me fez falta
+
+ A                         G
+Sei, não é questão de aceitar
+ A                     Bm
+Se não sou mais um a negar
+  Bm       A        G
+A gente não pode impedir
+                         E4  E
+Se a vida cansou de ensinar
+                      G/A  A
+Sei que o amor nos dá a-sa
+               D4  D
+Mas volta pra ca-sa
+
+( G  G/B  D )
+
+                     G         A    G
+Abriu minha visão o jeito do amor
+ D                                  A
+Tocando o pé no chão alcança as estrelas
+ G                        D
+Tem poder de mover as montanhas
+         A7                           D
+Quando quer acontecer, derruba as barreiras
+
+ G                           D
+Para o amor não existem fronteiras
+        A7
+Tem a presa quando quer
+         G/A        A7               D4   D
+Não tem hora de chegar, e não vai embo-ra
+
+[Solo] C  G/B  D
+       C  G/B  D
+
+ A                         G
+Sei, não é questão de aceitar
+ A                     Bm
+Se não sou mais um a negar
+  Bm       A        G
+A gente não pode impedir
+                         E4  E
+Se a vida cansou de ensinar
+                      G/A  A
+Sei que o amor nos dá a-sa
+               D4  D
+Mas volta pra ca-sa
+
+ A                        G
+Sei, não é questão de aceitar
+ A                            Bm
+Se não há nada que eu possa fazer
+  Bm       A        G
+A gente não pode impedir
+                         E4  E
+Se a vida cansou de ensinar
+                      G/A  A
+Sei que o amor nos dá a-sa
+               D4  D
+Mas volta pra ca-sa
+
+               D4  D
+Mas volta pra ca-sa
+
+( G  G/B  D )

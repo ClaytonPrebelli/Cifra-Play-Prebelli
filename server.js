@@ -1,5 +1,5 @@
 import { createServer } from 'node:http'
-import { readFile, writeFile, unlink, readdir } from 'node:fs/promises'
+import { readFile, writeFile, unlink, readdir, rename, stat } from 'node:fs/promises'
 import { extname, join, normalize } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -43,6 +43,22 @@ function sanitizeId(id) {
   return id
 }
 
+function mesmoArquivo(a, b) {
+  const normaliza = (s) => s.normalize('NFC').toLowerCase()
+  return process.platform === 'win32' || process.platform === 'darwin'
+    ? normaliza(a) === normaliza(b)
+    : a === b
+}
+
+async function existeArquivo(nome) {
+  try {
+    await stat(join(MUSICAS_DIR, nome))
+    return true
+  } catch {
+    return false
+  }
+}
+
 async function loadCatalog() {
   try {
     const raw = await readFile(CATALOG_PATH, 'utf8')
@@ -69,18 +85,22 @@ function deriveMeta(id) {
   return { artista, titulo }
 }
 
+const TOM_PATTERN = /^[A-G](#|b)?(?:(?:maj7?|min7?|M7?|m|dim|aug|\+|°)(?:2|4|5|6|7|9|11|13)?|sus(?:2|4)?|add[2-9]?|7M(?:6|9|11|13)?|2|4|5|6|7|9|11|13)?(?:\([^)]*\))?(?:\/[A-G](#|b)?)?$/
+
 function tomBaseFromContent(text) {
-  const m = /^[ \t]*Tom:\s*([A-G](?:#|b)?)[ \t]*$/im.exec(text || '')
-  return m ? m[1] : null
+  const m = /^[ \t]*Tom:\s*(\S+)[ \t]*$/im.exec(text || '')
+  if (!m) return null
+  const normalizado = m[1][0].toUpperCase() + m[1].slice(1)
+  return TOM_PATTERN.test(normalizado) ? normalizado : null
 }
 
 function normalizeTom(value) {
   if (typeof value !== 'string') return undefined
   const t = value.trim()
   if (!t) return null
-  const m = /^([A-Ga-g])(#|b|B)?$/.exec(t)
-  if (!m) return undefined
-  return m[1].toUpperCase() + (m[2] ? m[2].toLowerCase() : '')
+  const normalizado = t[0].toUpperCase() + t.slice(1)
+  if (!TOM_PATTERN.test(normalizado)) return undefined
+  return normalizado
 }
 
 function normalizeEstilos(list) {
@@ -180,8 +200,14 @@ async function handlePutMusica(req, res, id) {
   if (!body || typeof body.conteudo !== 'string') {
     return sendJson(res, 400, { error: 'conteudo inválido' })
   }
+  const idAnterior = typeof body.idAnterior === 'string' ? sanitizeId(body.idAnterior) : null
+  const renomeando = Boolean(idAnterior) && idAnterior !== id
+  if (renomeando && !mesmoArquivo(idAnterior, id) && (await existeArquivo(id))) {
+    return sendJson(res, 409, { error: 'já existe uma música com esse nome' })
+  }
   const before = await loadCatalog()
   const existing = before.musicas.find((m) => m.id === id)
+  const anterior = renomeando ? before.musicas.find((m) => m.id === idAnterior) : null
   const meta = deriveMeta(id)
   const capo = body.capotraste === undefined
     ? capotrasteFromContent(body.conteudo)
@@ -199,14 +225,25 @@ async function handlePutMusica(req, res, id) {
     estilos: Array.isArray(body.estilos)
       ? normalizeEstilos(body.estilos)
       : existing?.estilos ?? estilosFromContent(body.conteudo),
-    prefs: existing?.prefs,
+    prefs: existing?.prefs ?? anterior?.prefs,
   }
   await writeFile(join(MUSICAS_DIR, id), body.conteudo, 'utf8')
+  if (renomeando && mesmoArquivo(idAnterior, id)) {
+    const temp = join(MUSICAS_DIR, `.cifra-rename-${Date.now()}.tmp`)
+    await rename(join(MUSICAS_DIR, id), temp)
+    await rename(temp, join(MUSICAS_DIR, id))
+  }
   const catalog = await loadCatalog()
+  if (renomeando) catalog.musicas = catalog.musicas.filter((m) => m.id !== idAnterior)
   const idx = catalog.musicas.findIndex((m) => m.id === id)
   if (idx === -1) catalog.musicas.push(entry)
   else catalog.musicas[idx] = { ...catalog.musicas[idx], ...entry }
   await persistCatalog(catalog)
+  if (renomeando && !mesmoArquivo(idAnterior, id)) {
+    try {
+      await unlink(join(MUSICAS_DIR, idAnterior))
+    } catch {}
+  }
   return sendJson(res, 200, { ok: true, musica: entry })
 }
 
