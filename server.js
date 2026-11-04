@@ -4,7 +4,7 @@ import { extname, join, normalize } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const PORT = Number(process.env.PORT || 3000)
-const HOST = '127.0.0.1'
+const HOST = process.env.HOST || (process.env.RENDER ? '0.0.0.0' : '127.0.0.1')
 const ROOT = fileURLToPath(new URL('.', import.meta.url))
 const PUBLIC_DIR = join(ROOT, 'public')
 const MUSICAS_DIR = join(ROOT, 'musicas')
@@ -273,7 +273,7 @@ async function handleCatalog(req, res) {
   return sendJson(res, 200, { ok: true, musicas: catalog.musicas, ordens: catalog.ordens })
 }
 
-async function handleScan(res) {
+async function syncCatalogWithFiles() {
   const catalog = await loadCatalog()
   let files = []
   try {
@@ -282,9 +282,11 @@ async function handleScan(res) {
     files = []
   }
   const present = new Set(files.filter((f) => sanitizeId(f)))
+  const conhecidas = new Set(catalog.musicas.map((m) => m.id))
+  const removidas = catalog.musicas.filter((m) => !present.has(m.id)).length
   const newEntries = []
   for (const f of present) {
-    if (catalog.musicas.some((m) => m.id === f)) continue
+    if (conhecidas.has(f)) continue
     const meta = deriveMeta(f)
     let tomBase = null
     let estilos = []
@@ -304,8 +306,16 @@ async function handleScan(res) {
       capotraste,
     })
   }
+  if (removidas === 0 && newEntries.length === 0) {
+    return { catalog, novas: 0, removidas: 0 }
+  }
   catalog.musicas = [...catalog.musicas.filter((m) => present.has(m.id)), ...newEntries]
   await persistCatalog(catalog)
+  return { catalog, novas: newEntries.length, removidas }
+}
+
+async function handleScan(res) {
+  const { catalog } = await syncCatalogWithFiles()
   return sendJson(res, 200, { ok: true, musicas: catalog.musicas })
 }
 
@@ -353,6 +363,18 @@ const server = createServer(async (req, res) => {
   }
 })
 
-server.listen(PORT, HOST, () => {
-  console.log(`Cifra Prebelli em http://${HOST}:${PORT}`)
-})
+async function iniciar() {
+  try {
+    const { novas, removidas } = await syncCatalogWithFiles()
+    if (novas || removidas) {
+      console.log(`catálogo sincronizado com musicas/: +${novas} -${removidas}`)
+    }
+  } catch (err) {
+    console.error('falha ao sincronizar catálogo:', err)
+  }
+  server.listen(PORT, HOST, () => {
+    console.log(`Cifra Prebelli em http://${HOST}:${PORT}`)
+  })
+}
+
+iniciar()
