@@ -26,7 +26,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 232
     },
     {
       "id": "Panda - Eu Te Seguro.txt",
@@ -71,19 +72,6 @@
       "duracao": 173
     },
     {
-      "id": "Henrique e Juliano - A Mala é Falsa.txt",
-      "artista": "Henrique e Juliano",
-      "titulo": "A Mala é Falsa",
-      "tomBase": "F",
-      "capotraste": null,
-      "estilos": [
-        "Sertanejo Universitário"
-      ],
-      "prefs": {
-        "tomOffset": 0
-      }
-    },
-    {
       "id": "Jorge e Mateus - Ai Ja Era.txt",
       "artista": "Jorge e Mateus",
       "titulo": "Ai Ja Era",
@@ -94,7 +82,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 249
     },
     {
       "id": "Daniel - Adoro Amar Voce.txt",
@@ -107,7 +96,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 272
     },
     {
       "id": "Chitãozinho e Chororó - Ah Se Deus me Ouvisse.txt",
@@ -120,7 +110,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 238
     },
     {
       "id": "Tião Carreiro e Pardinho - Amargurado.txt",
@@ -133,7 +124,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 174
     },
     {
       "id": "Joao Mineiro e Marciano - Ainda Ontem Chorei de Saudade.txt",
@@ -146,20 +138,22 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 183
     },
     {
       "id": "Jorge e Mateus - Amo Noite e Dia.txt",
       "artista": "Jorge e Mateus",
       "titulo": "Amo Noite e Dia",
-      "tomBase": null,
+      "tomBase": "Em",
       "capotraste": null,
       "estilos": [
         "Sertanejo Universitário"
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 200
     },
     {
       "id": "Eduardo Costa - Amor de Violeiro.txt",
@@ -172,17 +166,19 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 244
     },
     {
       "id": "Murilo Huff - Anestesiado.txt",
       "artista": "Murilo Huff",
       "titulo": "Anestesiado",
-      "tomBase": null,
+      "tomBase": "Dm",
       "capotraste": null,
       "estilos": [
         "Sertanejo Universitário"
-      ]
+      ],
+      "duracao": 179
     },
     {
       "id": "Fiduma e Jeca - Anjo Chapadex.txt",
@@ -195,7 +191,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 164
     },
     {
       "id": "Edson e Hudson - Azul.txt",
@@ -208,7 +205,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 186
     },
     {
       "id": "Joao Carreiro - Bagulho e Loco.txt",
@@ -221,7 +219,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 173
     },
     {
       "id": "Bruno e Marrone - Bijuteria.txt",
@@ -234,7 +233,8 @@
       ],
       "prefs": {
         "tomOffset": 2
-      }
+      },
+      "duracao": 260
     },
     {
       "id": "Altemar Dutra - Brigas.txt",
@@ -248,7 +248,7 @@
       "prefs": {
         "tomOffset": 0
       },
-      "duracao": null
+      "duracao": 193
     },
     {
       "id": "Zezé di Camargo e Luciano - Meu País.txt",
@@ -272,7 +272,8 @@
       "capotraste": null,
       "estilos": [
         "Sertanejo Romântico"
-      ]
+      ],
+      "duracao": 214
     },
     {
       "id": "Vitor e Leo - Borboletas.txt",
@@ -285,7 +286,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 199
     },
     {
       "id": "Fagner - Bobulhas de Amor.txt",
@@ -295,13 +297,14 @@
       "capotraste": null,
       "estilos": [
         "Sertanejo Romântico"
-      ]
+      ],
+      "duracao": 261
     },
     {
       "id": "Gustavo Lima - Canudinho.txt",
       "artista": "Gustavo Lima",
       "titulo": "Canudinho",
-      "tomBase": "E",
+      "tomBase": "F#m",
       "capotraste": null,
       "estilos": [
         "Sertanejo Universitário"
@@ -309,7 +312,7 @@
       "prefs": {
         "tomOffset": 0
       },
-      "duracao": null
+      "duracao": 138
     },
     {
       "id": "Xand Aviao - Casal Raiz.txt",
@@ -322,7 +325,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 180
     },
     {
       "id": "Junior Laino - Orgulho Caipira.txt",
@@ -349,7 +353,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 217
     },
     {
       "id": "Vitor e Leo - Deus e Eu No Sertão.txt",
@@ -362,7 +367,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 180
     },
     {
       "id": "Vitor e Leo - Vida Boa.txt",
@@ -375,7 +381,8 @@
       ],
       "prefs": {
         "tomOffset": 0
-      }
+      },
+      "duracao": 180
     },
     {
       "id": "Bon Jovi - Always.txt",
@@ -873,7 +880,8 @@
       "capotraste": null,
       "duracao": 210,
       "estilos": [
-        "MPB"
+        "MPB",
+        "Românticas"
       ],
       "prefs": {
         "tomOffset": 0
@@ -995,8 +1003,12 @@
       "capotraste": null,
       "duracao": 145,
       "estilos": [
-        "MPB"
-      ]
+        "MPB",
+        "Românticas"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
     },
     {
       "id": "ELIS REGINA - COMO NOSSOS PAIS.txt",
@@ -1047,12 +1059,757 @@
       "estilos": [
         "MPB"
       ]
+    },
+    {
+      "id": "RITA LEE - DESCULPE O AUE.txt",
+      "artista": "RITA LEE",
+      "titulo": "DESCULPE O AUE",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 171,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "ROUPA NOVA - DONA.txt",
+      "artista": "ROUPA NOVA",
+      "titulo": "DONA",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 197,
+      "estilos": [
+        "MPB",
+        "Românticas"
+      ]
+    },
+    {
+      "id": "ZE RAMALHO - ENTRE A SERPENTE E A ESTRELA.txt",
+      "artista": "ZE RAMALHO",
+      "titulo": "ENTRE A SERPENTE E A ESTRELA",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 161,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "KELL SMITH - ERA UMA VEZ.txt",
+      "artista": "KELL SMITH",
+      "titulo": "ERA UMA VEZ",
+      "tomBase": "Eb",
+      "capotraste": 3,
+      "duracao": 223,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "SANDY E JUNIOR - ERA UMA VEZ.txt",
+      "artista": "SANDY E JUNIOR",
+      "titulo": "ERA UMA VEZ",
+      "tomBase": "E",
+      "capotraste": null,
+      "duracao": 193,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "ROBERTO CARLOS - ESSE CARA SOU EU.txt",
+      "artista": "ROBERTO CARLOS",
+      "titulo": "ESSE CARA SOU EU",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 273,
+      "estilos": [
+        "MPB",
+        "Românticas"
+      ]
+    },
+    {
+      "id": "DJAVAN - EU TE DEVORO.txt",
+      "artista": "DJAVAN",
+      "titulo": "EU TE DEVORO",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 306,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "ADRIANA CALCANHOTO - FICO ASSIM SEM VOCE.txt",
+      "artista": "ADRIANA CALCANHOTO",
+      "titulo": "FICO ASSIM SEM VOCE",
+      "tomBase": "A#",
+      "capotraste": 1,
+      "duracao": 192,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "TIAGO YORK - EU AMEI TE VER.txt",
+      "artista": "TIAGO YORK",
+      "titulo": "EU AMEI TE VER",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 257,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "JORGE VERCILO - FINAL FELIZ.txt",
+      "artista": "JORGE VERCILO",
+      "titulo": "FINAL FELIZ",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 257,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "DJAVAN - FLOR DE LIS.txt",
+      "artista": "DJAVAN",
+      "titulo": "FLOR DE LIS",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 231,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "ROBERTO CARLOS - FORÇA ESTRANHA.txt",
+      "artista": "ROBERTO CARLOS",
+      "titulo": "FORÇA ESTRANHA",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 257,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "ANA CAROLINA - GARGANTA.txt",
+      "artista": "ANA CAROLINA",
+      "titulo": "GARGANTA",
+      "tomBase": "Gm",
+      "capotraste": null,
+      "duracao": 208,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "TIM MAIA - GOSTAVA TANTO DE VOCE.txt",
+      "artista": "TIM MAIA",
+      "titulo": "GOSTAVA TANTO DE VOCE",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 219,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "JORGE VERCILO - HOMEM ARANHA.txt",
+      "artista": "JORGE VERCILO",
+      "titulo": "HOMEM ARANHA",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 273,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "IVAN LINS - LEMBRA DE MIM.txt",
+      "artista": "IVAN LINS",
+      "titulo": "LEMBRA DE MIM",
+      "tomBase": "E",
+      "capotraste": null,
+      "duracao": 254,
+      "estilos": [
+        "MPB"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "ZECA BALERO - LENHA.txt",
+      "artista": "ZECA BALERO",
+      "titulo": "LENHA",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 254,
+      "estilos": [
+        "MPB"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "RICK E RENER - MAE.txt",
+      "artista": "RICK E RENER",
+      "titulo": "MAE",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 180,
+      "estilos": [
+        "Sertanejo Romântico"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "ROUPA NOVA - LINDA DEMAIS.txt",
+      "artista": "ROUPA NOVA",
+      "titulo": "LINDA DEMAIS",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 303,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "RAUL GIL - LONAS AZUIS.txt",
+      "artista": "RAUL GIL",
+      "titulo": "LONAS AZUIS",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 236,
+      "estilos": [
+        "MPB",
+        "Românticas"
+      ]
+    },
+    {
+      "id": "DANIEL - MEU MUNDO E NADA MAIS.txt",
+      "artista": "DANIEL",
+      "titulo": "MEU MUNDO E NADA MAIS",
+      "tomBase": "F",
+      "capotraste": null,
+      "duracao": 207,
+      "estilos": [
+        "MPB",
+        "Românticas",
+        "Sertanejo Romântico"
+      ]
+    },
+    {
+      "id": "ZE RAMALHO - MISTERIOS DA MEIA NOITE.txt",
+      "artista": "ZE RAMALHO",
+      "titulo": "MISTERIOS DA MEIA NOITE",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 201,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "JORGE VERCILO - MONALISA.txt",
+      "artista": "JORGE VERCILO",
+      "titulo": "MONALISA",
+      "tomBase": "F#m",
+      "capotraste": null,
+      "duracao": 225,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "ALCEU VALENÇA - MORENA TROPICANA.txt",
+      "artista": "ALCEU VALENÇA",
+      "titulo": "MORENA TROPICANA",
+      "tomBase": "Bm",
+      "capotraste": null,
+      "duracao": 242,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "KID ABELHA - NA RUA NA CHUVA NA FAZENDA.txt",
+      "artista": "KID ABELHA",
+      "titulo": "NA RUA NA CHUVA NA FAZENDA",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 201,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "DJAVAN - OCEANO.txt",
+      "artista": "DJAVAN",
+      "titulo": "OCEANO",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 302,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "SANDY E JUNIOR - OLHA O QUE O AMOR ME FAZ.txt",
+      "artista": "SANDY E JUNIOR",
+      "titulo": "OLHA O QUE O AMOR ME FAZ",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 205,
+      "estilos": [
+        "Românticas",
+        "MPB"
+      ]
+    },
+    {
+      "id": "SANDRA DE SA - OLHOS COLORIDOS.txt",
+      "artista": "SANDRA DE SA",
+      "titulo": "OLHOS COLORIDOS",
+      "tomBase": "Fm",
+      "capotraste": 1,
+      "duracao": 241,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "LENINE - PACIENCIA.txt",
+      "artista": "LENINE",
+      "titulo": "PACIENCIA",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 215,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "FABIO JUNIOR - PAI.txt",
+      "artista": "FABIO JUNIOR",
+      "titulo": "PAI",
+      "tomBase": "G",
+      "capotraste": 1,
+      "duracao": 308,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "VANESSA RANGEL - Palpite.txt",
+      "artista": "VANESSA RANGEL",
+      "titulo": "Palpite",
+      "tomBase": "E",
+      "capotraste": null,
+      "duracao": 243,
+      "estilos": [
+        "MPB"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "IVETE SANGALO - QUANDO A CHUVA PASSAR.txt",
+      "artista": "IVETE SANGALO",
+      "titulo": "QUANDO A CHUVA PASSAR",
+      "tomBase": "Am",
+      "capotraste": null,
+      "duracao": 249,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "ANA CAROLINA - QUEM DE NOS DOIS.txt",
+      "artista": "ANA CAROLINA",
+      "titulo": "QUEM DE NOS DOIS",
+      "tomBase": "A#",
+      "capotraste": 3,
+      "duracao": 311,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "NATIRUTS - QUERO SER FELIZ TAMBEM.txt",
+      "artista": "NATIRUTS",
+      "titulo": "QUERO SER FELIZ TAMBEM",
+      "tomBase": "C#m",
+      "capotraste": null,
+      "duracao": 254,
+      "estilos": [
+        "Moda",
+        "Rock"
+      ]
+    },
+    {
+      "id": "CAETANO VELOSO - SAMBA DE VERAO.txt",
+      "artista": "CAETANO VELOSO",
+      "titulo": "SAMBA DE VERAO",
+      "tomBase": "F",
+      "capotraste": null,
+      "duracao": 182,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "DJAVAN - SE.txt",
+      "artista": "DJAVAN",
+      "titulo": "SE",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 260,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "DJAVAN - SINA.txt",
+      "artista": "DJAVAN",
+      "titulo": "SINA",
+      "tomBase": "E",
+      "capotraste": null,
+      "duracao": 313,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "FABIO JUNIOR - SO VOCE.txt",
+      "artista": "FABIO JUNIOR",
+      "titulo": "SO VOCE",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 254,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "CAETANO VELOSO - SOZINHO.txt",
+      "artista": "CAETANO VELOSO",
+      "titulo": "SOZINHO",
+      "tomBase": null,
+      "capotraste": null,
+      "duracao": 193,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "LEONI - SO PRO MEU PRAZER.txt",
+      "artista": "LEONI",
+      "titulo": "SO PRO MEU PRAZER",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 243,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "ANA VILELA - TREM BALA.txt",
+      "artista": "ANA VILELA",
+      "titulo": "TREM BALA",
+      "tomBase": "B",
+      "capotraste": 2,
+      "duracao": 180,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "CHIMARUTS - VERSOS SIMPLES.txt",
+      "artista": "CHIMARUTS",
+      "titulo": "VERSOS SIMPLES",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 188,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "CAETANO VELOSO - VOCE NAO ME ENSINOU A TE ESQUECER.txt",
+      "artista": "CAETANO VELOSO",
+      "titulo": "VOCE NAO ME ENSINOU A TE ESQUECER",
+      "tomBase": "Cm",
+      "capotraste": 3,
+      "duracao": 261,
+      "estilos": [
+        "MPB"
+      ]
+    },
+    {
+      "id": "TITAS - A MELHOR BANDA DE TODOS OS TEMPOS DA ULTIMA SEMANA.txt",
+      "artista": "TITAS",
+      "titulo": "A MELHOR BANDA DE TODOS OS TEMPOS DA ULTIMA SEMANA",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 182,
+      "estilos": [
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "SKANK - ACIMA DO SOL.txt",
+      "artista": "SKANK",
+      "titulo": "ACIMA DO SOL",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 242,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "SKANK - AINDA GOTO DELA.txt",
+      "artista": "SKANK",
+      "titulo": "AINDA GOTO DELA",
+      "tomBase": "E",
+      "capotraste": null,
+      "duracao": 314,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "JOTA QUEST - ALEM DO HORIZONTE.txt",
+      "artista": "JOTA QUEST",
+      "titulo": "ALEM DO HORIZONTE",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 266,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "RITA LEE - AMOR E SEXO.txt",
+      "artista": "RITA LEE",
+      "titulo": "AMOR E SEXO",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 219,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "JOTA QUEST - AMOR MAIOR.txt",
+      "artista": "JOTA QUEST",
+      "titulo": "AMOR MAIOR",
+      "tomBase": "Dm",
+      "capotraste": null,
+      "duracao": 242,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "LOS HERMANOS - ANA JULIA.txt",
+      "artista": "LOS HERMANOS",
+      "titulo": "ANA JULIA",
+      "tomBase": "E",
+      "capotraste": null,
+      "duracao": 212,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "PARALAMAS DO SUCESSO - AONDE QUER QUE EU VA.txt",
+      "artista": "PARALAMAS DO SUCESSO",
+      "titulo": "AONDE QUER QUE EU VA",
+      "tomBase": "Am",
+      "capotraste": null,
+      "duracao": 260,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "LULU SANTOS - APENAS MAIS UMA DE AMOR.txt",
+      "artista": "LULU SANTOS",
+      "titulo": "APENAS MAIS UMA DE AMOR",
+      "tomBase": "F",
+      "capotraste": null,
+      "duracao": 248,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "FELIPE E ARAUJO - A MALA E FALSA.txt",
+      "artista": "FELIPE E ARAUJO",
+      "titulo": "A MALA E FALSA",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 197,
+      "estilos": [
+        "Sertanejo Universitário"
+      ]
+    },
+    {
+      "id": "LULU SANTOS - ASSIM CAMINHA A HUMANIDADE.txt",
+      "artista": "LULU SANTOS",
+      "titulo": "ASSIM CAMINHA A HUMANIDADE",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 206,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "NENHUM D ENOS - ASTRONAUTA DE MARMORE.txt",
+      "artista": "NENHUM D ENOS",
+      "titulo": "ASTRONAUTA DE MARMORE",
+      "tomBase": "Dm",
+      "capotraste": null,
+      "duracao": 215,
+      "estilos": [
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "ENGENHEIROS DO HAWAII - ATE O FIM.txt",
+      "artista": "ENGENHEIROS DO HAWAII",
+      "titulo": "ATE O FIM",
+      "tomBase": "F",
+      "capotraste": null,
+      "duracao": 214,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "PLBE RUDE - ATE QUANDO ESPERAR.txt",
+      "artista": "PLBE RUDE",
+      "titulo": "ATE QUANDO ESPERAR",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 214,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "CAZUZA - BETE BALANÇO.txt",
+      "artista": "CAZUZA",
+      "titulo": "BETE BALANÇO",
+      "tomBase": "Em",
+      "capotraste": null,
+      "duracao": 228,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "CAPITAL INICIAL - CAI A NOITE.txt",
+      "artista": "CAPITAL INICIAL",
+      "titulo": "CAI A NOITE",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 191,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "NENHUM DE NOS - CAMILA CAMILA.txt",
+      "artista": "NENHUM DE NOS",
+      "titulo": "CAMILA CAMILA",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 297,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "LS JACK - CARLA.txt",
+      "artista": "LS JACK",
+      "titulo": "CARLA",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 259,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "ZELIA DUNCAN - CATEDRAL.txt",
+      "artista": "ZELIA DUNCAN",
+      "titulo": "CATEDRAL",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 194,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "CAZUZA - CODINOME BEIJA FLOR.txt",
+      "artista": "CAZUZA",
+      "titulo": "CODINOME BEIJA FLOR",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 293,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "KID ABELHA - COMO EU QUERO.txt",
+      "artista": "KID ABELHA",
+      "titulo": "COMO EU QUERO",
+      "tomBase": "C",
+      "capotraste": null,
+      "duracao": 181,
+      "estilos": [
+        "Rock"
+      ]
     }
   ],
   "ordens": {
     "Rock": [
       "Oasis - Wonderwall.txt",
       "Bon Jovi - Always.txt"
+    ],
+    "Sertanejo Universitário": [
+      "Henrique e Juliano - A Maior Saudade.txt",
+      "Panda - Eu Te Seguro.txt",
+      "Marcos e Belutti - Sonho de Todo Casal.txt",
+      "João Bosco e Vinicius - Amiga Linda.txt",
+      "FELIPE E ARAUJO - A MALA E FALSA.txt",
+      "Jorge e Mateus - Ai Ja Era.txt",
+      "Jorge e Mateus - Amo Noite e Dia.txt",
+      "Murilo Huff - Anestesiado.txt",
+      "Fiduma e Jeca - Anjo Chapadex.txt",
+      "Edson e Hudson - Azul.txt",
+      "Joao Carreiro - Bagulho e Loco.txt",
+      "Vitor e Leo - Borboletas.txt",
+      "Gustavo Lima - Canudinho.txt",
+      "Xand Aviao - Casal Raiz.txt"
     ]
   }
 }

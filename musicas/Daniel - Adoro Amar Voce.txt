@@ -1,3 +1,6 @@
+[REFRAO]
+DESCER 1 VIRTUAL
+[FIM]
 Em  F  Em  F7M  G7
        C
 Tá no meu paladar

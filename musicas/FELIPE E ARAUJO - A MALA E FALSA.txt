@@ -1,85 +1,92 @@
- F  C  Dm  C  A#9  C
-Dm                                A#9
+[REFRAO]
+DESCER 1 VIRTUAL
+[FIM]
+G  D  Em  D  C9  D
+
+Em                                C9
 É, agora tá com tempo pra me escutar
-                               C
+                               D
 Agora diz que ama e que vai mudar
 
 Eu sei que a cena é forte
-           A7
+           B7
 Vai doer agora
-                               A#9
+                               C9
 Arrumei minha mala, tô caindo fora
-                           Dm
+                           Em
 Você não percebeu, mas esfriou
-                            F
+                            G
 Caiu na rotina, você descuidou
-                            C
+                            D
 Eu só queria um pouco de carinho
-          A#9            C     F
+          C9            D     G
 Fica tranquila amor eu tô fingindo
 
 [Refrão]
-                  F
+                  G
 A mala é falsa, amor
-                               C
+                               D
 Engole o choro, embora eu não vou
-                             Dm
+                             Em
 Agora vê se aprende a dar valor
-                           A#9  C
+                           C9  D
 Mata minha sede de fazer amor
-                  F
+G
 A mala é falsa, amor
-                       C
+                               D
 Engole o choro, embora eu não vou
-                             Dm
+                             Em
 Agora vê se aprende a dar valor
-                           A#9  C
+                           C9  D
 Mata minha sede de fazer amor
 [FIM]
- F  C  Dm  C  A#9  C
-Dm                                A#9
+ G  D  Em  D  C9  D
+
+Em                                C9
 É, agora tá com tempo pra me escutar
-                               C
+                               D
 Agora diz que ama e que vai mudar
 
 Eu sei que a cena é forte
-           A7
+           B7
 Vai doer agora
-                               A#9
+                               C9
 Arrumei minha mala, tô caindo fora
-                           Dm
+                           Em
 Você não percebeu, mas esfriou
-                            F
+                            G
 Caiu na rotina, você descuidou
-                            C
+                            D
 Eu só queria um pouco de carinho
-          A#9            C        F
+          C9            D        G
 Fica tranquila amor eu tô fingindo
 
 [Refrão]
-                  F
+
+                  G
 A mala é falsa, amor
-                               C
+                               D
 Engole o choro, embora eu não vou
-                             Dm
+                             Em
 Agora vê se aprende a dar valor
-                           A#9  C
+                           C9  D
 Mata minha sede de fazer amor
 
-                  F
+                  G
 A mala é falsa, amor
-                               C
-Engole o choro, embora eu não vou
 
-Dm
-Agora vê se aprende a dar valor
-                           A#9  C  F
-Mata minha sede de fazer amor
-                  F
-A mala é falsa, amor
-                               C
+D
 Engole o choro, embora eu não vou
-                             Dm
+                             Em
 Agora vê se aprende a dar valor
-                           A#9  C  F
+                           C9  D  G
+Mata minha sede de fazer amor
+
+                  G
+A mala é falsa, amor
+                               D
+Engole o choro, embora eu não vou
+                             Em
+Agora vê se aprende a dar valor
+                           C9  D  G
 Mata minha sede de fazer amor

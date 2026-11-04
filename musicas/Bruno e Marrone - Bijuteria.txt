@@ -1,3 +1,6 @@
+[REFRAO]
+SUBIR 1 VIRTUAL
+[FIM
 Gm
 Quando a noite cai
 Gm/F
