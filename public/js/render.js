@@ -62,9 +62,8 @@ export function renderShow(modelo, { tomOffset = 0, colunas = 3 } = {}) {
   let destacar = false
   conteudo.forEach((item, i) => {
     if (item.tipo === 'secao') {
-      const nome = item.nome || ''
-      if (/^(fim|final)$/i.test(nome)) destacar = false
-      else if (/ref/i.test(nome)) destacar = true
+      if (item.tipoSecao === 'refrao') destacar = true
+      else if (item.tipoSecao === 'fim') destacar = false
       return
     }
     if (item.tipo === 'espaco') {

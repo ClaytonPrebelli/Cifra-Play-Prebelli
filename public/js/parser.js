@@ -73,6 +73,38 @@ function isChordLine(texto) {
   return tokens.length > 0 && tokens.every((t) => CHORD_PATTERN.test(t))
 }
 
+function expandirGruposDeAcordes(texto) {
+  return texto.replace(/\(([^()]*)\)/g, (m, inner) => {
+    const tokens = inner.trim().split(/\s+/).filter(Boolean)
+    if (tokens.length < 2 || !tokens.every((t) => CHORD_PATTERN.test(t))) return m
+    return ` ${inner} `
+  })
+}
+
+export function normalizarSecao(nome) {
+  return String(nome || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+}
+
+export function classificarSecao(nome) {
+  const n = normalizarSecao(nome)
+  if (!n) return null
+  const refrao = /\brefr?ao\b/.test(n)
+  const fim = /\b(fim|final)\b/.test(n)
+  if (refrao) {
+    if (/\bpre\b/.test(n)) return null
+    if (/^(fim|final)\b/.test(n)) return 'fim'
+    if (/\bpos\b/.test(n)) return 'fim'
+    return 'refrao'
+  }
+  if (fim) return 'fim'
+  return null
+}
+
 function acordesDeLinha(texto) {
   const acordes = []
   const re = /\S+/g
@@ -84,7 +116,11 @@ function acordesDeLinha(texto) {
 }
 
 export function parseCifra(texto) {
-  const limpoLinhas = texto.replace(/\uFEFF/g, '').replace(/\r\n?/g, '\n').split('\n')
+  const limpoLinhas = texto
+    .replace(/\uFEFF/g, '')
+    .replace(/[\u200B-\u200D\u2060]/g, '')
+    .replace(/\r\n?/g, '\n')
+    .split('\n')
   const modelo = { tom: null, estilos: [], conteudo: [] }
   let pendente = []
 
@@ -130,22 +166,25 @@ export function parseCifra(texto) {
 
     if (/^[A-ZÀ-Ù][^\s:]{0,19}:\s*\S{1,50}$/.test(linha)) continue
 
-    const comChaves = linha[0] === '[' && linha[linha.length - 1] === ']'
+    const semBordas = linha.trim()
+    const comChaves = semBordas[0] === '[' && semBordas[semBordas.length - 1] === ']'
     if (comChaves) {
-      const inner = linha.slice(1, -1)
+      const inner = semBordas.slice(1, -1)
       if (isChordLine(inner)) {
         flush()
         pendente = acordesDeLinha(inner)
         continue
       }
       flush()
-      modelo.conteudo.push({ tipo: 'secao', nome: inner.trim() })
+      const tipoSecao = classificarSecao(inner)
+      if (tipoSecao) modelo.conteudo.push({ tipo: 'secao', tipoSecao, nome: inner.trim() })
       continue
     }
 
-    if (isChordLine(linha)) {
+    const linhaAcordes = expandirGruposDeAcordes(linha)
+    if (isChordLine(linhaAcordes)) {
       flush()
-      pendente = acordesDeLinha(linha)
+      pendente = acordesDeLinha(linhaAcordes)
       continue
     }
 

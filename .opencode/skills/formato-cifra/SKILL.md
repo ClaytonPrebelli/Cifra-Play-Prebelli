@@ -23,10 +23,15 @@ nome todo é o título, artista vazio.
 ## Classificação de linhas (na ordem)
 
 1. `Tom: <Nota>` (case-insensitive) → meta: tom de referência, base do offset 0.
-2. Linha inteira entre `[`...`]` (ex.: `[Refrão]`) → **seção** (vermelho), nunca
-   é acorde/letra.
+2. Linha inteira entre `[`...`]` (ex.: `[Refrão]`) → **seção** apenas se for
+   refrão ou fim; qualquer outro marcador (`[Intro]`, `[Solo]`, `[Verso 1]`,
+   `[Ponte]`, `[Pré-Refrão]` etc.) é descartado e não aparece na tela. Refrão e
+   fim aceitam qualquer escrita (caixa, acento, variações como `[RefrAo]`,
+   `[REFRAO]`, `[Refrão 1]`, `[Fim]`, `[Final]`).
 3. **Todos** os tokens separados por espaços são acordes válidos → **linha de
-   acordes** (sempre acima de uma letra).
+   acordes** (sempre acima de uma letra). Grupos de 2+ acordes entre parênteses
+   (ex.: `( E  A9  D9  E )`) contam como acordes; parênteses com texto
+   (`(O melhor)`, `(2x)`) não.
 4. Caso contrário → **linha de letra** (pode ter acordes inline `[C]`/`(C)`,
    extraídos e ancorados à palavra seguinte, removidos do texto).
 5. Metadados tipo `Alvo: G`, `Compasso: 4/4` → descartados do conteúdo.

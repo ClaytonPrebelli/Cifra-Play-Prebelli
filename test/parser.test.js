@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { parseCifra, parseChord } from '../public/js/parser.js'
+import { parseCifra, parseChord, classificarSecao } from '../public/js/parser.js'
 
 const TXT = `Tom: Bb
 
@@ -34,8 +34,13 @@ test('golden: cifra completa vira modelo esperado', () => {
     if (i.tipo === 'espaco') return '_'
     return null
   }), [
-    'Intro', null, '_', 'Verso', null, null, '_', 'Refrão', null, '_', 'Final', null,
+    null, '_', null, null, '_', 'Refrão', null, '_', 'Final', null,
   ])
+
+  assert.deepEqual(
+    m.conteudo.filter((i) => i.tipo === 'secao').map((i) => [i.nome, i.tipoSecao]),
+    [['Refrão', 'refrao'], ['Final', 'fim']],
+  )
 
   const [intro, v1, v2, refrao, final] = m.conteudo.filter((i) => i.tipo === 'compasso')
 
@@ -77,6 +82,33 @@ test('seção vs acorde entre colchetes', () => {
   assert.equal(c2.acordes.length, 2)
   assert.equal(c2.acordes[1].tonica, 'G')
   assert.ok(m.conteudo.some((i) => i.tipo === 'espaco'))
+})
+
+test('seção: refrão e fim aceitam qualquer escrita; demais são ignoradas', () => {
+  for (const nome of ['Refrão', 'REFRAO', 'RefrAo', 'refrao', 'Refrão 1', 'Segundo Refrão', 'Refrão Final', 'Refão']) {
+    assert.equal(classificarSecao(nome), 'refrao', nome)
+  }
+  for (const nome of ['Fim', 'FIM', 'fim', 'Final', 'Fim do Refrão', 'Pós-Refrão Final']) {
+    assert.equal(classificarSecao(nome), 'fim', nome)
+  }
+  for (const nome of ['Intro', 'Verso 1', 'Solo', 'Primeira Parte', 'Ponte', 'Pré-Refrão']) {
+    assert.equal(classificarSecao(nome), null, nome)
+  }
+
+  const m = parseCifra('[Intro]\nC\n\n[RefrAo]\nG\nEu vou\n\n[Solo]\nAm\n\n[FIM]\nC\n')
+  assert.deepEqual(
+    m.conteudo.filter((i) => i.tipo === 'secao').map((i) => [i.nome, i.tipoSecao]),
+    [['RefrAo', 'refrao'], ['FIM', 'fim']],
+  )
+  assert.ok(!m.conteudo.some((i) => i.tipo === 'secao' && /solo|intro/i.test(i.nome)))
+})
+
+test('seção ignora espaços e caracteres invisíveis ao redor dos colchetes', () => {
+  const m = parseCifra('\u200B[RefrAo]\nG\nEu vou\n\n \u200B[FIM] \nC\n')
+  assert.deepEqual(
+    m.conteudo.filter((i) => i.tipo === 'secao').map((i) => [i.nome, i.tipoSecao]),
+    [['RefrAo', 'refrao'], ['FIM', 'fim']],
+  )
 })
 
 test('fronteira: letra com C maiúsculo não é linha de acordes', () => {
@@ -173,6 +205,28 @@ test('sufixo "5" (power chord Cifra Club) é linha de acordes', () => {
   assert.deepEqual(c2.vinculos, [{ acorde: 0, palavra: 0 }])
 })
 
+test('grupo de notas entre parênteses vira linha de acordes', () => {
+  const m = parseCifra('( E  A9  D9  E )\n\nLetra da música\n')
+  const [c1, c2] = m.conteudo.filter((i) => i.tipo === 'compasso')
+  assert.equal(c1.letra, null)
+  assert.deepEqual(c1.acordes.map((a) => `${a.tonica}${a.sufixo}`), ['E', 'A9', 'D9', 'E'])
+  assert.equal(c2.letra, 'Letra da música')
+  assert.deepEqual(c2.acordes, [])
+})
+
+test('grupo de notas no meio de uma linha de acordes é preservado', () => {
+  const m = parseCifra('Gm7  C7  F  (F C/E F C/E F G)\n')
+  const [c] = m.conteudo.filter((i) => i.tipo === 'compasso')
+  assert.equal(c.letra, null)
+  assert.deepEqual(c.acordes.map((a) => a.texto), ['Gm7', 'C7', 'F', 'F', 'C/E', 'F', 'C/E', 'F', 'G'])
+})
+
+test('parênteses com texto continuam como letra', () => {
+  const m = parseCifra('(O melhor)\n')
+  const [c] = m.conteudo.filter((i) => i.tipo === 'compasso')
+  assert.equal(c.letra, '(O melhor)')
+})
+
 test('tom case-insensitive normaliza para maiúsculo', () => {
   assert.equal(parseCifra('tom: c\n\nC\n').tom, 'C')
   assert.equal(parseCifra('Tom: F#\n\nC\n').tom, 'F#')
@@ -193,9 +247,9 @@ test('estilos separados por vírgula ou ponto-e-vírgula', () => {
 })
 
 test('CRLF e BOM são normalizados', () => {
-  const m = parseCifra('\uFEFFTom: C\r\n\r\n[Intro]\r\nAm  F\r\n')
+  const m = parseCifra('\uFEFFTom: C\r\n\r\n[Refrão]\r\nAm  F\r\n')
   assert.equal(m.tom, 'C')
-  assert.equal(m.conteudo[0].nome, 'Intro')
+  assert.equal(m.conteudo[0].nome, 'Refrão')
   assert.equal(m.conteudo[1].acordes.length, 2)
 })
 

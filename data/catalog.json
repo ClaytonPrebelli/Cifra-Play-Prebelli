@@ -1788,6 +1788,176 @@
       "estilos": [
         "Rock"
       ]
+    },
+    {
+      "id": "RAUL SEIXAS - COMO VOVÓ JA DIZIA.txt",
+      "artista": "RAUL SEIXAS",
+      "titulo": "COMO VOVÓ JA DIZIA",
+      "tomBase": "E",
+      "capotraste": null,
+      "duracao": 209,
+      "estilos": [
+        "Rock"
+      ]
+    },
+    {
+      "id": "RAUL SEIXAS - COWBOY FORA DA LEI.txt",
+      "artista": "RAUL SEIXAS",
+      "titulo": "COWBOY FORA DA LEI",
+      "tomBase": "G",
+      "capotraste": null,
+      "duracao": 213,
+      "estilos": [
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "RAFAEL ROSSATO - DE UM TROCADO PRO SEU BRUXO.txt",
+      "artista": "RAFAEL ROSSATO",
+      "titulo": "DE UM TROCADO PRO SEU BRUXO",
+      "tomBase": "F",
+      "capotraste": 1,
+      "duracao": 209,
+      "estilos": [
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "JOTA QUEST - DO SEU LADO.txt",
+      "artista": "JOTA QUEST",
+      "titulo": "DO SEU LADO",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 311,
+      "estilos": [
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "PAULO RICARDO - DOIS.txt",
+      "artista": "PAULO RICARDO",
+      "titulo": "DOIS",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 251,
+      "estilos": [
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "LEGIAO URBANA - EDUARDO E MONICA.txt",
+      "artista": "LEGIAO URBANA",
+      "titulo": "EDUARDO E MONICA",
+      "tomBase": "E",
+      "capotraste": null,
+      "duracao": 279,
+      "estilos": [
+        "Rock"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "DI PAULO E PAULINHO - ESTRELINHA.txt",
+      "artista": "DI PAULO E PAULINHO",
+      "titulo": "ESTRELINHA",
+      "tomBase": "E",
+      "capotraste": null,
+      "duracao": 209,
+      "estilos": [
+        "Sertanejo Romântico",
+        "Sertanejo Universitário"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "EDUARDO COSTA - EU APOSTO.txt",
+      "artista": "EDUARDO COSTA",
+      "titulo": "EU APOSTO",
+      "tomBase": "F",
+      "capotraste": null,
+      "duracao": 227,
+      "estilos": [
+        "Sertanejo Romântico",
+        "Sertanejo Universitário"
+      ]
+    },
+    {
+      "id": "GUSTAVO MIOTO - DESPEDIDA DE CASAL.txt",
+      "artista": "GUSTAVO MIOTO",
+      "titulo": "DESPEDIDA DE CASAL",
+      "tomBase": "A",
+      "capotraste": null,
+      "duracao": 202,
+      "estilos": [
+        "Sertanejo Universitário"
+      ]
+    },
+    {
+      "id": "MAYCK E LYAN - CHUVA NO PANTANAL.txt",
+      "artista": "MAYCK E LYAN",
+      "titulo": "CHUVA NO PANTANAL",
+      "tomBase": "Dm",
+      "capotraste": null,
+      "duracao": 198,
+      "estilos": [
+        "Sertanejo Romântico",
+        "Moda"
+      ]
+    },
+    {
+      "id": "JORGE E MATEUS - CHORA VIOLA - CAMINHEIRO - LADRAO DE MUIE - CAMPEAO - A VACA FOI PRO BREJO.txt",
+      "artista": "JORGE E MATEUS",
+      "titulo": "CHORA VIOLA - CAMINHEIRO - LADRAO DE MUIE - CAMPEAO - A VACA FOI PRO BREJO",
+      "tomBase": "D",
+      "capotraste": null,
+      "duracao": 357,
+      "estilos": [
+        "Moda"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
+    },
+    {
+      "id": "CRISTIANO ARAUJO - CASO INDEFINIDO.txt",
+      "artista": "CRISTIANO ARAUJO",
+      "titulo": "CASO INDEFINIDO",
+      "tomBase": "C#m",
+      "capotraste": null,
+      "duracao": 229,
+      "estilos": [
+        "Sertanejo Universitário"
+      ]
+    },
+    {
+      "id": "IRENE CARA - WHAT A FEELING.txt",
+      "artista": "IRENE CARA",
+      "titulo": "WHAT A FEELING",
+      "tomBase": "Bb",
+      "capotraste": 1,
+      "duracao": 232,
+      "estilos": [
+        "Internacional"
+      ],
+      "prefs": {
+        "tomOffset": 0
+      }
     }
   ],
   "ordens": {

@@ -60,11 +60,20 @@ Pra te lembrar
 - Outras linhas-chave antes do conteúdo (ex.: `Alvo:`, `Compasso:`) são
   **ignoradas** no modo de exibição na v1 (não viram acorde nem letra).
 
-## 4. Seções (destaque vermelho)
+## 4. Seções (refrão e fim)
 
-- Uma linha **inteira** que começa com `[` e termina com `]` — ex. `[Refrão]`,
-  `[Verso 1]`, `[Ponte]`, `[Intro]`, `[Solo]`, `[Final]`.
-- NUNCA é acorde nem letra; renderiza em **vermelho**, caixa alta, centralizado.
+- Uma linha **inteira** que começa com `[` e termina com `]` é um marcador de
+  seção, mas só duas categorias têm efeito:
+  - **refrão** — `[Refrão]`, `[REFRAO]`, `[RefrAo]`, `[refrao]`, `[Refrão 1]`,
+    `[Segundo Refrão]`, `[Refrão Final]`, `[Refão]` etc. Liga o destaque do
+    refrão. A comparação ignora caixa, acentos e pontuação.
+  - **fim** — `[Fim]`, `[FIM]`, `[Final]`, `[Fim do Refrão]`,
+    `[Pós-Refrão Final]` etc. Desliga o destaque.
+- Qualquer outro marcador (`[Intro]`, `[Verso 1]`, `[Ponte]`, `[Solo]`,
+  `[Primeira Parte]`, `[Pré-Refrão]` etc.) é **ignorado**: não vira acorde,
+  letra nem é exibido.
+- Marcadores de seção nunca aparecem na tela; servem apenas para controlar o
+  destaque vermelho do refrão.
 - Desambiguação com acorde inline: `[Refrão]` é seção porque `Refrão` não é um
   acorde válido. `[C]` em linha própria seria um acorde (ver §6).
 
@@ -73,9 +82,12 @@ Pra te lembrar
 Cada linha útil (não vazia) é classificada por este algoritmo:
 
 1. É linha Tom → **meta** (apenas informação).
-2. É linha de seção ([...] em linha própria) → **seção**.
+2. É linha de seção ([...] em linha própria) → **seção** se for refrão ou fim
+   (ver §4); os demais marcadores são descartados.
 3. **Todos** os tokens da linha, separados por espaços, são acordes válidos
-   (ver §6) → **linha de acordes** (acima de uma letra).
+   (ver §6) → **linha de acordes** (acima de uma letra). Grupos de 2+ acordes
+   entre parênteses (ex.: `( E  A9  D9  E )`, `(C F F#m)`) são desembrulhados
+   e contam como acordes; parênteses com texto (`(O melhor)`, `(2x)`) não.
 4. Senão → **linha de letra** (pode conter acordes inline, ver §7).
 
 ### Regras de fronteira letra × acorde
